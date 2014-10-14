@@ -1,0 +1,32 @@
+/**
+  *
+  */
+  
+  
+  import ASAP.PreProcess;
+  
+  public class Run {
+        public static void main(String[] args) {
+                String preprocessedFilename;
+                if (args.length < 1) {
+                        System.out.println("You need to provide an input and an output file.");
+                }
+                if (args.length < 2) {
+                        System.out.println("You need to provide an output file aswell.");
+                }
+                
+                preprocessedFilename = args[0] + ".ppout"
+                
+                PreProcess pp = new PreProcess();
+                pp.loadSentencePairs(args[0]);
+                pp.calculateFeatures();
+                pp.saveDataSet(preprocessedFilename);
+
+                Process p = new Process();
+                p.loadFeaturesFile(preprocessedFilename);
+                p.loadModels();
+                p.calculatePredictions();
+                p.savePredictions(args[1]);
+                
+        }
+  }

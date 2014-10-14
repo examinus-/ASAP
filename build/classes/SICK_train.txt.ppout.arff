@@ -1,0 +1,26 @@
+@relation 'semeval_preprocessed'
+@attribute 'pair_ID' integer
+@attribute 'lex_count_sw_s1' numeric
+@attribute 'lex_count_sw_s2' numeric
+@attribute 'lex_count_sw_dif' numeric
+@attribute 'lex_overlap_rem_0sw' numeric
+@attribute 'lex_overlap_rem_1sw' numeric
+@attribute 'lex_overlap_rem_2sw' numeric
+@attribute 'lex_overlap_rem_3sw' numeric
+@attribute 'syn_count_dif_NPs' numeric
+@attribute 'syn_count_dif_VPs' numeric
+@attribute 'syn_count_dif_PPs' numeric
+@attribute 'JCN_sum_max' numeric
+@attribute 'relatedness_groundtruth' numeric
+
+@data
+1,9,9,0,0.812,0.8,0.786,0.769,0,0,0,0.151,4.5
+2,10,9,1,0.688,0.667,0.714,0.692,1,1,0,0.248,3.2
+3,4,4,0,0.417,0.417,0.417,0.455,1,1,2,500,4.7
+5,4,9,5,0.25,0.267,0.214,0.231,1,1,1,500,3.4
+9,4,9,5,0.312,0.333,0.357,0.308,2,0,3,500,3.7
+12,1,2,1,0.5,0.5,0.5,0.6,0,0,0,500,4.0
+14,7,1,6,0,0,0,0,4,0,3,500,3.5
+18,7,2,5,0,0,0,0,4,0,3,500,3.2
+25,4,5,1,0.182,0.2,0.222,0.222,1,0,1,500,2.8
+26,4,5,1,0.273,0.2,0.222,0.222,1,0,1,500,3.7
