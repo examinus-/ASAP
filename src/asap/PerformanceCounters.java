@@ -16,6 +16,7 @@ public class PerformanceCounters {
 
     Map<String, Stat> counters;
     private final long totalStartTime;
+    private int longestCounterName;
 
     static class Stat {
 
@@ -23,33 +24,33 @@ public class PerformanceCounters {
         Long startTime;
         Long totalTime;
         Long noRuns;
+        Long totalMemoryUsage;
+        static final Runtime runtime = Runtime.getRuntime();
 
         public Stat(String timerName) {
             this.timerName = timerName;
             this.startTime = 0L;
             this.totalTime = 0L;
             this.noRuns = 0L;
+            this.totalMemoryUsage = 0L;
         }
 
         @Override
         public String toString() {
-            Long avgTime = getAvgTime();
-            if (avgTime < 60000)
-                return "{" + timerName + "}\t " + noRuns + " runs\t\t "
-                    + avgTime + "ms";
-            
-            Long minutes = avgTime / 60000;
-            avgTime -= (minutes * 60000);
-            
-            return  "{" + timerName + "}\t " + noRuns + " runs\t\t "
-                    + minutes + "minutes and " + avgTime + "ms";
+            double avgTime = getAvgTime() / 1000000d;
+            String tmp = timerName;
+            while (tmp.length() < pc.longestCounterName) {
+                tmp += " ";
+            }
+            return "{" + timerName + "}\t " + noRuns + " runs\t\t "
+                    + avgTime + "ms\t" + getAvgMemoryUsage() + "b";
         }
 
         public synchronized void startTimer() {
             if (startTime != 0L) {
                 System.err.println("Counter had already started before! (" + timerName + ")");
             } else {
-                startTime = System.currentTimeMillis();
+                startTime = System.nanoTime();
             }
         }
 
@@ -57,17 +58,27 @@ public class PerformanceCounters {
             if (startTime == 0L) {
                 System.err.println("Counter hadn't start before! (" + timerName + ")");
             } else {
-                totalTime += (System.currentTimeMillis() - startTime);
+                totalTime += (System.nanoTime() - startTime);
                 noRuns++;
                 startTime = 0L;
+                totalMemoryUsage += runtime.totalMemory() - runtime.freeMemory();
             }
         }
 
-        public Long getAvgTime() {
-            if (noRuns == 0)
-                return Long.MAX_VALUE;
-            
-            return totalTime / noRuns;
+        public double getAvgTime() {
+            if (noRuns == 0) {
+                return Double.MAX_VALUE;
+            }
+
+            return ((double) totalTime) / ((double) noRuns);
+        }
+
+        public Long getAvgMemoryUsage() {
+            if (noRuns == 0) {
+                return 0l;
+            }
+
+            return totalMemoryUsage / noRuns;
         }
     }
 
@@ -75,6 +86,7 @@ public class PerformanceCounters {
 
     private PerformanceCounters() {
         counters = new HashMap<>();
+        longestCounterName = 0;
         totalStartTime = System.currentTimeMillis();
     }
 
@@ -82,6 +94,9 @@ public class PerformanceCounters {
         Stat stat = pc.counters.get(timerName);
         if (stat == null) {
             stat = new Stat(timerName);
+            if (timerName.length() > pc.longestCounterName) {
+                pc.longestCounterName = timerName.length();
+            }
             pc.counters.put(timerName, stat);
         }
         stat.startTimer();
@@ -100,6 +115,6 @@ public class PerformanceCounters {
         for (Stat value : pc.counters.values()) {
             System.out.println(value.toString());
         }
-        System.out.println("(Total time: " + ((System.currentTimeMillis() - pc.totalStartTime) / 1000d) + " seconds)" );
+        System.out.println("(Total time: " + ((System.currentTimeMillis() - pc.totalStartTime) / 1000d) + " seconds)");
     }
 }
