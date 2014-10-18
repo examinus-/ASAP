@@ -5,10 +5,9 @@
  */
 package asap;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -22,34 +21,35 @@ public class Instance {
     private final LinkedList<Object> values;
     private final String sentence1;
     private final String sentence2;
-    private String sentence1PosTagged;
-    private String sentence2PosTagged;
-    private String[] sentence1Tokenized;
-    private String[] sentence2Tokenized;
-    private String[] sentence1PosTags;
-    private String[] sentence2PosTags;
-    private String[] sentence1Chunks;
-    private String[] sentence2Chunks;
-    private String[] sentence1ChunkLemmas;
-    private String[] sentence2ChunkLemmas;
+//    private String sentence1PosTagged;
+//    private String sentence2PosTagged;
+//    private String[] sentence1Tokenized;
+//    private String[] sentence2Tokenized;
+//    private String[] sentence1PosTags;
+//    private String[] sentence2PosTags;
+//    private String[] sentence1Chunks;
+//    private String[] sentence2Chunks;
+//    private String[] sentence1ChunkLemmas;
+//    private String[] sentence2ChunkLemmas;
+//    
+//    private HashSet<String> sentence1Words;
+//    private HashSet<String> sentence2Words;
     
-    private HashSet<String> sentence1Words;
-    private HashSet<String> sentence2Words;
-    
-    
+    private final HashMap<String, Object> processedText;
+    private final int pair_ID;
     private final double relatedness_groundtruth;
-
+    private final LinkedList<TextProcesser> processed;
     
     public Instance(String sentence1, String sentence2, int pairId,
-            double relatedness_groundtruth, HashSet<String> sentence1Words,
-            HashSet<String> sentence2Words) {
+            double relatedness_groundtruth) {
         values = new LinkedList<>();
         this.sentence1 = sentence1;
         this.sentence2 = sentence2;
         this.values.add(pairId);
-        this.sentence1Words = sentence1Words;
-        this.sentence2Words = sentence2Words;
+        this.pair_ID = pairId;
         this.relatedness_groundtruth = relatedness_groundtruth;
+        this.processed = new LinkedList<>();
+        this.processedText = new HashMap<>();
     }
 
     public String getSentence1() {
@@ -60,61 +60,31 @@ public class Instance {
         return sentence2;
     }
 
-    public String getSentence1PosTagged() {
-        return sentence1PosTagged;
+    public synchronized Object getProcessedTextPart(String objectKey) {
+        if (!processedText.containsKey(objectKey))
+            return null;
+        return processedText.get(objectKey);
     }
 
-    public String getSentence2PosTagged() {
-        return sentence2PosTagged;
-    }
-
-    public HashSet<String> getSentence1Words() {
-        return sentence1Words;
-    }
-
-    public HashSet<String> getSentence2Words() {
-        return sentence2Words;
-    }
-
-    public String[] getSentence1Tokenized() {
-        return sentence1Tokenized;
-    }
-
-    public String[] getSentence2Tokenized() {
-        return sentence2Tokenized;
-    }
-
-    public String[] getSentence1PosTags() {
-        return sentence1PosTags;
-    }
-
-    public String[] getSentence2PosTags() {
-        return sentence2PosTags;
-    }
-
-    public String[] getSentence1Chunks() {
-        return sentence1Chunks;
-    }
-
-    public String[] getSentence2Chunks() {
-        return sentence2Chunks;
-    }
-
-    public String[] getSentence1ChunkLemmas() {
-        return sentence1ChunkLemmas;
-    }
-
-    public String[] getSentence2ChunkLemmas() {
-        return sentence2ChunkLemmas;
-    }
-
-    public Object getAttributeAt(int index) {
+    public synchronized Object getAttributeAt(int index) {
         return values.get(index);
     }
     
     public double getRelatedness_groundtruth() {
         return relatedness_groundtruth;
-    }   
+    }
+    
+    public synchronized boolean isProcessed(TextProcesser textProcesser) {
+        if (textProcesser == null) {
+            return true;
+        }
+        Iterator<TextProcesser> it = processed.iterator();
+        while (it.hasNext()) {
+            if (it.next().getClass().isInstance(textProcesser))
+                return true;
+        }
+        return false;
+    }
     
     @Override
     public String toString() {
@@ -134,7 +104,7 @@ public class Instance {
         }
         r += relatedness_groundtruth;
 
-        System.out.println("Wrote " + (values.size() + 1) + " values");
+//        System.out.println("Wrote " + (values.size() + 1) + " values");
         
         return r;
     }
@@ -148,16 +118,8 @@ public class Instance {
         while (s2.length() < 140) {
             s2 += " ";
         }
-        String ps1 = sentence1PosTagged;
-        while (ps1.length() < 140) {
-            ps1 += " ";
-        }
-        String ps2 = sentence2PosTagged;
-        while (ps2.length() < 140) {
-            ps2 += " ";
-        }
 
-        return toString() + "\t" + s1 + "\t" + s2 + "\t" + ps1 + "\t" + ps2;
+        return toString() + "\t" + s1 + "\t" + s2;
     }
  
     public String valuesToArffCsvFormat() {
@@ -178,64 +140,21 @@ public class Instance {
         
         r += relatedness_groundtruth;
         
-        System.out.println("Wrote " + (values.size() + 1) + " values");
-        System.out.println(r);
+//        System.out.println("Wrote " + (values.size() + 1) + " values");
+//        System.out.println(r);
         
         return r;
     }
-
     
-
-    public void setSentence1Words(HashSet<String> sentence1Words) {
-        this.sentence1Words = sentence1Words;
+    public synchronized void addProcessedTextPart(String key, Object processedTextPart) {
+        processedText.put(key, processedTextPart);
     }
 
-    public void setSentence2Words(HashSet<String> sentence2Words) {
-        this.sentence2Words = sentence2Words;
-    }
-
-    public void setSentence1PosTagged(String sentence1PosTagged) {
-        this.sentence1PosTagged = sentence1PosTagged;
-    }
-
-    public void setSentence2PosTagged(String sentence2PosTagged) {
-        this.sentence2PosTagged = sentence2PosTagged;
+    public synchronized void addProcessed(TextProcesser textProcesser) {
+        this.processed.add(textProcesser);
     }
     
-    public void setSentence1Tokenized(String[] sentence1Tokenized) {
-        this.sentence1Tokenized = sentence1Tokenized;
-    }
-
-    public void setSentence2Tokenized(String[] sentence2Tokenized) {
-        this.sentence2Tokenized = sentence2Tokenized;
-    }
-
-    public void setSentence1PosTags(String[] sentence1PosTags) {
-        this.sentence1PosTags = sentence1PosTags;
-    }
-
-    public void setSentence2PosTags(String[] sentence2PosTags) {
-        this.sentence2PosTags = sentence2PosTags;
-    }
-
-    public void setSentence1Chunks(String[] sentence1Chunks) {
-        this.sentence1Chunks = sentence1Chunks;
-    }
-
-    public void setSentence2Chunks(String[] sentence2Chunks) {
-        this.sentence2Chunks = sentence2Chunks;
-    }
-
-    public void setSentence1ChunkLemmas(String[] sentence1ChunkLemmas) {
-        this.sentence1ChunkLemmas = sentence1ChunkLemmas;
-    }
-
-    public void setSentence2ChunkLemmas(String[] sentence2ChunkLemmas) {
-        this.sentence2ChunkLemmas = sentence2ChunkLemmas;
-    }
-    
-    
-    public void addAtribute(Object o) {
+    public synchronized void addAtribute(Object o) {
         
         if (o instanceof double[]) {
             double[] doubleArray = (double[]) o;
@@ -243,7 +162,7 @@ public class Instance {
                 double value = doubleArray[i];
                 values.add(value);
             }
-            System.out.println("Added " + doubleArray.length + " attribute to " + getAttributeAt(0));
+//            System.out.println("Added " + doubleArray.length + " attribute to " + getAttributeAt(0));
         } else if (o instanceof int[]) {
             
             int[] intArray = (int[]) o;
@@ -251,10 +170,10 @@ public class Instance {
                 double value = intArray[i];
                 values.add(value);
             }
-            System.out.println("Added " + intArray.length + " attribute to " + getAttributeAt(0));
+//            System.out.println("Added " + intArray.length + " attribute to " + getAttributeAt(0));
         } else {
             values.add(o);
-            System.out.println("Added 1 attribute to " + getAttributeAt(0));
+//            System.out.println("Added 1 attribute to " + getAttributeAt(0));
         }
     }
     

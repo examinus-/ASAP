@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author exam
  */
-public class PreProcess {
+public class PreProcess extends TextProcessHashWords {
 
     FeatureCalculator featureCalculators[];
     FeatureCalculator featureCalculatorsClone[];
@@ -97,10 +97,83 @@ public class PreProcess {
         maxRelatedness_groundtruth = Double.MIN_VALUE;
         minRelatedness_groundtruth = Double.MAX_VALUE;
     }
+    
+    public void loadSentencePairsWithSideGoldStandardFile(String pairsFilename, String gsFilename) {
+        PerformanceCounters.startTimer("loadSentencePairs");
+        double relatedness_groundtruth;
+        HashSet<String> s1Words;
+        HashSet<String> s2Words;
+
+        
+        try (FileInputStream fis = new FileInputStream(pairsFilename)
+                ;
+        FileInputStream gsFis = new FileInputStream(gsFilename)) {
+            //ignore column headers:
+            try (Scanner sc = new Scanner(fis)
+                    ;
+                 Scanner gsSc = new Scanner(gsFis)) {
+                
+                /* NO COLUMN NAMES IN THE BEGGINING::
+                sc.nextLine();
+                gsSc.nextLine();
+                */
+                
+                while (sc.hasNextLine() && gsSc.hasNextLine()) {
+                    s1Words = new HashSet<>();
+                    s2Words = new HashSet<>();
+                    String line = sc.nextLine();
+                    //ignore empty lines:
+                    if (line.isEmpty()) {
+                        gsSc.nextLine();
+                        continue;
+                    }
+                    //String attributes[] = line.split(" \\|\\|\\| ");
+                    String attributes[] = line.split("\t");
+                    //sentences word set:
+
+                    for (String word : attributes[0].toLowerCase().split(" ")) {
+                        s1Words.add(word);
+                        incrementWordFrequency(word);
+                    }
+                    for (String word : attributes[1].toLowerCase().split(" ")) {
+                        s2Words.add(word);
+                        incrementWordFrequency(word);
+                    }
+                    relatedness_groundtruth = Double.parseDouble(gsSc.nextLine());
+
+                    if (relatedness_groundtruth < minRelatedness_groundtruth) {
+                        minRelatedness_groundtruth = relatedness_groundtruth;
+                    }
+                    if (relatedness_groundtruth > maxRelatedness_groundtruth) {
+                        maxRelatedness_groundtruth = relatedness_groundtruth;
+                    }
+                    //NO pair_ID column either:
+                    //int pair_ID = Integer.parseInt(attributes[0]);
+                    int pair_ID = instances.size();
+                    
+                    Instance i = new Instance(attributes[0].toLowerCase(), attributes[1].toLowerCase(),
+                            pair_ID, relatedness_groundtruth);
+                    
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
+                    i.addProcessed(this);
+                    
+                    instances.add(i);
+                    
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("Loaded " + instances.size() + " instances from " + pairsFilename + " with gold standard values from " + gsFilename);
+        System.out.println("\tMin relatedness:" + minRelatedness_groundtruth);
+        System.out.println("\tMax relatedness:" + maxRelatedness_groundtruth);
+        PerformanceCounters.stopTimer("loadSentencePairs");
+    }
 
     public void loadSentencePairs(String filename) {
         PerformanceCounters.startTimer("loadSentencePairs");
-        int i = 0;
         double relatedness_groundtruth;
         HashSet<String> s1Words;
         HashSet<String> s2Words;
@@ -122,11 +195,11 @@ public class PreProcess {
                     String attributes[] = line.split("\t");
                     //sentences word set:
 
-                    for (String word : attributes[1].split(" ")) {
+                    for (String word : attributes[1].toLowerCase().split(" ")) {
                         s1Words.add(word);
                         incrementWordFrequency(word);
                     }
-                    for (String word : attributes[2].split(" ")) {
+                    for (String word : attributes[2].toLowerCase().split(" ")) {
                         s2Words.add(word);
                         incrementWordFrequency(word);
                     }
@@ -140,16 +213,22 @@ public class PreProcess {
                     }
                     int pair_ID = Integer.parseInt(attributes[0]);
                     
-                    instances.add(new Instance(attributes[1], attributes[2],
-                            pair_ID, relatedness_groundtruth,
-                            s1Words, s2Words));
+                    Instance i = new Instance(attributes[1].toLowerCase(), attributes[2].toLowerCase(),
+                            pair_ID, relatedness_groundtruth);
+                    
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
+                    i.addProcessed(this);
+                    
+                    instances.add(i);
+                    
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Loaded " + i + " instances from " + filename);
+        System.out.println("Loaded " + instances.size() + " instances from " + filename);
         System.out.println("\tMin relatedness:" + minRelatedness_groundtruth);
         System.out.println("\tMax relatedness:" + maxRelatedness_groundtruth);
         PerformanceCounters.stopTimer("loadSentencePairs");
@@ -246,14 +325,16 @@ public class PreProcess {
 
         //featureCalculators[0] = new LexicalCountWords("src/negative-stopword-list.txt", "nsw");
         
-        featureCalculators[0] = new LexicalCountWords("src/stopword-list.txt", "sw");
-        featureCalculatorsClone[0] = new LexicalCountWords("src/stopword-list.txt", "sw");
-        featureCalculators[1] = new LexicalOverlapFeaturesCalculator(0, 3);
-        featureCalculatorsClone[1] = new LexicalOverlapFeaturesCalculator(0, 3);
-        featureCalculators[2] = new SyntacticCountChunkTypesFeatures();
-        featureCalculatorsClone[2] = new SyntacticCountChunkTypesFeatures();
-        featureCalculators[3] = new SemanticSimilarityAndRelatednessCalculator();
-        featureCalculatorsClone[3] = new SemanticSimilarityAndRelatednessCalculator();
+        featureCalculators[0] = new LexicalCountWords("stopword-list.txt", "sw");
+        featureCalculatorsClone[0] = new LexicalCountWords("stopword-list.txt", "sw");
+        
+        featureCalculators[1] = new SemanticSimilarityAndRelatednessCalculator();
+        featureCalculatorsClone[1] = new SemanticSimilarityAndRelatednessCalculator();
+        
+        featureCalculators[2] = new LexicalOverlapFeaturesCalculator(0, 3);
+        featureCalculatorsClone[2] = new LexicalOverlapFeaturesCalculator(0, 3);
+        featureCalculators[3] = new SyntacticCountChunkTypesFeatures();
+        featureCalculatorsClone[3] = new SyntacticCountChunkTypesFeatures();
         
         
         Thread worker = new Thread(new FeatureCalculatorWorker(featureCalculators));
@@ -275,9 +356,62 @@ public class PreProcess {
     }
 
     public void preProcessFile(String inputFilename, String preprocessedFilename) {
+        PerformanceCounters.startTimer("preProcessFile");
         loadSentencePairs(inputFilename);
         calculateFeatures();
         saveArffDataSet(preprocessedFilename);
+        PerformanceCounters.stopTimer("preProcessFile");
+    }
+    
+    public void preProcessFile(String inputPairsFilename, String inputGoldStandardFilename, String preprocessedFilename) {
+        PerformanceCounters.startTimer("preProcessFile");
+        loadSentencePairsWithSideGoldStandardFile(inputPairsFilename, inputGoldStandardFilename);
+        calculateFeatures();
+        saveArffDataSet(preprocessedFilename);
+        PerformanceCounters.stopTimer("preProcessFile");
+    }
+
+    public void runTests(String sentencePairsFile, String preprocessedFilename) {
+        System.out.println("Running performance tests...");
+        int runs = 10, i;
+        
+
+        for (i = 0; i < runs; i++) {
+            System.out.println("\ttest iteration " + i);
+            preProcessFile(sentencePairsFile, preprocessedFilename);
+            
+            instances = new LinkedList<>();
+            featureCalculators = null;
+            featureCalculatorsClone = null;
+            bottomUp = Integer.MAX_VALUE;
+            topDown = Integer.MIN_VALUE;
+            wordFrequencies = new HashMap<>();
+
+            maxRelatedness_groundtruth = Double.MIN_VALUE;
+            minRelatedness_groundtruth = Double.MAX_VALUE;
+        }
+        System.out.println("\ttests done.");
+    }
+    public void runTests(String sentencePairsFile, String goldStandardsFile, String preprocessedFilename) {
+        System.out.println("Running performance tests...");
+        int runs = 10, i;
+        
+
+        for (i = 0; i < runs; i++) {
+            System.out.println("\ttest iteration " + i);
+            preProcessFile(sentencePairsFile, goldStandardsFile, preprocessedFilename);
+            
+            instances = new LinkedList<>();
+            featureCalculators = null;
+            featureCalculatorsClone = null;
+            bottomUp = Integer.MAX_VALUE;
+            topDown = Integer.MIN_VALUE;
+            wordFrequencies = new HashMap<>();
+
+            maxRelatedness_groundtruth = Double.MIN_VALUE;
+            minRelatedness_groundtruth = Double.MAX_VALUE;
+        }
+        System.out.println("\ttests done.");
     }
 
     private class FeatureCalculatorWorker implements Runnable {
@@ -301,15 +435,15 @@ public class PreProcess {
                         return;
                     }
                 }
-                System.out.println("calculating topDown for instance@" + topDown);
                 Instance currentInstance = it.next();
+//                System.out.println("calculating topDown for (" + currentInstance.getAttributeAt(0) + "):\n|" + currentInstance.getSentence1() + "\n|" + currentInstance.getSentence2());
                 try {
                     for (FeatureCalculator featureCalculator : featureCalculators) {
                         featureCalculator.calculate(currentInstance);
                     }
 
-                } catch (Exception e) {
-
+                } catch (Exception ex) {
+                    Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -338,9 +472,9 @@ public class PreProcess {
                         return;
                     }
                 }
-                System.out.println("calculating bottomUp for instance@" + bottomUp);
-
                 Instance currentInstance = it.next();
+//                System.out.println("calculating bottomUp for (" + currentInstance.getAttributeAt(0) + "):\n|" + currentInstance.getSentence1() + "\n|" + currentInstance.getSentence2());
+
                 try {
                     for (FeatureCalculator featureCalculator : featureCalculators) {
                         featureCalculator.calculate(currentInstance);

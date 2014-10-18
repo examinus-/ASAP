@@ -10,11 +10,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-public class LexicalOverlapFeaturesCalculator implements FeatureCalculator {
+public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
 
     private final int minStopWords;
     private final int maxStopWords;
-    private TreeSet<String> topWords;
+    private final TreeSet<String> topWords;
+    private static final TextProcesser textProcesserDependency = new TextProcessHashWords();
 
     public LexicalOverlapFeaturesCalculator(int minStopWords, int maxStopWords) {
         this.minStopWords = minStopWords;
@@ -23,13 +24,40 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator {
     }
 
     @Override
+    public boolean textProcessingDependenciesMet(Instance i) {
+        return i.isProcessed(textProcesserDependency);
+    }
+
+    @Override
     public void calculate(Instance i) {
-        System.out.println("calculating " + Arrays.toString(getFeatureNames())
-                + " for instance " + i.getAttributeAt(0));
+        if (!textProcessingDependenciesMet(i))
+            textProcesserDependency.process(i);
+        PerformanceCounters.startTimer("calculate LexicalOverlapFeatures");
+        
+//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//                + " for instance " + i.getAttributeAt(0));
         
         HashSet<String> intersection, s1, s2;
-        s1 = i.getSentence1Words();
-        s2 = i.getSentence2Words();
+        Object o;
+        
+        o = i.getProcessedTextPart(sentence1Words);
+        if (!(o instanceof String[])) {
+            return;
+        }
+        String[] s1Words = (String[]) o;
+        
+        o = i.getProcessedTextPart(sentence2Words);
+        if (!(o instanceof String[])) {
+            return;
+        }
+        String[] s2Words = (String[]) o;
+        
+        s1 = new HashSet<>();
+        s2 = new HashSet<>();
+        
+        s1.addAll(Arrays.asList(s1Words));
+        s2.addAll(Arrays.asList(s2Words));
+        
         double overlap;
 
         Iterator<String> it = topWords.iterator();
@@ -60,6 +88,8 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator {
                 //no more stop words to remove, speed it up:
             }
         }
+//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+        PerformanceCounters.stopTimer("calculate LexicalOverlapFeatures");
     }
 
     @Override

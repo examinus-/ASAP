@@ -5,74 +5,85 @@
  */
 package asap;
 
-import edu.cmu.lti.jawjaw.pobj.Lang;
-import edu.cmu.lti.jawjaw.pobj.Link;
-import edu.cmu.lti.jawjaw.pobj.POS;
-import edu.cmu.lti.jawjaw.pobj.Synset;
-import edu.cmu.lti.jawjaw.pobj.Word;
 import edu.cmu.lti.ws4j.WS4J;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
-public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalculator {
+public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
 
-    private TreeSet<LemmaSimilarity> lemmaPairSimilarityValues;
-    private ArrayList<Chunk> sentence1Chunks;
-    private ArrayList<Chunk> sentence2Chunks;
     private final double MAX_VALUE = 100;
+
+    private static final TextProcesser textProcesserDependency = new TextProcessChunkLemmas();
+
+    @Override
+    public boolean textProcessingDependenciesMet(Instance i) {
+        return i.isProcessed(textProcesserDependency);
+    }
 
     @Override
     public void calculate(Instance i) {
-        System.out.println("calculating " + Arrays.toString(getFeatureNames())
-                + " for instance " + i.getAttributeAt(0));
-
-        sentence1Chunks = readSentenceChunks(i.getSentence1Chunks());
-        sentence2Chunks = readSentenceChunks(i.getSentence2Chunks());
-        System.out.println("sentence chunks parsed.");
-
-        i.setSentence1ChunkLemmas(lemmatizeSentenceChunks(sentence1Chunks));
-        i.setSentence2ChunkLemmas(lemmatizeSentenceChunks(sentence2Chunks));
-        System.out.println("Lemmas found.");
-
-        lemmaPairSimilarityValues = calculateLemmaPairSimilarityValues(i);
-        System.out.println("lemma pair similarities calculated");
-
-        resolveConflicts();
-        System.out.println("best lemma pairs determined");
-
-        i.addAtribute(getJCNValueSum());
-        System.out.println("added max JCN sum measure");
-    }
-
-    private ArrayList<Chunk> readSentenceChunks(String[] sentenceChunks) {
-        ArrayList<Chunk> chunks = new ArrayList<>();
-
-        for (String sentenceChunk : sentenceChunks) {
-            int spaceIndex = sentenceChunk.indexOf(" ");
-            String sentenceChunkType = sentenceChunk.substring(0, spaceIndex);
-            String sentenceChunkWords = sentenceChunk.substring(spaceIndex + 1);
-            chunks.add(new Chunk(sentenceChunkType, sentenceChunkWords));
-
+        if (!textProcessingDependenciesMet(i)) {
+            textProcesserDependency.process(i);
         }
-        System.out.println("chunks = " + Arrays.toString(chunks.toArray()));
-        return chunks;
+        PerformanceCounters.startTimer("calculate SemanticSimilarityAndRelatedness");
+        
+//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//                + " for instance " + i.getAttributeAt(0));
+        
+        Object o;
+        Chunk[] s1Chunks, s2Chunks;
+        String[] s1Lemmas, s2Lemmas;
+        TreeSet<LemmaSimilarity> lemmaPairSimilarityValues;
+        o = i.getProcessedTextPart(sentence1Chunks);
+        if (!(o instanceof Chunk[]))
+            return;
+        s1Chunks = (Chunk[]) o;
+        
+        o = i.getProcessedTextPart(sentence2Chunks);
+        if (!(o instanceof Chunk[]))
+            return;
+        s2Chunks = (Chunk[]) o;
+        
+        
+        o = i.getProcessedTextPart(sentence1ChunkLemmas);
+        if (!(o instanceof String[]))
+            return;
+        s1Lemmas = (String[])o;
+        
+        o = i.getProcessedTextPart(sentence2ChunkLemmas);
+        if (!(o instanceof String[]))
+            return;
+        s2Lemmas = (String[])o;
+        
+        
+        lemmaPairSimilarityValues = calculateLemmaPairSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
+        //System.out.println("lemma pair similarities calculated");
+
+        resolveConflicts(lemmaPairSimilarityValues);
+        //System.out.println("best lemma pairs determined");
+
+        i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
+        //System.out.println("added max JCN sum measure");
+        
+//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+        PerformanceCounters.stopTimer("calculate SemanticSimilarityAndRelatedness");
     }
 
-    private List<Entry<Integer, Integer>> getChunkPairs() {
+    //maybe should be another TextProcesser?
+    private List<Entry<Integer, Integer>> getEqualChunkPairs(Chunk[] s1Chunks, Chunk[] s2Chunks) {
         LinkedList<Entry<Integer, Integer>> pairList
                 = new LinkedList<>();
 
-        for (int i = 0; i < sentence1Chunks.size(); i++) {
-            Chunk sentence1Chunk = sentence1Chunks.get(i);
-            if (sentence1Chunk.chunkType.equalsIgnoreCase("NP")
-                    || sentence1Chunk.chunkType.equalsIgnoreCase("VP")) {
-                for (int j = 0; j < sentence2Chunks.size(); j++) {
-                    Chunk sentence2Chunk = sentence2Chunks.get(j);
+        for (int i = 0; i < s1Chunks.length; i++) {
+            Chunk sentence1Chunk = s1Chunks[i];
+            if (sentence1Chunk.getChunkType().equalsIgnoreCase("NP")
+                    || sentence1Chunk.getChunkType().equalsIgnoreCase("VP")) {
+                for (int j = 0; j < s2Chunks.length; j++) {
+                    Chunk sentence2Chunk = s2Chunks[j];
                     if (sentence1Chunk.getChunkType().equals(sentence2Chunk.getChunkType())) {
                         pairList.add(new Entry<>(i, j));
                     }
@@ -83,7 +94,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         return pairList;
     }
 
-    private void resolveConflicts() {
+    private void resolveConflicts(TreeSet<LemmaSimilarity> lemmaPairSimilarityValues) {
         LemmaSimilarity[] lemmaSimilarities;
 
         //TODO: if slow, there must be a better way than always converting the whole collection to array...
@@ -104,108 +115,44 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         }
     }
 
-    private String[] lemmatizeSentenceChunks(List<Chunk> sentenceChunks) {
-        LinkedList<String> chunkLemmas = new LinkedList<>();
-        String lemma;
-
-        for (Chunk sentenceChunk : sentenceChunks) {
-            lemma = lemmatizeChunk(sentenceChunk);
-            if (lemma != null) {
-                chunkLemmas.add(lemma);
-            }
-        }
-
-        String[] tmp = new String[chunkLemmas.size()];
-        tmp = chunkLemmas.toArray(tmp);
-        System.out.println("sentenceChunkLemmas = " + Arrays.toString(tmp));
-        return tmp;
-    }
-
     @Override
     public String[] getFeatureNames() {
         String[] featureNames = {"JCN_sum_max"};
         return featureNames;
     }
 
-    private String lemmatizeChunk(Chunk chunk) {
-        String lemma = chunk.getChunkText();
-        String validLemma = WNCheckValid(lemma, chunk.toPOS());
-        while (validLemma == null) {
-            int indexOfSpace = lemma.indexOf(" ");
-            if (indexOfSpace < 0) {
-                return "";
-            }
-            lemma = lemma.substring(indexOfSpace + 1);
-
-            validLemma = WNCheckValid(lemma, chunk.toPOS());
-        }
-        System.out.println("Chunk's (" + chunk.getChunkText()
-                + ") lemma is:" + validLemma);
-        return validLemma;
-    }
-
-    private String WNCheckValid(String lemma, POS pos) {
-        //USE ws4J:
-        List<Synset> synsetList = edu.cmu.lti.jawjaw.util.WordNetUtil.wordToSynsets(lemma, pos);
-        
-        ArrayList<Word> words = new ArrayList<Word>();
-        for (Synset synset : synsetList) {
-            words.addAll(edu.cmu.lti.jawjaw.util.WordNetUtil.synsetToWords(synset.getSynset()));
-        }
-        Iterator<Word> it = words.iterator();
-        
-        while (it.hasNext()) {
-            if (it.next().getLang().equals(Lang.jpn)) {
-                it.remove();
-            }
-        }
-        
-        if (words.isEmpty())
-            return null;
-        
-        return words.get(0).getLemma();
-        //USE JAWS:
-        /*
-        WordNetDatabase database = WordNetDatabase.getFileInstance();
-        Synset[] synsets;
-        try {
-            synsets = database.getSynsets(lemma);
-        } catch (WordNetException wne) {
-            return null;
-        }
-        return Arrays.toString(synsets);
-        */
-    }
 
     private double getJCNValueOf(String wordA, String wordB) {
         double value = WS4J.runJCN(wordA, wordB);
-        System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
+        //System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
         return value;
     }
 
-    private double getJCNValueSum() {
+    private double getJCNValueSum(Set<LemmaSimilarity> lemmaPairSimilarityValues) {
         double sum = 0d;
         for (LemmaSimilarity lemmaPairSimilarityValue : lemmaPairSimilarityValues) {
             sum += lemmaPairSimilarityValue.getSimilarityValue();
         }
+        //Check what to do in this case::
         if (sum >= MAX_VALUE) {
-            return 500;
+            return 1000;
         }
 
         return sum;
     }
 
-    private TreeSet<LemmaSimilarity> calculateLemmaPairSimilarityValues(Instance i) {
+    private TreeSet<LemmaSimilarity> calculateLemmaPairSimilarityValues(String[] s1ChunkLemmas, 
+            String[] s2ChunkLemmas, List<Entry<Integer, Integer>> chunkPairs) {
         TreeSet<LemmaSimilarity> lemmaSimilarities
                 = new TreeSet<>();
-
-        for (Map.Entry<Integer, Integer> chunkPair : getChunkPairs()) {
+        
+        for (Entry<Integer, Integer> chunkPair : chunkPairs) {
             LemmaSimilarity lemmaSimilarity
                     = new LemmaSimilarity(chunkPair.getKey(),
                             chunkPair.getValue(),
-                            getJCNValueOf(
-                                    i.getSentence1ChunkLemmas()[chunkPair.getKey()],
-                                    i.getSentence2ChunkLemmas()[chunkPair.getValue()]
+                            getSimilarityValueOf(
+                                    s1ChunkLemmas[chunkPair.getKey()],
+                                    s2ChunkLemmas[chunkPair.getValue()]
                             ));
 
             if (lemmaSimilarity.getSimilarityValue() > 0) {
@@ -216,6 +163,18 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         return lemmaSimilarities;
     }
 
+    protected double getSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
+        return getJCNValueOf(s1ChunkLemma, s2ChunkLemma);
+    }
+    
+    protected double getTotalSimilarityValueOf(Set<LemmaSimilarity> values) {
+        return getJCNValueSum(values);
+    }
+
+    
+    
+    
+    
     private class Entry<K, V> implements Map.Entry {
 
         private final K key;
@@ -242,42 +201,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         }
     }
 
-    private class Chunk {
-
-        private final String chunkType;
-        private final String chunkText;
-
-        public Chunk(String chunkType, String chunkText) {
-            this.chunkType = chunkType;
-            this.chunkText = chunkText;
-        }
-
-        public String getChunkType() {
-            return chunkType;
-        }
-
-        public String getChunkText() {
-            return chunkText;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + chunkType + " " + chunkText + "]";
-        }
-
-        private POS toPOS() {
-            switch(chunkType) {
-                case "NP":
-                    return POS.n;
-                case "VP":
-                    return POS.v;
-            }
-            return POS.a;
-        }
-
-    }
-
-    private class LemmaSimilarity implements Comparable<LemmaSimilarity> {
+    protected class LemmaSimilarity implements Comparable<LemmaSimilarity> {
 
         private final int sentence1ChunkIndex;
         private final int sentence2ChunkIndex;
@@ -291,7 +215,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
 
         @Override
         public int compareTo(LemmaSimilarity o) {
-            return Double.compare(similarityValue, o.similarityValue);
+            return Double.compare(o.similarityValue, similarityValue);
         }
 
         public boolean isEither(int sentence1ChunkIndex, int sentence2ChunkIndex) {

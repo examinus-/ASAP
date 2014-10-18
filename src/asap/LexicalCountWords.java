@@ -15,9 +15,9 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LexicalCountWords implements FeatureCalculator {
+public class LexicalCountWords implements FeatureCalculator, TextProcessedPartKeyConsts {
 
-    HashSet<String> wordSet;
+    HashSet<String> stopWordSet;
     String wordListName;
 
     /**
@@ -27,7 +27,7 @@ public class LexicalCountWords implements FeatureCalculator {
      */
     public LexicalCountWords(String wordListFilename, String wordListName) {
         this.wordListName = wordListName;
-        wordSet = new HashSet<>();
+        stopWordSet = new HashSet<>();
 
         FileInputStream fis = null;
         Scanner scanner = null;
@@ -37,7 +37,7 @@ public class LexicalCountWords implements FeatureCalculator {
             scanner = new Scanner(fis);
 
             while (scanner.hasNext()) {
-                wordSet.add(scanner.next());
+                stopWordSet.add(scanner.next());
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(LexicalCountWords.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,13 +57,19 @@ public class LexicalCountWords implements FeatureCalculator {
 
     public LexicalCountWords(Collection<String> words, String wordListName) {
         this.wordListName = wordListName;
-        wordSet = new HashSet<>(words);
+        stopWordSet = new HashSet<>(words);
+    }
+
+    @Override
+    public boolean textProcessingDependenciesMet(Instance i) {
+        return true;
     }
 
     @Override
     public void calculate(Instance i) {
-        System.out.println("calculating " + Arrays.toString(getFeatureNames())
-                + " for instance " + i.getAttributeAt(0));
+        PerformanceCounters.startTimer("calculate LexicalCountWords");
+//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//                + " for instance " + i.getAttributeAt(0));
         double features[] = {countWords(i.getSentence1()),
             countWords(i.getSentence2()),
             0};
@@ -71,27 +77,29 @@ public class LexicalCountWords implements FeatureCalculator {
         features[2] = Math.abs(features[0] - features[1]);
 
         i.addAtribute(features);
+//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+        PerformanceCounters.stopTimer("calculate LexicalCountWords");
     }
 
     private int countWords(String sentence) {
-        int negativeStopWords = 0;
+        int stopWords = 0;
 
         for (String word : sentence.split(" ")) {
-            if (isNegativeWord(word)) {
-                negativeStopWords++;
+            if (isStopWord(word)) {
+                stopWords++;
             }
         }
 
-        return negativeStopWords;
+        return stopWords;
     }
 
-    private boolean isNegativeWord(String word) {
-        return wordSet.contains(word);
+    private boolean isStopWord(String word) {
+        return stopWordSet.contains(word);
     }
 
     @Override
     public String toString() {
-        return "LexicalCountWords Features(3#) with " + wordSet.size() + " words.";
+        return "LexicalCountWords Features(3#) with " + stopWordSet.size() + " words.";
     }
 
     @Override

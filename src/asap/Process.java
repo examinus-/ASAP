@@ -73,7 +73,7 @@ public class Process {
         predictionsAvg = new double[predictions[0].length];
 
         for (int j = 0; j < predictions[0].length; j++) {
-            predictionsAvg[j]=0;
+            predictionsAvg[j] = 0;
             for (int i = 0; i < predictions.length; i++) {
                 predictionsAvg[j] += predictions[i][j];
             }
@@ -82,10 +82,10 @@ public class Process {
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("calculateAveragePredictions");
     }
-    
+
     public void calculateAverageSummary() {
         //TODO: calculate correlation, etc...
-        
+
     }
 
 //consider not using file system (streams...)
@@ -173,6 +173,7 @@ public class Process {
     public void calculatePredictions() {
         calculatePredictions(false);
     }
+
     public void calculatePredictions(boolean calculateAverage) {
         PerformanceCounters.startTimer("calculatePredictions");
         System.out.println("Calculating predictions with all models...");
@@ -191,11 +192,11 @@ public class Process {
 
             predictions[i] = evaluateModel((AbstractClassifier) classifier, instances);
         }
-        
+
         if (calculateAverage) {
             calculateAveragePredictions();
         }
-        
+
         System.out.println("\tpredictions calculated.");
         PerformanceCounters.stopTimer("calculatePredictions");
     }
@@ -208,15 +209,14 @@ public class Process {
         String outputBaseFilename = outputFilename;
 
         if (outputFilename.contains("\\")) {
-            outputPath = outputFilename.substring(0, outputFilename.lastIndexOf("\\")+1);
-            outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("\\")+1);
+            outputPath = outputFilename.substring(0, outputFilename.lastIndexOf("\\") + 1);
+            outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("\\") + 1);
         }
         if (outputFilename.contains("/")) {
-            outputPath = outputFilename.substring(0, outputFilename.lastIndexOf("/")+1);
-            outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("/")+1);
+            outputPath = outputFilename.substring(0, outputFilename.lastIndexOf("/") + 1);
+            outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("/") + 1);
         }
-        
-        
+
         if (predictions.length == 0) {
             System.out.println("\tno predictions to save.");
             PerformanceCounters.stopTimer("savePredictions");
@@ -231,7 +231,7 @@ public class Process {
                         "\t", outputPath + i + "-" + outputBaseFilename);
             }
         }
-        
+
         if (predictionsAvg != null) {
             formatPredictions(predictionsAvg, columnNames, 1, "relatedness_score",
                     "\t", outputPath + "avg-" + outputBaseFilename);
@@ -246,14 +246,13 @@ public class Process {
     public void runTests(String featuresFilename) {
         System.out.println("Running performance tests...");
         int runs = 10, i;
-        
 
         for (i = 0; i < runs; i++) {
             System.out.println("\ttest iteration " + i);
             loadFeaturesFile(featuresFilename);
-            createModels("src/weka-models");
+            createModels("weka-models");
             calculatePredictions(true);
-            savePredictions(i + "-test/out");
+            savePredictions("outputs/predictions/" + i + "-test/out");
             // reset variables for next iteration:
             classifiers = null;
             predictions = null;
@@ -352,7 +351,7 @@ public class Process {
 
     public void processFile(String preprocessedFilename, String outputFilename) {
         PerformanceCounters.startTimer("processFile");
-        String modelsContainerDirectory = "src/weka-models";
+        String modelsContainerDirectory = "weka-models";
         loadFeaturesFile(preprocessedFilename);
         loadModels(modelsContainerDirectory);
         calculatePredictions(true);
@@ -370,7 +369,7 @@ public class Process {
         createTestModel4();
         System.out.println("\tall models created.");
         PerformanceCounters.stopTimer("createModels");
-        
+
     }
 
     private void createTestModel1() {
@@ -379,17 +378,21 @@ public class Process {
         Stacking stack = new Stacking();
 
         Classifier[] baseClassifiers = new Classifier[3];
-        //String[] options = new String[1];
+        String[] options = new String[1];
         M5P tree = new M5P();         // new instance of tree
         IBk knn = new IBk(1);
         LinearRegression lr = new LinearRegression();
         M5P metatree = new M5P();         // new instance of tree
 
-        //options[0] = "-U";            // unpruned tree
+        options[0] = "-R";
         baseClassifiers[0] = tree;
         baseClassifiers[1] = knn;
         baseClassifiers[2] = lr;
-        //tree.setOptions(options);     // set the options
+        try {
+            tree.setOptions(options);     // set the options
+        } catch (Exception ex) {
+            Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         stack.setClassifiers(baseClassifiers);
         stack.setMetaClassifier(metatree);
@@ -399,7 +402,7 @@ public class Process {
         } catch (Exception ex) {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         classifiers[0] = stack;
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("createTestModel1");
@@ -411,7 +414,7 @@ public class Process {
         Stacking stack = new Stacking();
 
         Classifier[] baseClassifiers = new Classifier[5];
-        String[] options = new String[2];
+        String[] options = new String[3];
         M5P tree = new M5P();         // new instance of tree
         IBk knn = new IBk(1);
         LinearRegression lr = new LinearRegression();
@@ -428,6 +431,7 @@ public class Process {
 
         options[0] = "-M";            // unpruned tree
         options[1] = "4";            // unpruned tree
+        options[2] = "-R";
         try {
             tree.setOptions(options);     // set the options
         } catch (Exception ex) {
@@ -442,7 +446,7 @@ public class Process {
         } catch (Exception ex) {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         classifiers[1] = stack;
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("createTestModel2");
@@ -454,7 +458,7 @@ public class Process {
         Vote vote = new Vote();
 
         Classifier[] baseClassifiers = new Classifier[7];
-        String[] options = new String[2];
+        String[] options = new String[3];
         M5P tree = new M5P();         // new instance of tree
         IBk knn = new IBk(1);
         M5P tree2 = new M5P();         // new instance of tree
@@ -473,6 +477,7 @@ public class Process {
 
         options[0] = "-M";            // ...
         options[1] = "4";            // number of ...
+        options[2] = "-R";
         try {
             tree.setOptions(options);     // set the options
         } catch (Exception ex) {
@@ -489,9 +494,10 @@ public class Process {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        options = new String[2];
+        options = new String[3];
         options[0] = "-M";            // ...
         options[1] = "20";            // number of ...
+        options[2] = "-R";
         try {
             tree3.setOptions(options);     // set the options
         } catch (Exception ex) {
@@ -505,7 +511,7 @@ public class Process {
         } catch (Exception ex) {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         classifiers[2] = vote;
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("createTestModel3");
@@ -518,7 +524,7 @@ public class Process {
 
         Classifier[] baseClassifiers = new Classifier[7];
 
-        String[] options = new String[2];
+        String[] options = new String[3];
         M5P tree = new M5P();         // new instance of tree
         IBk knn = new IBk(1);
         M5P tree2 = new M5P();         // new instance of tree
@@ -539,6 +545,7 @@ public class Process {
 
         options[0] = "-M";            // unpruned tree
         options[1] = "4";            // unpruned tree
+        options[2] = "-R";
         try {
             tree.setOptions(options);     // set the options
         } catch (Exception ex) {
@@ -555,9 +562,10 @@ public class Process {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        options = new String[2];
+        options = new String[3];
         options[0] = "-M";            // unpruned tree
         options[1] = "20";            // unpruned tree
+        options[2] = "-R";
         try {
             tree3.setOptions(options);     // set the options
         } catch (Exception ex) {
@@ -572,7 +580,7 @@ public class Process {
         } catch (Exception ex) {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         classifiers[3] = stack;
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("createTestModel4");

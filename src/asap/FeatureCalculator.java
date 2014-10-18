@@ -11,6 +11,7 @@ package asap;
  */
 public interface FeatureCalculator {
     public void calculate(Instance i);
+    public boolean textProcessingDependenciesMet(Instance i);
     
     public String[] getFeatureNames();
 }

@@ -42,7 +42,7 @@ public class PerformanceCounters {
             while (tmp.length() < pc.longestCounterName) {
                 tmp += " ";
             }
-            return "{" + timerName + "}\t " + noRuns + " runs\t\t "
+            return "{" + tmp + "}\t " + noRuns + " runs\t\t "
                     + avgTime + "ms\t" + getAvgMemoryUsage() + "b";
         }
 
