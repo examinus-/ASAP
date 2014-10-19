@@ -60,7 +60,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         s2Lemmas = (String[])o;
         
         
-        lemmaPairSimilarityValues = calculateLemmaPairSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
+        lemmaPairSimilarityValues = calculateLemmaPairJcnSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
         //System.out.println("lemma pair similarities calculated");
 
         resolveConflicts(lemmaPairSimilarityValues);
@@ -68,6 +68,14 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
 
         i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
         //System.out.println("added max JCN sum measure");
+        
+        lemmaPairSimilarityValues = calculateLemmaPairLeskSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
+        //System.out.println("lemma pair similarities calculated");
+
+        resolveConflicts(lemmaPairSimilarityValues);
+        //System.out.println("best lemma pairs determined");
+
+        i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
         
 //        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate SemanticSimilarityAndRelatedness");
@@ -127,8 +135,13 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         //System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
         return value;
     }
+    private double getLeskValueOf(String wordA, String wordB) {
+        double value = WS4J.runLESK(wordA, wordB);
+        //System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
+        return value;
+    }
 
-    private double getJCNValueSum(Set<LemmaSimilarity> lemmaPairSimilarityValues) {
+    private double getValueSum(Set<LemmaSimilarity> lemmaPairSimilarityValues) {
         double sum = 0d;
         for (LemmaSimilarity lemmaPairSimilarityValue : lemmaPairSimilarityValues) {
             sum += lemmaPairSimilarityValue.getSimilarityValue();
@@ -141,7 +154,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         return sum;
     }
 
-    private TreeSet<LemmaSimilarity> calculateLemmaPairSimilarityValues(String[] s1ChunkLemmas, 
+    private TreeSet<LemmaSimilarity> calculateLemmaPairJcnSimilarityValues(String[] s1ChunkLemmas, 
             String[] s2ChunkLemmas, List<Entry<Integer, Integer>> chunkPairs) {
         TreeSet<LemmaSimilarity> lemmaSimilarities
                 = new TreeSet<>();
@@ -150,7 +163,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
             LemmaSimilarity lemmaSimilarity
                     = new LemmaSimilarity(chunkPair.getKey(),
                             chunkPair.getValue(),
-                            getSimilarityValueOf(
+                            getJcnSimilarityValueOf(
                                     s1ChunkLemmas[chunkPair.getKey()],
                                     s2ChunkLemmas[chunkPair.getValue()]
                             ));
@@ -163,12 +176,38 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         return lemmaSimilarities;
     }
 
-    protected double getSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
+    protected double getJcnSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
         return getJCNValueOf(s1ChunkLemma, s2ChunkLemma);
+    }
+
+    private TreeSet<LemmaSimilarity> calculateLemmaPairLeskSimilarityValues(String[] s1ChunkLemmas, 
+            String[] s2ChunkLemmas, List<Entry<Integer, Integer>> chunkPairs) {
+        TreeSet<LemmaSimilarity> lemmaSimilarities
+                = new TreeSet<>();
+        
+        for (Entry<Integer, Integer> chunkPair : chunkPairs) {
+            LemmaSimilarity lemmaSimilarity
+                    = new LemmaSimilarity(chunkPair.getKey(),
+                            chunkPair.getValue(),
+                            getLeskSimilarityValueOf(
+                                    s1ChunkLemmas[chunkPair.getKey()],
+                                    s2ChunkLemmas[chunkPair.getValue()]
+                            ));
+
+            if (lemmaSimilarity.getSimilarityValue() > 0) {
+                lemmaSimilarities.add(lemmaSimilarity);
+            }
+        }
+
+        return lemmaSimilarities;
+    }
+
+    protected double getLeskSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
+        return getLeskValueOf(s1ChunkLemma, s2ChunkLemma);
     }
     
     protected double getTotalSimilarityValueOf(Set<LemmaSimilarity> values) {
-        return getJCNValueSum(values);
+        return getValueSum(values);
     }
 
     

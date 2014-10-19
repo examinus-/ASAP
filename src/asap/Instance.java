@@ -13,7 +13,8 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 /**
- *  classe auxiliar ao preprocessamento
+ * classe auxiliar ao preprocessamento
+ *
  * @author exam
  */
 public class Instance {
@@ -34,22 +35,28 @@ public class Instance {
 //    
 //    private HashSet<String> sentence1Words;
 //    private HashSet<String> sentence2Words;
-    
+
     private final HashMap<String, Object> processedText;
     private final int pair_ID;
-    private final double relatedness_groundtruth;
+    private double goldStandard;
     private final LinkedList<TextProcesser> processed;
-    
-    public Instance(String sentence1, String sentence2, int pairId,
-            double relatedness_groundtruth) {
+
+    public Instance(String sentence1, String sentence2, int pairId) {
         values = new LinkedList<>();
         this.sentence1 = sentence1;
         this.sentence2 = sentence2;
         this.values.add(pairId);
         this.pair_ID = pairId;
-        this.relatedness_groundtruth = relatedness_groundtruth;
         this.processed = new LinkedList<>();
         this.processedText = new HashMap<>();
+
+        this.goldStandard = -1;
+    }
+
+    public Instance(String sentence1, String sentence2, int pairId,
+            double relatedness_groundtruth) {
+        this(sentence1, sentence2, pairId);
+        this.goldStandard = relatedness_groundtruth;
     }
 
     public String getSentence1() {
@@ -61,31 +68,33 @@ public class Instance {
     }
 
     public synchronized Object getProcessedTextPart(String objectKey) {
-        if (!processedText.containsKey(objectKey))
+        if (!processedText.containsKey(objectKey)) {
             return null;
+        }
         return processedText.get(objectKey);
     }
 
     public synchronized Object getAttributeAt(int index) {
         return values.get(index);
     }
-    
+
     public double getRelatedness_groundtruth() {
-        return relatedness_groundtruth;
+        return goldStandard;
     }
-    
+
     public synchronized boolean isProcessed(TextProcesser textProcesser) {
         if (textProcesser == null) {
             return true;
         }
         Iterator<TextProcesser> it = processed.iterator();
         while (it.hasNext()) {
-            if (it.next().getClass().isInstance(textProcesser))
+            if (it.next().getClass().isInstance(textProcesser)) {
                 return true;
+            }
         }
         return false;
     }
-    
+
     @Override
     public String toString() {
         String r = "";
@@ -102,10 +111,9 @@ public class Instance {
             }
             r += "\t";
         }
-        r += relatedness_groundtruth;
+        r += goldStandard;
 
 //        System.out.println("Wrote " + (values.size() + 1) + " values");
-        
         return r;
     }
 
@@ -121,7 +129,7 @@ public class Instance {
 
         return toString() + "\t" + s1 + "\t" + s2;
     }
- 
+
     public String valuesToArffCsvFormat() {
         String r = "";
 
@@ -135,17 +143,20 @@ public class Instance {
             } else {
                 r += o;
             }
-            r += ",";
+            if (it.hasNext() || hasGoldStandard()) {
+                r += ",";
+            }
         }
         
-        r += relatedness_groundtruth;
-        
+        if (hasGoldStandard()) {
+            r += goldStandard;
+        }
+
 //        System.out.println("Wrote " + (values.size() + 1) + " values");
 //        System.out.println(r);
-        
         return r;
     }
-    
+
     public synchronized void addProcessedTextPart(String key, Object processedTextPart) {
         processedText.put(key, processedTextPart);
     }
@@ -153,9 +164,9 @@ public class Instance {
     public synchronized void addProcessed(TextProcesser textProcesser) {
         this.processed.add(textProcesser);
     }
-    
+
     public synchronized void addAtribute(Object o) {
-        
+
         if (o instanceof double[]) {
             double[] doubleArray = (double[]) o;
             for (int i = 0; i < doubleArray.length; i++) {
@@ -164,7 +175,7 @@ public class Instance {
             }
 //            System.out.println("Added " + doubleArray.length + " attribute to " + getAttributeAt(0));
         } else if (o instanceof int[]) {
-            
+
             int[] intArray = (int[]) o;
             for (int i = 0; i < intArray.length; i++) {
                 double value = intArray[i];
@@ -176,5 +187,9 @@ public class Instance {
 //            System.out.println("Added 1 attribute to " + getAttributeAt(0));
         }
     }
-    
+
+    public boolean hasGoldStandard() {
+        return goldStandard != -1;
+    }
+
 }

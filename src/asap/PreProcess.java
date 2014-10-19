@@ -51,7 +51,7 @@ public class PreProcess extends TextProcessHashWords {
         }
 
         PreProcess pp = new PreProcess();
-        pp.loadSentencePairs(args[0]);
+        pp.loadSentencePairsWithGoldStandard(args[0]);
         pp.calculateFeatures();
         pp.saveDataSet(args[1]);
 
@@ -97,27 +97,23 @@ public class PreProcess extends TextProcessHashWords {
         maxRelatedness_groundtruth = Double.MIN_VALUE;
         minRelatedness_groundtruth = Double.MAX_VALUE;
     }
-    
+
     public void loadSentencePairsWithSideGoldStandardFile(String pairsFilename, String gsFilename) {
         PerformanceCounters.startTimer("loadSentencePairs");
         double relatedness_groundtruth;
         HashSet<String> s1Words;
         HashSet<String> s2Words;
 
-        
-        try (FileInputStream fis = new FileInputStream(pairsFilename)
-                ;
-        FileInputStream gsFis = new FileInputStream(gsFilename)) {
+        try (FileInputStream fis = new FileInputStream(pairsFilename);
+                FileInputStream gsFis = new FileInputStream(gsFilename)) {
             //ignore column headers:
-            try (Scanner sc = new Scanner(fis)
-                    ;
-                 Scanner gsSc = new Scanner(gsFis)) {
-                
+            try (Scanner sc = new Scanner(fis);
+                    Scanner gsSc = new Scanner(gsFis)) {
+
                 /* NO COLUMN NAMES IN THE BEGGINING::
-                sc.nextLine();
-                gsSc.nextLine();
-                */
-                
+                 sc.nextLine();
+                 gsSc.nextLine();
+                 */
                 while (sc.hasNextLine() && gsSc.hasNextLine()) {
                     s1Words = new HashSet<>();
                     s2Words = new HashSet<>();
@@ -150,16 +146,16 @@ public class PreProcess extends TextProcessHashWords {
                     //NO pair_ID column either:
                     //int pair_ID = Integer.parseInt(attributes[0]);
                     int pair_ID = instances.size();
-                    
+
                     Instance i = new Instance(attributes[0].toLowerCase(), attributes[1].toLowerCase(),
                             pair_ID, relatedness_groundtruth);
-                    
+
                     i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
                     i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
                     i.addProcessed(this);
-                    
+
                     instances.add(i);
-                    
+
                 }
             }
         } catch (IOException ex) {
@@ -172,7 +168,7 @@ public class PreProcess extends TextProcessHashWords {
         PerformanceCounters.stopTimer("loadSentencePairs");
     }
 
-    public void loadSentencePairs(String filename) {
+    public void loadSentencePairsWithGoldStandard(String filename) {
         PerformanceCounters.startTimer("loadSentencePairs");
         double relatedness_groundtruth;
         HashSet<String> s1Words;
@@ -212,16 +208,16 @@ public class PreProcess extends TextProcessHashWords {
                         maxRelatedness_groundtruth = relatedness_groundtruth;
                     }
                     int pair_ID = Integer.parseInt(attributes[0]);
-                    
+
                     Instance i = new Instance(attributes[1].toLowerCase(), attributes[2].toLowerCase(),
                             pair_ID, relatedness_groundtruth);
-                    
+
                     i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
                     i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
                     i.addProcessed(this);
-                    
+
                     instances.add(i);
-                    
+
                 }
             }
         } catch (IOException ex) {
@@ -270,7 +266,9 @@ public class PreProcess extends TextProcessHashWords {
                     sb.append(String.format("@attribute '%s' numeric\n", featureName));
                 }
             }
-            sb.append("@attribute 'relatedness_groundtruth' numeric\n\n@data\n");
+            if (instances.get(0).hasGoldStandard()) {
+                sb.append("@attribute 'gold_standard' numeric\n\n@data\n");
+            }
             fos.write(sb.toString().getBytes());
 
             for (Instance instance : instances) {
@@ -324,19 +322,17 @@ public class PreProcess extends TextProcessHashWords {
         featureCalculatorsClone = new FeatureCalculator[4];
 
         //featureCalculators[0] = new LexicalCountWords("src/negative-stopword-list.txt", "nsw");
-        
         featureCalculators[0] = new LexicalCountWords("stopword-list.txt", "sw");
         featureCalculatorsClone[0] = new LexicalCountWords("stopword-list.txt", "sw");
-        
+
         featureCalculators[1] = new SemanticSimilarityAndRelatednessCalculator();
         featureCalculatorsClone[1] = new SemanticSimilarityAndRelatednessCalculator();
-        
+
         featureCalculators[2] = new LexicalOverlapFeaturesCalculator(0, 3);
         featureCalculatorsClone[2] = new LexicalOverlapFeaturesCalculator(0, 3);
         featureCalculators[3] = new SyntacticCountChunkTypesFeatures();
         featureCalculatorsClone[3] = new SyntacticCountChunkTypesFeatures();
-        
-        
+
         Thread worker = new Thread(new FeatureCalculatorWorker(featureCalculators));
         Thread iWorker = new Thread(new FeatureCalculatorInvertedWorker(featureCalculatorsClone));
 
@@ -355,31 +351,30 @@ public class PreProcess extends TextProcessHashWords {
         PerformanceCounters.stopTimer("calculateFeatures");
     }
 
-    public void preProcessFile(String inputFilename, String preprocessedFilename) {
-        PerformanceCounters.startTimer("preProcessFile");
-        loadSentencePairs(inputFilename);
+    public void preProcessFileWithGoldStandard(String inputFilename, String preprocessedFilename) {
+        PerformanceCounters.startTimer("preProcessFileWithGoldStandard");
+        loadSentencePairsWithGoldStandard(inputFilename);
         calculateFeatures();
         saveArffDataSet(preprocessedFilename);
-        PerformanceCounters.stopTimer("preProcessFile");
+        PerformanceCounters.stopTimer("preProcessFileWithGoldStandard");
     }
-    
-    public void preProcessFile(String inputPairsFilename, String inputGoldStandardFilename, String preprocessedFilename) {
-        PerformanceCounters.startTimer("preProcessFile");
+
+    public void preProcessFileWithGoldStandard(String inputPairsFilename, String inputGoldStandardFilename, String preprocessedFilename) {
+        PerformanceCounters.startTimer("preProcessFileWithGoldStandard");
         loadSentencePairsWithSideGoldStandardFile(inputPairsFilename, inputGoldStandardFilename);
         calculateFeatures();
         saveArffDataSet(preprocessedFilename);
-        PerformanceCounters.stopTimer("preProcessFile");
+        PerformanceCounters.stopTimer("preProcessFileWithGoldStandard");
     }
 
-    public void runTests(String sentencePairsFile, String preprocessedFilename) {
+    public void runBenchmark(String sentencePairsFile, String preprocessedFilename) {
         System.out.println("Running performance tests...");
         int runs = 10, i;
-        
 
         for (i = 0; i < runs; i++) {
             System.out.println("\ttest iteration " + i);
-            preProcessFile(sentencePairsFile, preprocessedFilename);
-            
+            PreProcess.this.preProcessFileWithGoldStandard(sentencePairsFile, preprocessedFilename);
+
             instances = new LinkedList<>();
             featureCalculators = null;
             featureCalculatorsClone = null;
@@ -392,15 +387,15 @@ public class PreProcess extends TextProcessHashWords {
         }
         System.out.println("\ttests done.");
     }
-    public void runTests(String sentencePairsFile, String goldStandardsFile, String preprocessedFilename) {
+
+    public void runBenchmark(String sentencePairsFile, String goldStandardsFile, String preprocessedFilename) {
         System.out.println("Running performance tests...");
         int runs = 10, i;
-        
 
         for (i = 0; i < runs; i++) {
             System.out.println("\ttest iteration " + i);
-            preProcessFile(sentencePairsFile, goldStandardsFile, preprocessedFilename);
-            
+            preProcessFileWithGoldStandard(sentencePairsFile, goldStandardsFile, preprocessedFilename);
+
             instances = new LinkedList<>();
             featureCalculators = null;
             featureCalculatorsClone = null;
@@ -412,6 +407,78 @@ public class PreProcess extends TextProcessHashWords {
             minRelatedness_groundtruth = Double.MAX_VALUE;
         }
         System.out.println("\ttests done.");
+    }
+
+    public void preProcessFileWithoutGoldStandards(String inputFilename, String preprocessedFilename) {
+
+        PerformanceCounters.startTimer("preProcessFileWithoutGoldStandards");
+        loadSentencePairsWithoutGoldStandard(inputFilename);
+        calculateFeatures();
+        saveArffDataSet(preprocessedFilename);
+        PerformanceCounters.stopTimer("preProcessFileWithoutGoldStandards");
+    }
+
+    private void loadSentencePairsWithoutGoldStandard(String filename) {
+        PerformanceCounters.startTimer("loadSentencePairsWithoutGoldStandard");
+//        double relatedness_groundtruth;
+        HashSet<String> s1Words;
+        HashSet<String> s2Words;
+
+        try (FileInputStream fis = new FileInputStream(filename)) {
+            //ignore column headers:
+            try (Scanner sc = new Scanner(fis)) {
+                sc.nextLine();
+
+                while (sc.hasNextLine()) {
+                    s1Words = new HashSet<>();
+                    s2Words = new HashSet<>();
+                    String line = sc.nextLine();
+                    //ignore empty lines:
+                    if (line.isEmpty()) {
+                        continue;
+                    }
+                    //String attributes[] = line.split(" \\|\\|\\| ");
+                    String attributes[] = line.split("\t");
+                    //sentences word set:
+
+                    for (String word : attributes[0].toLowerCase().split(" ")) {
+                        s1Words.add(word);
+                        incrementWordFrequency(word);
+                    }
+                    for (String word : attributes[1].toLowerCase().split(" ")) {
+                        s2Words.add(word);
+                        incrementWordFrequency(word);
+                    }
+//                    relatedness_groundtruth = Double.parseDouble(attributes[3]);
+//
+//                    if (relatedness_groundtruth < minRelatedness_groundtruth) {
+//                        minRelatedness_groundtruth = relatedness_groundtruth;
+//                    }
+//                    if (relatedness_groundtruth > maxRelatedness_groundtruth) {
+//                        maxRelatedness_groundtruth = relatedness_groundtruth;
+//                    }
+//                    int pair_ID = Integer.parseInt(attributes[0]);
+                    int pair_ID = instances.size();
+
+                    Instance i = new Instance(attributes[0].toLowerCase(), attributes[1].toLowerCase(),
+                            pair_ID);
+
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
+                    i.addProcessed(this);
+
+                    instances.add(i);
+
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("Loaded " + instances.size() + " instances from " + filename);
+//        System.out.println("\tMin relatedness:" + minRelatedness_groundtruth);
+//        System.out.println("\tMax relatedness:" + maxRelatedness_groundtruth);
+        PerformanceCounters.stopTimer("loadSentencePairsWithoutGoldStandard");
     }
 
     private class FeatureCalculatorWorker implements Runnable {

@@ -20,13 +20,12 @@ import weka.classifiers.meta.Vote;
 import weka.classifiers.rules.ZeroR;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Locale;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.IsotonicRegression;
@@ -134,37 +133,35 @@ public class Process {
 
         if (listOfFiles.length == 0) {
 
-            System.out.println("\tNo models found. Assuming they have to be built...");
-            createModels(modelsContainerPath);
-            System.out.println("\tmodels built.");
+            System.out.println("\tNo models found. Can't test without prior model building and training!");
             PerformanceCounters.stopTimer("loadModels");
-            return;
+            throw new RuntimeException("Can't test - no models found.");
         }
 
-        classifiers = new Classifier[listOfFiles.length];
+        LinkedList<Classifier> classifiersList = new LinkedList<>();
+        
         Object obj;
-        int failed = 0;
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String modelFilename = listOfFiles[i].getAbsolutePath();
+        for (File listOfFile : listOfFiles) {
+            String modelFilename = listOfFile.getAbsolutePath();
             try {
                 obj = SerializationHelper.read(modelFilename);
             } catch (Exception ex) {
                 Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
-                failed++;
                 continue;
             }
             if (obj instanceof AbstractClassifier) {
                 AbstractClassifier abCl = (AbstractClassifier) obj;
-                classifiers[i] = abCl;
+                classifiersList.add(abCl);
 
                 System.out.println("\tLoaded model : " + abCl.getClass().getName() + " "
                         + Utils.joinOptions(abCl.getOptions()));
             } else {
                 System.out.println("\tModel filename given doesn't contain a valid built model!");
-                failed++;
             }
         }
-        //TODO: take care with models that failed to load. array is "corrupt" now.
+        
+        classifiers = classifiersList.toArray(new Classifier[classifiersList.size()]);
+        
 
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("loadModels");
@@ -243,14 +240,14 @@ public class Process {
     /**
      * @param featuresFilename
      */
-    public void runTests(String featuresFilename) {
+    public void runBenchmark(String featuresFilename) {
         System.out.println("Running performance tests...");
         int runs = 10, i;
 
         for (i = 0; i < runs; i++) {
             System.out.println("\ttest iteration " + i);
             loadFeaturesFile(featuresFilename);
-            createModels("weka-models");
+            buildModelsTo("weka-models");
             calculatePredictions(true);
             savePredictions("outputs/predictions/" + i + "-test/out");
             // reset variables for next iteration:
@@ -349,18 +346,19 @@ public class Process {
         return predictions;
     }
 
-    public void processFile(String preprocessedFilename, String outputFilename) {
-        PerformanceCounters.startTimer("processFile");
+    public void buildModelsFromFile(String preprocessedFilename, String outputFilename) {
+        PerformanceCounters.startTimer("buildModelsFromFile");
         String modelsContainerDirectory = "weka-models";
         loadFeaturesFile(preprocessedFilename);
-        loadModels(modelsContainerDirectory);
+        //loadModels(modelsContainerDirectory);
+        buildModelsTo(modelsContainerDirectory);
         calculatePredictions(true);
         savePredictions(outputFilename);
-        PerformanceCounters.stopTimer("processFile");
+        PerformanceCounters.stopTimer("buildModelsFromFile");
     }
 
-    private void createModels(String modelsContainerPath) {
-        PerformanceCounters.startTimer("createModels");
+    private void buildModelsTo(String modelsContainerPath) {
+        PerformanceCounters.startTimer("buildModelsTo");
         System.out.println("Creating models...");
         classifiers = new Classifier[4];
         createTestModel1();
@@ -368,8 +366,8 @@ public class Process {
         createTestModel3();
         createTestModel4();
         System.out.println("\tall models created.");
-        PerformanceCounters.stopTimer("createModels");
-
+        saveModels(modelsContainerPath);
+        PerformanceCounters.stopTimer("buildModelsTo");
     }
 
     private void createTestModel1() {
@@ -584,5 +582,33 @@ public class Process {
         classifiers[3] = stack;
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("createTestModel4");
+    }
+
+    public void loadModelsAndTestFile(String preprocessedFilename, String outputFilename, String modelsDirectory) {
+        PerformanceCounters.startTimer("loadModelsAndTestFile");
+        loadModels(modelsDirectory);
+        calculatePredictions(true);
+        savePredictions(outputFilename);
+        PerformanceCounters.stopTimer("loadModelsAndTestFile");
+    }
+
+    public void loadModelsAndTestFile(String preprocessedFilename, String outputFilename) {
+        loadModelsAndTestFile(preprocessedFilename, outputFilename, "weka-models");
+    }
+
+    private void saveModels(String modelsContainerPath) {
+        PerformanceCounters.startTimer("saveModels");
+        for (int i = 0; i < classifiers.length; i++) {
+            AbstractClassifier classifier = (AbstractClassifier) classifiers[i];
+            
+            String filename = i + classifier.getClass().getName();
+            try {
+                SerializationHelper.write(modelsContainerPath + File.pathSeparator + filename, classifier);
+            } catch (Exception ex) {
+                Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        PerformanceCounters.stopTimer("saveModels");
     }
 }

@@ -18,7 +18,7 @@ public class Run {
 
     public static void main(String[] args) {
         System.out.println(Arrays.toString(args));
-        String preprocessedFilename;
+        
         if (args.length < 1) {
             System.out.println("You need to provide [normal,test], an input and an output file.");
             return;
@@ -32,33 +32,25 @@ public class Run {
             return;
         }
 
+        if (args[0].equalsIgnoreCase("benchmark")) {
+            runBenchmark(args);
+            return;
+        }
+        
+        if (args[0].equalsIgnoreCase("train")) {
+            trainAndBuildModels(args);
+            return;
+        }
+        
         if (args[0].equalsIgnoreCase("test")) {
-            runTests(args);
+            loadAndTestModels(args);
+            return;
         }
 
-        preprocessedFilename = args[1] + ".ppout.arff";
-
-        PreProcess pp = new PreProcess();
-        Process p = new Process();
-        
-        
-        
-        if (args.length < 4) {
-            pp.preProcessFile(args[1], preprocessedFilename);
-            p.processFile(preprocessedFilename, args[2]);
-        } else
-        {
-            pp.preProcessFile(args[1], args[2], preprocessedFilename);
-            p.processFile(preprocessedFilename, args[3]);
-        }
-
-        LemmasNotFound.finishLog();
-
-        System.out.println("\n\n\n-----------------------------------");
-        PerformanceCounters.printStats();
+        System.out.println("First argument must be either \"benchmark\", \"train\" or \"test\".");
     }
 
-    private static void runTests(String[] args) {
+    private static void runBenchmark(String[] args) {
         String preprocessedFilename = args[1] + ".ppout.arff";
 
         PreProcess pp = new PreProcess();
@@ -67,13 +59,59 @@ public class Run {
         
         
         if (args.length < 4) {
-            pp.runTests(args[1], preprocessedFilename);
+            pp.runBenchmark(args[1], preprocessedFilename);
 
-            p.runTests(preprocessedFilename);
+            p.runBenchmark(preprocessedFilename);
         } else
         {
-            pp.runTests(args[1], args[2], preprocessedFilename);
-            p.runTests(preprocessedFilename);
+            pp.runBenchmark(args[1], args[2], preprocessedFilename);
+            p.runBenchmark(preprocessedFilename);
+        }
+
+        LemmasNotFound.finishLog();
+
+        System.out.println("\n\n\n-----------------------------------");
+        PerformanceCounters.printStats();
+    }
+
+    private static void trainAndBuildModels(String[] args) {
+        
+        String preprocessedFilename = args[1] + ".ppout.arff";
+
+        PreProcess pp = new PreProcess();
+        Process p = new Process();
+        
+        
+        
+        if (args.length < 4) {
+            pp.preProcessFileWithGoldStandard(args[1], preprocessedFilename);
+            p.buildModelsFromFile(preprocessedFilename, args[2]);
+        } else
+        {
+            pp.preProcessFileWithGoldStandard(args[1], args[2], preprocessedFilename);
+            p.buildModelsFromFile(preprocessedFilename, args[3]);
+        }
+
+        LemmasNotFound.finishLog();
+
+        System.out.println("\n\n\n-----------------------------------");
+        PerformanceCounters.printStats();
+    }
+
+    private static void loadAndTestModels(String[] args) {
+        
+        String preprocessedFilename = args[1] + ".ppout.arff";
+
+        PreProcess pp = new PreProcess();
+        Process p = new Process();
+        
+        if (args.length < 4) {
+            pp.preProcessFileWithoutGoldStandards(args[1], preprocessedFilename);
+            p.loadModelsAndTestFile(preprocessedFilename, args[2]);
+        } else
+        {
+            pp.preProcessFileWithoutGoldStandards(args[1], preprocessedFilename);
+            p.loadModelsAndTestFile(preprocessedFilename, args[2], args[3]);
         }
 
         LemmasNotFound.finishLog();

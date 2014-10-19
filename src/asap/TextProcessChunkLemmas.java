@@ -130,11 +130,14 @@ public class TextProcessChunkLemmas extends TextProcessChunks implements TextPro
     }
     
     private String lemmatizeChunkMethodJWI(Chunk chunk) {
-        return lemmatizeJWIMethod0(chunk.getChunkText(), edu.mit.jwi.item.POS.getPartOfSpeech(chunk.toPOS().name().charAt(0)));
+        String chunkText = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
+        if (chunkText.isEmpty())
+            return "";
+        return lemmatizeJWIMethod0(chunkText, edu.mit.jwi.item.POS.getPartOfSpeech(chunk.toPOS().name().charAt(0)));
     }
     
     private String lemmatizeChunkMethodCombinedWs4jAndJaws(Chunk chunk) {
-        String lemma = chunk.getChunkText();
+        String lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
         String validLemma = WNCheckValidMethod0(lemma.replace(" ", "_"), chunk.toPOS(), chunk.toSynsetType());
         while (validLemma == null) {
             int indexOfSpace = lemma.indexOf(" ");
@@ -148,7 +151,7 @@ public class TextProcessChunkLemmas extends TextProcessChunks implements TextPro
         }
 
         if (lemma == null) {
-            lemma = chunk.getChunkText();
+            lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
             validLemma = WNCheckValidMethod1(lemma, chunk.toPOS(), chunk.toSynsetType());
             while (validLemma == null) {
                 int indexOfSpace = lemma.indexOf(" ");
