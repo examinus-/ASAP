@@ -44,16 +44,6 @@ public class Chunk {
         return "[" + chunkType + " " + chunkText + "]";
     }
 
-    public POS toPOS() {
-        switch (chunkType) {
-            case "NP":
-                return POS.n;
-            case "VP":
-                return POS.v;
-        }
-        return POS.a;
-    }
-
     public SynsetType toSynsetType() {
 
         switch (chunkType) {

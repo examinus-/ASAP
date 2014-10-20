@@ -1,1107 +1,912 @@
-"lol" (POS=NP)
-	 in sentence "lol, you are so ignorant."
+"geiges" (POS=NP)
+	 in sentence "van der merwe sentenced geiges to a total of 13 years imprisonment. "
 
-"the co growth rate accelerates" (POS=NP)
-	 in sentence "scenario a assumes that the co growth rate accelerates by .%/yr."
+"human organ trafficking" (POS=NP)
+	 in sentence "6 czech hospital employees are charged with human organ trafficking. "
 
-"-not-" (POS=O)
-	 in sentence "-not- talking about it 'and' -not- doing anything."
+"the advanced light helicopter ( alh )" (POS=NP)
+	 in sentence "france, belgium, germany, sweden, italy and britain provide parts and technology for the advanced light helicopter (alh). "
 
 "particularly" (POS=ADVP)
-	 in sentence "particularly after stating that marriage is a fundamental human right."
+	 in sentence "the african union has proposed a peacekeeping mission to aid the struggling transitional government in stabilizing somalia, particularly after the withdrawal of ethiopian forces."
+
+"baseless" (POS=NP)
+	 in sentence "the iranian government has dismissed the allegations in the intelligence presented to the international atomic energy agency board as baseless and the intelligence used to support the allegations as fake. "
 
 "that" (POS=SBAR)
-	 in sentence "the new study shows that the titanic story does not stand up to scrutiny imo."
+	 in sentence "iguaran stated that the detainees will be accused of homicide, criminal collaboration, kidnappings and the funding of terrorism. "
 
-"anybody" (POS=NP)
-	 in sentence "that israel doesn't giva a **** what anybody else thinks."
+"trans-dniester" (POS=NP)
+	 in sentence "russia ratified the updated treaty in 2004 but the united states and other nato members have refused to do so arguing that moscow must first fulfill obligations to withdraw forces from georgia and from moldova's separatist region of trans-dniester. "
 
-"upon" (POS=PP)
-	 in sentence "or sin is removed upon entry to heaven."
+"unintentionally" (POS=NP)
+	 in sentence "nuclear weapon systems at a high level of readiness increase the risk of those weapons being used including unintentionally with catastrophic consequences. "
 
-"larry bud melman" (POS=NP)
-	 in sentence "he hasn't been funny since larry bud melman was on the show."
+"to nato" (POS=VP)
+	 in sentence "russian president vladimir putin states that the decision to cease implementation of the conventional forces in europe treaty is a response to u.s. plans to establish missile defense sites in eastern europe and to nato's failure to ratify an amended version of the treaty. "
 
-"why" (POS=ADVP)
-	 in sentence "this is why i support the death penalty."
+"temporarily" (POS=ADVP)
+	 in sentence "estonian officials stated that some of the cyber attacks that caused estonian government websites to shut down temporarily came from computers in the administration of russia including in the office of president vladimir putin. "
 
-"off" (POS=NP)
-	 in sentence "candy - thanks for starting us off today."
+"the alh" (POS=NP)
+	 in sentence "the amnesty international report suggested that-- belgium begin immediate talks with india to prevent future sales of the alh, components or military technology to myanmar. "
 
-"nugent" (POS=NP)
-	 in sentence "and nugent was a complete fool to say what he said."
+"south africa cannot" (POS=NP)
+	 in sentence "government spokesman maseko stated that if administrative papers are in order the government of south africa cannot intervene to prevent weapons from being transported through its territory to a neighboring landlocked country. "
 
-"very highly" (POS=ADVP)
-	 in sentence "i purport to value human life very highly."
-
-"not" (POS=ADJP)
-	 in sentence "the government does not determine if you are married or not."
-
-"of" (POS=SBAR)
-	 in sentence "this eclipses the old record of  set in ."
+"may 1998" (POS=NP)
+	 in sentence "indian and pakistani governments each conducted nuclear tests in may 1998."
 
 "with" (POS=PP)
-	 in sentence "i am ok with medical use!"
+	 in sentence "6 czech hospital employees are charged with human organ trafficking. "
 
-"technically" (POS=ADVP)
-	 in sentence "morals do not exist, so technically nothing can be morally wrong."
+"march 2008" (POS=NP)
+	 in sentence "switzerland's trade and diplomatic relations with iran have been criticized in recent months after foreign minister micheline calmy-rey traveled to tehran in march 2008 to sign a deal with iran's state gas firm. "
 
-"voted" (POS=O)
-	 in sentence "voted voted it's definitely not what it used to be."
+"qin" (POS=PP)
+	 in sentence "chinese foreign ministry spokesman qin gang was asked to respond to cheney's speech on china's military development."
+
+"issued its" (POS=VP)
+	 in sentence "jordanian prime minister maaruf bakhit said in july 2006 that raghdad hussein and her family were living under the protection of king abdullah ii after iraq issued its"
 
 "all" (POS=NP)
-	 in sentence "best way to get money out is to get rid of lobby, all of it."
+	 in sentence "ukraine almost has all of the necessary approvals to join the european space agency's program. "
 
-"suicidal" (POS=NP)
-	 in sentence "i don't know how legitimate this is, but i heard he's kind of suicidal."
+"august 2008" (POS=NP)
+	 in sentence "the center will be operational in august 2008. "
 
-"lustig" (POS=NP)
-	 in sentence "@lustig andrei, lustig, agreed."
+"carrying" (POS=NP)
+	 in sentence "the statement did not specify the quantity of warheads the missile is capable of carrying. "
 
-"obama" (POS=NP)
-	 in sentence "do you see obama calling for regulation reform?"
+"janeiro" (POS=NP)
+	 in sentence "brazilian police surrounding slums north of rio de janeiro to rid them of violent drug traffickers. "
 
-"probably" (POS=ADVP)
-	 in sentence "so, short form, yes, it probably is different in different countries."
-
-"bienging" (POS=NP)
-	 in sentence "bienging is unaccptable."
+"elbaradei" (POS=NP)
+	 in sentence "elbaradei is the international atomic energy agency chief. "
 
 "from" (POS=PP)
-	 in sentence "how about some testimonies from real health experts?"
+	 in sentence "the united states government and other nato members have refused to ratify the amended treaty until officials in moscow withdraw troops from the former soviet republics of moldova and georgia. "
 
-"therefore" (POS=ADVP)
-	 in sentence "therefore you are not a christian."
+"eastern" (POS=NP)
+	 in sentence "russia had threatened several times to withdraw from the cfe when it was at odds with the united states over u.s. plans to install a missile defense shield in eastern "
 
-"a nazarite" (POS=NP)
-	 in sentence "proverbs  john the baptist was a nazarite from birth."
+"in" (POS=PP)
+	 in sentence "the treaty was first signed in 1990. "
 
-"does n't giva" (POS=VP)
-	 in sentence "that israel doesn't giva a **** what anybody else thinks."
+"up" (POS=PRT)
+	 in sentence "the united states said it would stand up to nuclear blackmail and has ruled out negotiations."
 
-"direct responsibilty" (POS=NP)
-	 in sentence "that is not direct responsibilty to the constituents."
+"police apprehend" (POS=NP)
+	 in sentence "beijing police apprehend more than 20 people including 8 foreigners in suspicion of using and trafficking drugs in 2 pubs in a popular downtown area. "
 
-"answer yes" (POS=VP)
-	 in sentence "if you answer yes to  and no to  you are probably straight."
+"zhang yan" (POS=NP)
+	 in sentence "zhang yan stated that all countries should abide by non-proliferation obligations in order to enhance mutual trust and create a sound environment for international cooperation in nuclear energy."
 
-"you" (POS=NP)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+". dhillon" (POS=NP)
+	 in sentence "the lawyer of michael karras named s.s. dhillon could not be reached for comment. "
 
-"'m" (POS=VP)
-	 in sentence "my gosh, i'm the one with the pregnancy ticker."
+"illicit trafficking" (POS=NP)
+	 in sentence "myanmar's military rulers burned approximately 250 million dollars worth of illegal drugs to mark the international day against drug abuse and illicit trafficking. "
 
-"extreme and leftwing" (POS=ADJP)
-	 in sentence "obama is extreme and leftwing."
+"kadhafi" (POS=NP)
+	 in sentence "kadhafi warns that us and britain's failure to compensate libya for nuclear disarmament will deter iran and north korea from disarming. "
 
-"ww" (POS=NP)
-	 in sentence "how exactly is germany being 'punished' for the stupidity of ww?"
+"urakov" (POS=NP)
+	 in sentence "general nikolai n. urakov is the longtime director of the the state scientific center of applied microbiology."
 
-"solinvictus" (POS=NP)
-	 in sentence "originally posted by solinvictus the messahe of all the scriptures is oneness."
+"the weaponization" (POS=NP)
+	 in sentence "the countries oppose the weaponization of space and an arms race in space. "
 
-"solinvictus ah" (POS=NP)
-	 in sentence "originally posted by solinvictus ah."
+"the nsg" (POS=NP)
+	 in sentence "russia is a member of the nsg."
 
-"until" (POS=SBAR)
-	 in sentence "wait until they become more consistent and closer together."
+"ahmad" (POS=ADVP)
+	 in sentence "ahmad is fighting extradition to the united states and lodged a formal complaint alleging that british police concocted intelligence reports to implicate ahmad in terror activities and desecrated the koran. "
 
-"that" (POS=O)
-	 in sentence "you already did that - we have a muslim in office right now."
+"funding and" (POS=NP)
+	 in sentence "india accuses pakistan of funding and training the cross-border guerrillas."
 
-"everything" (POS=NP)
-	 in sentence "the prices for everything you need have gone up due to inflation."
+"iguaran" (POS=NP)
+	 in sentence "iguaran stated that the detainees will be accused of homicide, criminal collaboration, kidnappings and the funding of terrorism. "
 
-"apisa" (POS=VP)
-	 in sentence "@frank apisa, frank, i observe and perceive."
+"unanimously" (POS=ADVP)
+	 in sentence "russian parliament voted unanimously to suspend russia's participation in the conventional forces in europe (cfe) treaty."
 
-"depending" (POS=PP)
-	 in sentence "depending on which action furthers their loony-tunes agenda of the moment."
+"altogether" (POS=ADVP)
+	 in sentence "putin stated that the russian government could withdraw from the treaty altogether if western nations refuse to ratify the amended treaty. "
 
-"methane growth rate accelerates" (POS=NP)
-	 in sentence "it assumes that methane growth rate accelerates by .%/yr."
-
-"buwhahahaha" (POS=NP)
-	 in sentence "buwhahahaha breathe in, breathe out, move on."
-
-"are" (POS=O)
-	 in sentence "why are they looking at each other like that ?!?!"
-
-"personally" (POS=ADVP)
-	 in sentence "personally i would read the bible to learn about christianity."
-
-"so quickly" (POS=ADVP)
-	 in sentence "h and i both read the books and thought the movie moved so quickly."
-
-"ergo" (POS=O)
-	 in sentence "ergo it offends me when thatcherites call themselves libertarian."
-
-"definitely" (POS=ADVP)
-	 in sentence "it's definitely not what it used to be."
-
-"differently" (POS=ADVP)
-	 in sentence "we in britain think differently to americans."
-
-"messy" (POS=NP)
-	 in sentence "your misogyny is getting messy."
-
-"treat" (POS=O)
-	 in sentence ""bright but scatterbrained" becomes "treat with drugs"."
-
-"really" (POS=ADVP)
-	 in sentence "can he really make mone from google ad sense."
+"zahedan" (POS=NP)
+	 in sentence "zahedan is the capital of sistan-baluchestan province."
 
 "itself" (POS=NP)
-	 in sentence "fix?: islam itself is not political."
+	 in sentence "fulvio berghella stated that the digital worm named sq hell was particularly virulent and replicated itself at the rate of 8000 times an hour. "
 
 "and" (POS=O)
-	 in sentence "if you answer yes to  and no to  you are probably straight."
+	 in sentence "iguaran stated that the detainees will be accused of homicide, criminal collaboration, kidnappings and the funding of terrorism. "
 
-"zimmerman" (POS=NP)
-	 in sentence "according to zimmerman he did."
+"dramatically" (POS=ADVP)
+	 in sentence "the number of executions increased dramatically in 2007 amid a campaign which iranian authorities state is aimed at improving security in society."
 
-"alot" (POS=PP)
-	 in sentence "if so, alot of cops should take presciption drugs."
-
-"what" (POS=NP)
-	 in sentence "you wanna know what i find curious?"
-
-"aye" (POS=NP)
-	 in sentence "aye but they are responsible to their constituents."
-
-"voracek" (POS=NP)
-	 in sentence "voracek with the goal."
-
-"your lo" (POS=NP)
-	 in sentence "i hope your lo is ok."
-
-"usually" (POS=ADVP)
-	 in sentence "i have  years of "neener neener" rights usually i get pretty decent care."
-
-"is diachronico" (POS=VP)
-	 in sentence "thus, meta - system - atic dialectic is diachronico - synchronic dialectic."
+"to britain" (POS=VP)
+	 in sentence "an institute for public policy research report said there are 27 weak states that pose a threat to britain's national security as the states could provide bases for terrorists. "
 
 "those" (POS=NP)
-	 in sentence "those may be my top . the money i spent adopting velociraptor."
+	 in sentence "many of those executed in iran are hanged in public. "
 
-"johnny mathis" (POS=NP)
-	 in sentence "toyland by johnny mathis we are all vessels filled with many wonders."
+"estonia including prime minister andrus ansip" (POS=NP)
+	 in sentence "officials in estonia including prime minister andrus ansip have claimed that some of the cyber attacks came from russian government computers including computers in the office of russian president vladimir putin."
 
-"has" (POS=O)
-	 in sentence "has annie ever used her sexuality like that?"
+"believe iran" (POS=VP)
+	 in sentence "the united states and the allies of the united states believe iran is pursuing nuclear arms."
 
-""what" (POS=O)
-	 in sentence "mom busted in and said, "what's that noise?""
+"worth" (POS=PP)
+	 in sentence "britain has struck an agreement to supply saudi arabia with typhoon jets in a deal worth an estimated 8 billion pounds (about 13.9 billion us dollars). "
 
-"gotta" (POS=NP)
-	 in sentence "gotta love the ek factoid that "iran is also a signed of the npt and the iaea."
+"shalgam" (POS=NP)
+	 in sentence "shalgam's visit to london is the first by a libyan foreign minister since 1969. "
 
 "if" (POS=PP)
-	 in sentence "i wood have at least asked if a threesome was out of the question."
+	 in sentence "warned that russia would withdraw from the treaty if western nations refuse to ratify its amended version."
 
-"however" (POS=ADVP)
-	 in sentence "out of touch and completely untrustworthy, however, wouldn't."
+"london" (POS=ADVP)
+	 in sentence "libyan foreign minister abdel rahman shalgam visited london during the first visit by a libyan foreign minister since 1969. "
 
-"lower than" (POS=NP)
-	 in sentence "lower than  per cent but not very low."
+"( opaq )" (POS=NP)
+	 in sentence "the ecuadorian foreign ministry said in a statement that delegates from the organization for the prohibition of chemical weapons (opaq) will also take part in the meeting."
 
-"yes" (POS=O)
-	 in sentence "originally posted by zaf in the long term, yes."
+"jamaat-i-islami" (POS=NP)
+	 in sentence "jamaat-i-islami's youth wing staged a separate demonstration in kashmir. "
 
-"different yes" (POS=ADJP)
-	 in sentence "a man and a woman are different yes."
+"europe treaty ( cfe )" (POS=NP)
+	 in sentence "russia and nato member countries will hold meetings this fall on the conventional forces in europe treaty (cfe). "
 
-"simply" (POS=ADVP)
-	 in sentence "there is simply no winning for obama among conservatives."
+"afriforum" (POS=NP)
+	 in sentence "a group representing mainly white south africans called afriforum stated it would organize protests along the route to zimbabwe. "
 
-"dickshot matt holliday" (POS=NP)
-	 in sentence "dickshot matt holliday owns."
+"near" (POS=PP)
+	 in sentence "withdrawal from the treaty would allow russia to bolster forces near russian borders. "
 
-"atleast" (POS=SBAR)
-	 in sentence "you might not like the positions he holds, but atleast he has them."
+"threatens" (POS=PP)
+	 in sentence "amnesty international has published a report stating that an indian project to sell attack helicopters to myanmar threatens a european union arms embargo against myanmar. "
 
-"the titanic" (POS=NP)
-	 in sentence "i don't believe there was any iceberg at all anywhere near the titanic."
+"defense stated--" (POS=NP)
+	 in sentence "in a statement the british ministry of defense stated-- the agreement aims to establish wider cooperation covering national security and the fight against global terrorism."
 
-"indulgence instead" (POS=NP)
-	 in sentence "satan represents indulgence instead of abstinence!"
+"october" (POS=ADJP)
+	 in sentence "berlin will host top-level meetings in october to save key european arms control treaty conventional forces in europe (cfe). "
 
-"christmas" (POS=SBAR)
-	 in sentence "landon and so this is christmas we are all vessels filled with many wonders."
+"heinrich von pierer" (POS=NP)
+	 in sentence "a siemens spokesman in germany stated that heinrich von pierer stated that siemens was beginning talks with interested chinese parties about a sale of the plutonium-processing facility. "
 
-"sleep." (POS=O)
-	 in sentence "the one that has  walks home afterwards and goes to sleep."
+"livermore" (POS=VP)
+	 in sentence "korobeynichev's laboratory worked with the u.s. lawrence livermore national laboratory. "
 
-"how exactly" (POS=ADVP)
-	 in sentence "how exactly are they being punished?"
+"towards" (POS=PP)
+	 in sentence "saudi arabia is an absolute monarchy that has taken steps towards reform. "
 
-"would" (POS=VP)
-	 in sentence "out of touch and completely untrustworthy, however, wouldn't."
+"inside" (POS=PP)
+	 in sentence "the south african government imposed a ban that prohibits the recruitment of people inside or outside of south africa for mercenary or foreign military assistance. "
 
-"'re" (POS=VP)
-	 in sentence "well, whatever, you're aware of it now."
+"includes--" (POS=O)
+	 in sentence "the alh's arsenal includes-- rocket launchers from belgium rockets, guns and engines from france brake systems from italy fuel tanks and gearboxes from britain self-protection equipment from a swedish company."
 
-"the extreme leftwing" (POS=NP)
-	 in sentence "obama is part of the extreme leftwing."
+"afghanistan and" (POS=NP)
+	 in sentence "both tajikistan and uzbekistan share a border with afghanistan and have experienced raids by taliban-backed islamic militants in recent years. "
 
-"too" (POS=ADVP)
-	 in sentence "i have  years of "neener neener" rights i use lettuce too."
+"blix" (POS=NP)
+	 in sentence "blix stated that it is essential to increase efforts to eliminate nuclear arms and weapons of mass destruction. "
 
-"ooops" (POS=VP)
-	 in sentence "originally posted by muslim girl ooops sorry!"
+"because" (POS=PP)
+	 in sentence "zhang stated-- china opposes restricting the peaceful use of nuclear energy by non-nuclear-weapon states on the basis of non-proliferation because the peaceful use of nuclear energy is a crucial objective of the npt. "
 
-"sadly" (POS=ADVP)
-	 in sentence "sadly ford did accept taxpayer money."
+"' party (pkk )" (POS=NP)
+	 in sentence "13 kurds from turkey were arrested near paris on suspicion of money-laundering for the kurdistan workers' party (pkk). "
 
-"@frank apisa" (POS=NP)
-	 in sentence "@frank apisa, what you want to call it is up to you."
+"abe" (POS=NP)
+	 in sentence "abe urged more assertive foreign policy for japan and the international community."
 
-"do" (POS=O)
-	 in sentence "do you see obama calling for regulation reform?"
+"japanese prime minister junichiro koizumi" (POS=NP)
+	 in sentence "japanese prime minister junichiro koizumi said the shift of the rods was proactive. "
 
-"'s" (POS=VP)
-	 in sentence "imagine a place that's % white and % black."
+"bruguiere stated--" (POS=NP)
+	 in sentence "bruguiere stated-- restraining extremist groups particularly across europe was becoming increasingly difficult because of how the groups are financed."
 
-"xyz" (POS=NP)
-	 in sentence "if you want to buy $ billion in xyz inc. common stock, who cares?"
+"khoramabad" (POS=NP)
+	 in sentence "khoramabad is a city in western iran."
 
-"sometimes" (POS=ADVP)
-	 in sentence "sometimes i fantasize about having power."
-
-"before" (POS=SBAR)
-	 in sentence "the government doesnt have to declare you married before you can be married."
+"n" (POS=ADVP)
+	 in sentence "general nikolai n. urakov stated by telephone that the state scientific center of applied microbiology has quite reliable systems of protection in case of emergency. "
 
 "if" (POS=SBAR)
-	 in sentence "if you answer yes to  and no to  you are probably straight."
+	 in sentence "russia would not hesitate to increase military strength along russian borders if the need arises."
 
-"alright" (POS=NP)
-	 in sentence "alright just got in."
+"themba" (POS=O)
+	 in sentence "spokesman themba maseko stated as long as administrative papers are in order south africa cannot intervene to prevent weapons being transported through south african territory to zimbabwe."
 
-"terral" (POS=NP)
-	 in sentence "gl, terral that is absolutely amazing."
-
-"does" (POS=O)
-	 in sentence "does he have supporters?"
+"mohammed elbarade" (POS=NP)
+	 in sentence "mohammed elbarade is the international atomic energy agency's director general."
 
 "since" (POS=PP)
-	 in sentence "they have actually showed a cooling trend since  due to the recent decline."
+	 in sentence "shalgam's visit to london is the first by a libyan foreign minister since 1969. "
 
-"yeah" (POS=INTJ)
-	 in sentence "yeah, i don't think this is that controversial either."
+"wen-huang" (POS=NP)
+	 in sentence "police stated tsai wen-huang would be extradited to taiwan. "
 
-"natalie" (POS=NP)
-	 in sentence "natalie was a complete fool to have insulted their fan base."
+"berghella" (POS=NP)
+	 in sentence "fulvio berghella stated that the digital worm named sq hell was particularly virulent and replicated itself at the rate of 8000 times an hour. "
 
-"oh" (POS=ADVP)
-	 in sentence "oh, and again asserts that marriage is a fundamental human right."
+". kamynin" (POS=NP)
+	 in sentence "the spokesman said there will be an exchange of opinions on topical international and regional matters based on a joint working relationship at the heart of the u.n. kamynin said russia recognizes the participation of libya in the work of the u.n. security council. "
 
-"'whats" (POS=NP)
-	 in sentence "my kids busted in and said 'whats that dad?'"
-
-"umm" (POS=NP)
-	 in sentence "umm the california was a cargo ship i dont care what the article says."
+"early" (POS=NP)
+	 in sentence "in early may 2002 officials from the philippines, malaysia and indonesia signed an anti-terrorism agreement to share airline passenger lists and other intelligence. "
 
 "to" (POS=PP)
-	 in sentence "the prices for everything you need have gone up due to inflation."
+	 in sentence "safe bourada was sentenced to 15 years in prison. "
 
-"lashl" (POS=NP)
-	 in sentence "edited by lashl: edited to properly mask profanity."
+"stated--" (POS=O)
+	 in sentence "the iranian government stated-- the iranian nuclear program remains peaceful. "
 
-"pfa" (POS=NP)
-	 in sentence "you didn't mention pfa before that one post."
+"mostly" (POS=ADVP)
+	 in sentence "the vietnam news agency reported that the ministry of public security stated that foreigners involved in drug trafficking cases in vietnam came mostly from laos, cambodia, australia, china, the united states and taiwan. "
 
-"runs" (POS=O)
-	 in sentence "runs victim down got any proof?"
+"may 2002" (POS=VP)
+	 in sentence "in early may 2002 officials from the philippines, malaysia and indonesia signed an anti-terrorism agreement to share airline passenger lists and other intelligence. "
 
-"jond doubtful" (POS=NP)
-	 in sentence "originally posted by jond doubtful."
+"gerhard schroeder" (POS=NP)
+	 in sentence "a siemens spokesman in germany stated that heinrich von pierer stated that gerhard schroeder stated that gerhard schroeder is not against the sale of the plutonium-processing facility in principle."
 
-"the lesser" (POS=NP)
-	 in sentence "i don't see obama as the lesser of two evils."
+"the french president sarkozy" (POS=NP)
+	 in sentence "the cyber attack occurred after the french president sarkozy's meeting with the dalai lama angered the chinese government. "
 
-"how legitimate" (POS=NP)
-	 in sentence "so, i don't know how legitimate this is but yeah."
+"solely" (POS=ADVP)
+	 in sentence "iran insists that the program is aimed solely at peaceful pursuits such as the generation of "
 
-"its not" (POS=NP)
-	 in sentence "its not an official deployment."
+"vladimir" (POS=VP)
+	 in sentence "russian president vladimir putin states that the decision to cease implementation of the conventional forces in europe treaty is a response to u.s. plans to establish missile defense sites in eastern europe and to nato's failure to ratify an amended version of the treaty. "
 
-"braindead" (POS=ADJP)
-	 in sentence "it doesn't have to be braindead."
+"over" (POS=PP)
+	 in sentence "there is much concern over the drug. "
 
-"except" (POS=PP)
-	 in sentence "except that it wasn't."
+"antonov" (POS=NP)
+	 in sentence "antonov spoke the day before a conference on the conventional forces in europe treaty."
 
-"compare homo sexuaity" (POS=NP)
-	 in sentence "when did i compare homo sexuaity with a developmental disorder?"
+"the updates cfe" (POS=NP)
+	 in sentence "the united states and other nato members have refused to do ratify the updates cfe."
 
-""what" (POS=ADVP)
-	 in sentence "zimmerman replied, "what are you doing here?""
+"afghanistan" (POS=O)
+	 in sentence "sistan-baluchestan borders afghanistan and pakistan."
 
-"increased to kt" (POS=VP)
-	 in sentence "subjective dvorak intensity estimates from tafb and sab increased to  kt."
+"on" (POS=PP)
+	 in sentence "3 suspected extremists were released on bail. "
 
-"actually" (POS=ADVP)
-	 in sentence "double jeopardy actually enforces a jury nullification."
+"godzhayev and godzhayev" (POS=NP)
+	 in sentence "godzhayev and godzhayev's lawyers were not immediately available to comment."
 
-"anabelle" (POS=NP)
-	 in sentence "originally posted by anabelle what's wrong with that?"
+"1969" (POS=NP)
+	 in sentence "shalgam's visit to london is the first by a libyan foreign minister since 1969. "
 
-"the 'right ' is" (POS=NP)
-	 in sentence "some believe the 'right' is most important."
-
-"could" (POS=O)
-	 in sentence "could this have been an enema?"
-
-"hey" (POS=NP)
-	 in sentence "**smooches ran** hey, blue-eyes, how's things in london?"
-
-"they" (POS=NP)
-	 in sentence "but in the news broadcasts i have seen they did call him white."
+"immediately" (POS=ADVP)
+	 in sentence "godzhayev and godzhayev's lawyers were not immediately available to comment."
 
 "already" (POS=ADVP)
-	 in sentence "you already did that - we have a muslim in office right now."
+	 in sentence "russia already participates in the european space agency's "
 
-"would" (POS=O)
-	 in sentence "if you could kill one person to save four, would you?"
+"cyber" (POS=PP)
+	 in sentence "a report issued by security software vendor mcafee inc., said government-affiliated hackers in china are at the forefront of a brewing cyber cold war. "
 
-"i" (POS=VP)
-	 in sentence "i have  years of "neener neener" rights i use lettuce too."
+"order" (POS=O)
+	 in sentence "the report urged belgium to begin immediate talks with india in order to prevent future weapons sale to myanmar."
 
-"him" (POS=NP)
-	 in sentence "but in the news broadcasts i have seen they did call him white."
+"sheik doon salad ilmi" (POS=NP)
+	 in sentence "sheik doon salad ilmi said civilian casualties resulting from overnight mortar and rocket attacks happen every day. "
 
-"because" (POS=NP)
-	 in sentence "get a cooling trend from  because of the recent decline."
+"2009" (POS=NP)
+	 in sentence "the center will formally open in 2009."
 
-"than" (POS=SBAR)
-	 in sentence "your freedom of speech will be no more prohibited than it is today."
-
-""what" (POS=NP)
-	 in sentence ""what does pressing the number one do?""
+"strongly" (POS=ADVP)
+	 in sentence "the russian government strongly opposes u.s. plans to install antimissile defenses in europe and dismisses u.s. assertions that the interceptors are needed to defend against threats from iran. "
 
 "but" (POS=O)
-	 in sentence "if you answer no to  but yes to  then you are probably straight."
+	 in sentence "russia ratified the updated treaty in 2004 but the united states and other nato members have refused to do so arguing that moscow must first fulfill obligations to withdraw forces from georgia and from moldova's separatist region of trans-dniester. "
 
-"lance berkman" (POS=NP)
-	 in sentence "the human element you could sign lance berkman at the end of the year i guess?"
+"to london" (POS=VP)
+	 in sentence "shalgam's visit to london is the first by a libyan foreign minister since 1969. "
 
-"foxe" (POS=NP)
-	 in sentence " foxe was mostly frozen."
+"jodran" (POS=NP)
+	 in sentence "in september 2007 the united states signed an accord with jordan aimed at supporting the peaceful development of jodran's new nuclear program."
 
-"else" (POS=O)
-	 in sentence "how would martin or anyone else know his intentions based on his actions?"
+"the advanced light helicopter ( alh" (POS=NP)
+	 in sentence "variants of the advanced light helicopter (alh) contain rocket launchers from belgium; rockets, guns and engines from france; brake systems from italy; fuel tanks and gearboxes from britain; self-protection equipment from a swedish company and have received crucial design development and engine control manufacturing from german companies. "
 
-"wiggies" (POS=VP)
-	 in sentence "i have  years of "neener neener" rights hi wiggies!"
+"stipulate" (POS=ADJP)
+	 in sentence "spokesman for the swiss justice ministry folco galli stated that the extradition conditions stipulate that mejri can only be prosecuted on a single charge of falsifying documents for which italian authorities could provide sufficient evidence to prosecute."
 
-"s" (POS=VP)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+"july 2006" (POS=NP)
+	 in sentence "jordanian prime minister maaruf bakhit said in july 2006 that raghdad hussein and her family were living under the protection of king abdullah ii after iraq issued its"
 
-"exactly" (POS=ADVP)
-	 in sentence "how exactly is germany being 'punished' for the stupidity of ww?"
+"britain" (POS=ADJP)
+	 in sentence "the 5 permanent united nations security council members are britain, china, france, russia and the united states. "
 
-"'an" (POS=VP)
-	 in sentence "the muslims would say the same thing about the qur'an."
+"because of" (POS=PP)
+	 in sentence "some officials stated the task would be difficult for asean members because of varied legal and political systems."
 
-"admin drpizza" (POS=NP)
-	 in sentence "- admin drpizza and i'd forgotten what a whiny little bed wetter you are."
+"plans to sell to myanmar" (POS=VP)
+	 in sentence "france, belgium, germany, sweden, italy and britain provide parts and technology for the advanced light helicopter that india plans to sell to myanmar."
 
-"gingrich" (POS=NP)
-	 in sentence "david @omsigdavid, i think santorum's more likely than gingrich."
-
-"will cornell" (POS=VP)
-	 in sentence "i be having conversations will cornell west my dear brother."
-
-"so yes" (POS=ADVP)
-	 in sentence "so yes, we do read the bible to learn about christianity."
+"cyber hacking" (POS=NP)
+	 in sentence "chinese foreign ministry spokeswoman jiang yu stated that cyber hacking is a global issue. "
 
 "not" (POS=ADVP)
-	 in sentence "we were talking about women as war bounty were we not?"
+	 in sentence "elbaradei stated that this is the last chance to build security in the middle east based on trust and cooperation and not on possession of nuclear weapons. "
 
-"a treesome" (POS=NP)
-	 in sentence "i wood have asked her if she is up for a treesome."
+"resolution 1540" (POS=NP)
+	 in sentence "resolution 1540 requires all countries to adopt laws to prevent non-state actors from manufacturing, acquiring or trafficking in nuclear, biological or chemical weapons, the materials to make them, and the missiles and other systems to deliver them."
 
-"we" (POS=NP)
-	 in sentence "we in britain think differently to americans."
+"including" (POS=PP)
+	 in sentence "brazil's strategic affairs minister roberto mangabeira unger stated brazil's new national defense plan calls for establishing partnerships with countries including russia and france to build a state-of-the-art weapons industry. "
 
-"the govt" (POS=NP)
-	 in sentence "their vast properties are protected by the govt."
+"or" (POS=PP)
+	 in sentence "the south african government imposed a ban that prohibits the recruitment of people inside or outside of south africa for mercenary or foreign military assistance. "
 
-"to" (POS=NP)
-	 in sentence "if you answer yes to  and no to  you are probably straight."
+"u" (POS=PP)
+	 in sentence "the russian government strongly opposes u.s. plans to install antimissile defenses in europe and dismisses u.s. assertions that the interceptors are needed to defend against threats from iran. "
 
-"astros or orioles bad gameday" (POS=NP)
-	 in sentence "not astros or orioles bad gameday for the orioles game is frozen for me."
+"amid" (POS=PP)
+	 in sentence "the number of executions increased in iran last year amid a campaign that is aimed at improving security in society. "
 
-"not dia chronic" (POS=NP)
-	 in sentence "the primary focus of systematic dialectics is syn chronic, not dia chronic."
+"ingo kober" (POS=NP)
+	 in sentence "ingo kober stated there is larger interest in intellectual property rights now than 20 or 30 years ago. "
 
-"the bailout" (POS=NP)
-	 in sentence "the bailout was bigger than tarp bloomberg news."
+"along" (POS=PP)
+	 in sentence "russia would not immediately increase military strength along russian borders. "
 
-"rather" (POS=ADVP)
-	 in sentence "originally posted by spikdboy not wishful thinking, rather realistic."
-
-"isnt" (POS=PP)
-	 in sentence "being in a gang isnt a crime."
+"the quang" (POS=NP)
+	 in sentence "29 people were convicted by the quang ninh people's court of participating in a drug ring that trafficked heroin from vietnam to china. "
 
 "iran" (POS=PP)
-	 in sentence "i'd offer iran a deal."
+	 in sentence "the us and allies have accused iran of attempting to develop nuclear weapons under the guise of a civilian nuclear program."
 
-"so" (POS=PP)
-	 in sentence "so which system isn't working for us?"
+"confidence-building" (POS=ADJP)
+	 in sentence "the treaty limits deployments of tanks and troops in nato and former easter european warsaw pact countries and establishes confidence-building, transparency and cooperation measures between member"
 
-"herself" (POS=NP)
-	 in sentence "pro-life people do not want a woman to be able to choose abortion for herself."
+"that--" (POS=O)
+	 in sentence "executive director of the arms control association in washington daryl kimball stated that-- the iaea report is 1 in a series of bad signs. "
 
-"charlie rangel censured" (POS=NP)
-	 in sentence "charlie rangel censured did anyone see the footage of this?"
+"once" (POS=PP)
+	 in sentence "fan stated the commission will ensure the commitments are upheld once the investments are under way."
 
-"ooo" (POS=NP)
-	 in sentence "ooo strike two those who ignore history are doomed to repeat it."
+"the south korean government participates" (POS=NP)
+	 in sentence "the north korean government stated if the south korean government participates in the proliferation security initiative program it would result in unspecified catastrophic consequences."
 
-"possible" (POS=VP)
-	 in sentence "is it possible his home was affected and the school was not?"
+"directly or indirectly" (POS=ADVP)
+	 in sentence "saferworld team leader on transfer controls and small arms roy isbister stated that -- the eu embargo explicitly states that no military equipment should be supplied either directly or indirectly for use in myanmar."
 
-"toyland" (POS=NP)
-	 in sentence "toyland by johnny mathis we are all vessels filled with many wonders."
+"1999" (POS=NP)
+	 in sentence "indian and pakistani governments nearly engaged in a fourth conflict in 1999. "
 
-"is" (POS=O)
-	 in sentence "if it isn't a person, then wtf is it?"
+"assertions" (POS=VP)
+	 in sentence "the russian government strongly opposes u.s. plans to install antimissile defenses in europe and dismisses u.s. assertions that the interceptors are needed to defend against threats from iran. "
 
-"essentially" (POS=ADVP)
-	 in sentence "peeve so we agree that it came down essentially in freefall?"
+"almost" (POS=ADVP)
+	 in sentence "ukraine almost has all of the necessary approvals to join the european space agency's program. "
 
-"yeah" (POS=NP)
-	 in sentence "so, i don't know how legitimate this is but yeah."
+"washington" (POS=PP)
+	 in sentence "kim myong-chol stated that north korea would retaliate with a nuclear missile attack on major cities such as new york and washington dc."
 
-"unconstuitutional" (POS=ADJP)
-	 in sentence "jury nullification does not mean that a law is unconstuitutional."
+"despite" (POS=PP)
+	 in sentence "religious extremism continues in pakistan despite the banning of militant groups. "
 
-"either" (POS=ADVP)
-	 in sentence "i didn't mention restraining order either."
+"italy" (POS=ADVP)
+	 in sentence "defense chiefs from estonia, latvia, lithuania, germany, italy, spain and slovakia will sign the agreement to provide staff and funding for the center. "
 
-"reinforcing" (POS=NP)
-	 in sentence "taking advantage has the effect of reinforcing."
+"soon" (POS=ADVP)
+	 in sentence "the abductee support group hopes parliament will change the laws soon. "
 
-"never" (POS=ADVP)
-	 in sentence "we never got out of it in the first place!"
+"rather than" (POS=PP)
+	 in sentence "this is the last chance to build security in the middle east based on trust and cooperation rather than on the possession of nuclear arms."
 
-"zaf" (POS=NP)
-	 in sentence "originally posted by zaf we in britain think differently to americans."
+"de" (POS=PP)
+	 in sentence "brazilian police surrounding slums north of rio de janeiro to rid them of violent drug traffickers. "
 
-"terral" (POS=ADJP)
-	 in sentence "gl, terral hi corn: so, you actually believe every word of what terral wrote?"
+"korobeynichev" (POS=NP)
+	 in sentence "korobeynichev's laboratory worked with the u.s. lawrence livermore national laboratory. "
 
-"was ted bundy" (POS=VP)
-	 in sentence "was ted bundy a partial psychopath?"
+"the anti-defamation league (adl" (POS=NP)
+	 in sentence "jewish-american group the anti-defamation league (adl) published full-page advertisements in swiss and international papers in april 2008 accusing switzerland of funding terrorism through the deal. "
 
-"everyone" (POS=NP)
-	 in sentence "everyone in the world at the current "prosperity" level of northwest africa."
-
-"neander" (POS=NP)
-	 in sentence "neander's revised version"?"
+"sinaloa" (POS=NP)
+	 in sentence "mexican president felipe calderon has sent 2800 special agents and soldiers to sinaloa due to the high degree of organized crime and drug trafficking. "
 
 "without" (POS=PP)
-	 in sentence "but we can't do it without help."
+	 in sentence "1 suspected extremist was provisionally released without bail."
 
-"though" (POS=ADVP)
-	 in sentence "that's not the moloch scene, though."
+"under" (POS=PP)
+	 in sentence "georgian government websites are under intense cyber attack following russian military strikes against georgia late last week. "
 
 "some" (POS=NP)
-	 in sentence "some believe the 'right' is most important."
+	 in sentence "estonian officials stated that some of the cyber attacks that caused estonian government websites to shut down temporarily came from computers in the administration of russia including in the office of president vladimir putin. "
 
-"is" (POS=NP)
-	 in sentence "i don't think what she's saying is that controversial."
+"after" (POS=PP)
+	 in sentence "after the first meeting between leaders of the european union and leaders from albania, bosnia and herzegowina, croatia, macedonia and serbia and montenegro, leaders from the western balkan countries pledge to diminish organized crime and corruption in the balkans to meet requirements of european union membership. "
 
-"would martin or anyone" (POS=VP)
-	 in sentence "how would martin or anyone else know his intentions based on his actions?"
+"1990" (POS=NP)
+	 in sentence "the treaty was first signed in 1990. "
 
-"hilited" (POS=VP)
-	 in sentence "hilited your common sense/deductive reasoning thing."
+"beijing" (POS=VP)
+	 in sentence "beijing police apprehend more than 20 people including 8 foreigners in suspicion of using and trafficking drugs in 2 pubs in a popular downtown area. "
 
-"ramblin'" (POS=NP)
-	 in sentence "ramblin' rose by nat king cole we are all vessels filled with many wonders."
+"full-page advertisments" (POS=NP)
+	 in sentence "the anti-defamation league took out full-page advertisments in swiss and international newspapers earlier in april 2008 accusing switzerland of funding terrorism through the deal."
 
-"her" (POS=NP)
-	 in sentence "i wood have asked her if she is up for a treesome."
+"shingarev" (POS=NP)
+	 in sentence "shingarev said it is very difficult to make a nuclear weapon from the plutonium in this fuel. "
 
-"trayvon" (POS=NP)
-	 in sentence "claims about trayvon's character and when did i do that?"
+"the osce" (POS=NP)
+	 in sentence "spain currently holds the rotating presidency of the osce. "
 
-"dutchy" (POS=NP)
-	 in sentence "dutchy has anyone heard from dutchy?"
+"unlike" (POS=PP)
+	 in sentence "according to the statement the prototype rs-24 rocket is unlike the topol-m in that it is equipped with multiple independently targetable warheads to overwhelm defense systems."
 
-"originally" (POS=ADVP)
-	 in sentence "originally posted by vienna how was it authoritarian?"
+"fulvio" (POS=ADVP)
+	 in sentence "fulvio berghella stated that the digital worm named sq hell was particularly virulent and replicated itself at the rate of 8000 times an hour. "
 
-"einstein" (POS=ADVP)
-	 in sentence "the argument was "albert einstein didn't go to college"."
+"the cfe" (POS=NP)
+	 in sentence "the cfe is 1 of several issues negatively impacting russia's relations with the united states and europe. "
 
-"stronger and closer together" (POS=NP)
-	 in sentence "wait for the contractions to get stronger and closer together."
+"russia including" (POS=NP)
+	 in sentence "estonian officials stated that some of the cyber attacks that caused estonian government websites to shut down temporarily came from computers in the administration of russia including in the office of president vladimir putin. "
 
-"@sozobe" (POS=NP)
-	 in sentence "@sozobe, i think santorum's more likely than gingrich."
+"2006" (POS=NP)
+	 in sentence "the mexican government has adopted a series of measures against drug trafficking and organized crime within mexico since 2006. "
 
-"@ossobuco" (POS=NP)
-	 in sentence "@ossobuco, could this have been an enema?"
-
-"how" (POS=NP)
-	 in sentence "how exactly is germany being 'punished' for the stupidity of ww?"
-
-"dr" (POS=NP)
-	 in sentence "dr. neander's revised version."
+"italiane" (POS=PP)
+	 in sentence "fulvio berghella stated that the digital worm named sq hell has a very high capacity to replicate itself and the digital worm named sq hell is slowing down the poste italiane computer network and making some computers inoperable."
 
 "within" (POS=PP)
-	 in sentence "why are you talking about women within the hebrew tribes?"
+	 in sentence "the mexican government has adopted a series of measures against drug trafficking and organized crime within mexico since 2006. "
 
-"afterwards" (POS=ADVP)
-	 in sentence "the one that has  walks home afterwards and goes to sleep."
+"do quy doan" (POS=NP)
+	 in sentence "do quy doan is a spokesman for the vietnamese ministry of culture and information. "
 
-"t" (POS=ADJP)
-	 in sentence "although satellite intensity estimates from tafb and sab are only t./"
+"withdraws" (POS=PP)
+	 in sentence "the united states and other nato members have refused ratify the amended treaty until russia completely withdraws from moldova and georgia."
+
+"court official tran dao" (POS=NP)
+	 in sentence "court official tran dao stated the 12 people were among 29 people convicted by the quang ninh people's court of participating in a drug ring that trafficked heroin from vietnam to china."
 
 "themselves" (POS=NP)
-	 in sentence "no thatcherite can ever call themselves a libertarian."
+	 in sentence "the villagers are inadvertently involving themselves in drug trafficking. "
 
-"tho" (POS=PP)
-	 in sentence "my hair is pretty thing tho :/ woops!"
+"china and operational since 1999" (POS=NP)
+	 in sentence "the plant will be constructed next to an existing plant also supplied by china and operational since 1999."
 
-"furthers" (POS=PP)
-	 in sentence "depending on which action furthers their loony-tunes agenda of the moment."
+"the dans" (POS=NP)
+	 in sentence "the dans stated the gang engaged in illegal activities including racketeering, blackmail, arms smuggling, cigarette smuggling and money laundering."
 
-""you" (POS=NP)
-	 in sentence "i don't prefix or suffix everything with "you hate jews.""
+"the tightly controlled military technically" (POS=NP)
+	 in sentence "the legislation is the most recent effort by japan to ascribe more freedom to the tightly controlled military technically known as a self-defense force."
 
-"the op" (POS=NP)
-	 in sentence "so i actually read the op and guess what i found out."
+"'s strategic affairs minister roberto mangabeira unger" (POS=NP)
+	 in sentence "brazil's strategic affairs minister roberto mangabeira unger stated brazil's new national defense plan calls for establishing partnerships with countries including russia and france to build a state-of-the-art weapons industry. "
 
-"the girlfriend and zimmerman" (POS=NP)
-	 in sentence "according to the girlfriend and zimmerman, he did."
+"the poste" (POS=NP)
+	 in sentence "fulvio berghella stated that the digital worm named sq hell has a very high capacity to replicate itself and the digital worm named sq hell is slowing down the poste italiane computer network and making some computers inoperable."
 
-"crack ups" (POS=NP)
-	 in sentence "i have  years of "neener neener" rights they are crack ups."
+"far" (POS=O)
+	 in sentence "united states officials do not know how far north korea's nuclear weapons program has progressed. "
 
-"mone" (POS=NP)
-	 in sentence "can he really make mone from google ad sense."
+"us" (POS=PP)
+	 in sentence "the uk agreed to supply saudi arabia with typhoon jets in a deal worth an estimated 8 billion pounds (approximately 13.9 billion us dollars) to the uk defense company bae systems."
 
-"yes" (POS=ADVP)
-	 in sentence "yes, it's legal to grow."
-
-"per" (POS=PP)
-	 in sentence "higher than  per cent but not very high."
-
-"btw" (POS=NP)
-	 in sentence "btw he had appropriate deferments for the time."
-
-"'and" (POS=O)
-	 in sentence "-not- talking about it 'and' -not- doing anything."
-
-"tafb and sab" (POS=NP)
-	 in sentence "although satellite intensity estimates from tafb and sab are only t./"
+"about" (POS=PP)
+	 in sentence "officials state that decision about the treaty will depend on u.s. action on its plans to deploy missile defense systems in poland and the czech republic. "
 
 "of" (POS=PP)
-	 in sentence "the prices of everything you own ie assets have gone down."
+	 in sentence "spain currently holds the rotating presidency of the osce. "
 
 "against" (POS=PP)
-	 in sentence ""being against nukes" does not mean "not wanting to use nukes"."
+	 in sentence "georgian government websites are under intense cyber attack following russian military strikes against georgia late last week. "
 
 "before" (POS=PP)
-	 in sentence "you didn't mention pfa before that one post."
+	 in sentence "antonov spoke the day before a conference on the conventional forces in europe treaty."
 
-""bright but scatterbrained" (POS=NP)
-	 in sentence ""bright but scatterbrained" becomes "treat with drugs"."
+"jiang" (POS=ADVP)
+	 in sentence "chinese foreign ministry spokeswoman jiang yu stated that cyber hacking is a global issue. "
 
-"that redundant and repetetive" (POS=NP)
-	 in sentence "religious fiction isn't that redundant and repetetive?"
+"the number 254" (POS=NP)
+	 in sentence "the number 254 was tabulated with an afp count compiled from press and witness reports. "
 
-"she" (POS=NP)
-	 in sentence "i wood have asked her if she is up for a treesome."
+"kamynin" (POS=NP)
+	 in sentence "kamynin said there will be an exchange of opinions on topical international and regional matters based on a joint working relationship at the heart of the un."
 
-"anything" (POS=NP)
-	 in sentence "-not- talking about it 'and' -not- doing anything."
+"based" (POS=PP)
+	 in sentence "elbaradei states that a middle east peace deal can only be reached in parallel with a security agreement based on eradicating all weapons of mass destruction from the region. "
 
-"vengeance instead" (POS=NP)
-	 in sentence ". satan represents vengeance instead of turning the other cheek!"
+"small arms roy isbister" (POS=NP)
+	 in sentence "saferworld team leader on transfer controls and small arms roy isbister stated-- the eu embargo prohibits direct or indirect supply of military equipment for use in myanmar. "
 
-"supposedly" (POS=ADVP)
-	 in sentence "who supposedly operated the homicidal gas chambers?"
+"the" (POS=NP)
+	 in sentence "the accused will be charged with international drug trafficking."
 
-"ah" (POS=INTJ)
-	 in sentence "ah ha, ha, ha, ha, ha!"
+"physicist danilov" (POS=NP)
+	 in sentence "physicist danilov was convicted of selling classified information on space technology to china. "
 
-"on" (POS=NP)
-	 in sentence "i am moving on to ask you the question: " where ' s the beef " ?"
+"the coa" (POS=NP)
+	 in sentence "lee stated that the coa has spent the past several years setting up relevant mechanisms and drafting a set of promotional measures to enhance development of china's knowledge-based agriculture and applications of agricultural technology."
 
-"just" (POS=NP)
-	 in sentence "that just isn't how legal reasoning works."
-
-"before" (POS=ADVP)
-	 in sentence "to repeat: they are not as sovereign as they were before."
+"goff" (POS=NP)
+	 in sentence "goff stated that this presents a major threat to global security. "
 
 "this" (POS=NP)
-	 in sentence "this is why i support the death penalty."
-
-"did n't have to" (POS=VP)
-	 in sentence "and you didn't have to."
+	 in sentence "this further aggravated the situation. "
 
 "into" (POS=PP)
-	 in sentence "regulation get the government into everything."
+	 in sentence "the state scientific center of applied microbiology has been working with western scientists to convert the complex into a biomedical manufacturing site."
 
-"can anything" (POS=NP)
-	 in sentence "i ask again if god does not exist can anything be morally wrong?"
+"the swiss justice ministry folco galli" (POS=NP)
+	 in sentence "spokesman for the swiss justice ministry folco galli stated that the extradition conditions stipulate that mejri can only be prosecuted on a single charge of falsifying documents for which italian authorities could provide sufficient evidence to prosecute."
 
-"fantasize" (POS=NP)
-	 in sentence "sometimes i fantasize about having power."
-
-"nah" (POS=NP)
-	 in sentence "nah, that's not how it works."
-
-"lyndon" (POS=PP)
-	 in sentence "@lustig andrei, so lyndon johnson and john kennedy were compatible?"
+"cannot" (POS=NP)
+	 in sentence "spokesman themba maseko stated as long as administrative papers are in order south africa cannot intervene to prevent weapons being transported through south african territory to zimbabwe."
 
 "them" (POS=NP)
-	 in sentence "please, what about them are not true."
+	 in sentence "the resolution requires all 192 united nations member states to adopt laws to prevent terrorists, black marketeers and other non-state actors from manufacturing, acquiring or trafficking in nuclear, biological or chemical weapons or the materials to make them. "
 
-"each other" (POS=NP)
-	 in sentence "they're looking at each other!"
-
-"lacey" (POS=O)
-	 in sentence "lacey - welcome back!"
+"unger" (POS=NP)
+	 in sentence "unger stated brazil's new national defense plan calls for establishing partnerships with countries including russia and france to build a state-of-the-art weapons industry."
 
 "by" (POS=PP)
-	 in sentence "originally posted by vienna how was it authoritarian?"
+	 in sentence "shalgam's visit to london is the first by a libyan foreign minister since 1969. "
 
-"now" (POS=ADVP)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+"ninh" (POS=PP)
+	 in sentence "29 people were convicted by the quang ninh people's court of participating in a drug ring that trafficked heroin from vietnam to china. "
 
-"'ve" (POS=VP)
-	 in sentence "for the trillionth time, i've never said rehabilitation doesn't work."
+"mohanty" (POS=NP)
+	 in sentence "n.r. mohanty stated that an agreement had been signed between the defense research and development organisation, hindustan aeronautics limited and the indian air force to upgrade india's ageing fleet of mig-27 m aircraft. "
 
-""albert" (POS=ADJP)
-	 in sentence "the argument was "albert einstein didn't go to college"."
+"according" (POS=PP)
+	 in sentence "according to court documents -- on 25 july australian television reporter peter lloyd faced 3 new drug charges in singapore."
 
-"should it" (POS=VP)
-	 in sentence "how long after the obliteration should it no longer bother the kid?"
+"2002 japanese prime minister junichiro" (POS=NP)
+	 in sentence "in 2002 japanese prime minister junichiro koizumi attended an summit in north korea with north korean leader kim jong il."
 
 "which" (POS=NP)
-	 in sentence "so which system isn't working for us?"
+	 in sentence "uranium is a radioactive material which is the primary basis for generating dirty weapons of mass destruction and terrorism."
+
+"zabol" (POS=NP)
+	 in sentence "zabol is a town in southeastern iran. "
 
 "because" (POS=SBAR)
-	 in sentence "he's not wealthy because he's successful."
-
-"matt holliday" (POS=NP)
-	 in sentence "matt holliday owns, y'all."
-
-"its just simply religion" (POS=VP)
-	 in sentence "when christians are extreme its just simply religion."
+	 in sentence "the international atomic energy agency may have been tricked because it was eager for a deal. "
 
 "for" (POS=PP)
-	 in sentence "the prices for everything you need have gone up due to inflation."
+	 in sentence "gorgich and pashtoon were executed for trafficking heroin in sistan-baluchestan province."
 
 "currently" (POS=ADVP)
-	 in sentence "his position is the way it is currently."
+	 in sentence "spain currently holds the rotating presidency of the osce. "
 
-"ive" (POS=NP)
-	 in sentence "ive watched kids play."
+"across" (POS=SBAR)
+	 in sentence "bruguiere stated-- restraining extremist groups particularly across europe was becoming increasingly difficult because of how the groups are financed."
 
-"wtf" (POS=O)
-	 in sentence "if it isn't a person, then wtf is it?"
+"toward" (POS=PP)
+	 in sentence "at un assembly chinese government urges increased efforts toward global arms control and disarmament."
 
 "that" (POS=PP)
-	 in sentence "they know that the video doesn't show a gas chamber."
+	 in sentence "the second proposal was that regional and international non-proliferation issues should be addressed through dialogue and negotiations."
 
-"anyone" (POS=NP)
-	 in sentence "dutchy has anyone heard from dutchy?"
+"around" (POS=ADJP)
+	 in sentence "the drug has been around in other forms for years."
 
-"for" (POS=O)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+"grenell" (POS=NP)
+	 in sentence "grenell is spokesman for the u.s. mission to the united nations."
 
-"the constitutionality" (POS=NP)
-	 in sentence "jury nullification has nothing to do with the constitutionality of laws."
+"tno" (POS=NP)
+	 in sentence "a hp/detijd journalist learned about tno's chemical weapons experiments from the defense ministry's archives."
 
-"about" (POS=NP)
-	 in sentence "what conviction where you talking about before?"
+"lugar and nunn" (POS=NP)
+	 in sentence "lugar and nunn are senators. "
 
-"no to" (POS=NP)
-	 in sentence "if you answer no to  but yes to  then you are probably straight."
+"as well as" (POS=CONJP)
+	 in sentence "iran lies on a major drug trafficking route between afghanistan and europe, as well as the persian gulf states."
 
-"david @omsigdavid" (POS=NP)
-	 in sentence "david @omsigdavid, i think santorum's more likely than gingrich."
+"to myanmar" (POS=VP)
+	 in sentence "the amnesty international report suggested that-- belgium begin immediate talks with india to prevent future sales of the alh, components or military technology to myanmar. "
 
-"slutstamp" (POS=VP)
-	 in sentence "slutstamp! a dear friend from ohio sent me this."
+"until" (POS=PP)
+	 in sentence "the united states government and other nato members have refused to ratify the amended treaty until officials in moscow withdraw troops from the former soviet republics of moldova and georgia. "
 
 "many" (POS=NP)
-	 in sentence "i have many problems with these men, way to many to state here!"
+	 in sentence "many of those executed in iran are hanged in public. "
 
-"dreamtech" (POS=NP)
-	 in sentence "dreamtech never been ejaculated on as far as i know."
+"airstrikes" (POS=NP)
+	 in sentence "the ensuing battle and airstrikes killed at least 10 militants. "
 
-"why" (POS=O)
-	 in sentence "more factchecking: i don't know why anyone is making a fuss over the $, bet."
+"2014" (POS=NP)
+	 in sentence "myanmar government has stated myanmar will become opium-free by 2014. "
 
-"everyone else" (POS=NP)
-	 in sentence "everyone else at the current prosperity level of mexico."
+"vladimir" (POS=PP)
+	 in sentence "russian president vladimir putin signed a decree suspending russia's participation in the conventional forces in europe treaty due to circumstances that affect the security of the russian federation and require immediate measure."
 
-"inc." (POS=O)
-	 in sentence "if you want to buy $ billion in xyz inc. common stock, who cares?"
+"april" (POS=VP)
+	 in sentence "jewish-american group the anti-defamation league (adl) published full-page advertisements in swiss and international papers in april 2008 accusing switzerland of funding terrorism through the deal. "
 
-"merely" (POS=ADVP)
-	 in sentence "operation chaos is merely people voting."
+"cheney" (POS=NP)
+	 in sentence "chinese foreign ministry spokesman qin gang was asked to respond to cheney's speech on china's military development."
 
-"jim croce" (POS=NP)
-	 in sentence "or this one by jim croce we are all vessels filled with many wonders."
+"hossein safarlou" (POS=NP)
+	 in sentence "the rapist was identified as hossein safarlou and had also been convicted of drug trafficking."
 
-"absolutely" (POS=ADVP)
-	 in sentence "i absolutely do believe there was an iceberg in those waters."
+"tskhinvali" (POS=NP)
+	 in sentence "tskhinvali is the capital of georgia. "
 
-"nutrax" (POS=NP)
-	 in sentence "nutrax the plural of anecdote is not data did gentlemen need chaperones?"
+"puerto cabezas" (POS=NP)
+	 in sentence "puerto cabezas is located 557 km northeast of managua, nicaragua."
 
-"mostly" (POS=O)
-	 in sentence "it is mostly just the dutch."
+"europe ( cfe )" (POS=NP)
+	 in sentence "berlin will host top-level meetings in october to save key european arms control treaty conventional forces in europe (cfe). "
 
-"john" (POS=PP)
-	 in sentence "proverbs  john the baptist was a nazarite from birth."
+"iranian majlis" (POS=NP)
+	 in sentence "the agreements were signed during iranian majlis (parliament) speaker gholam-ali haddad-adel's visit to cuba."
 
-"yours" (POS=NP)
-	 in sentence "florida the ignorance is yours!"
+"that-- chung" (POS=NP)
+	 in sentence "police stated that-- chung has been on the run."
 
-"ever" (POS=ADVP)
-	 in sentence "has annie ever used her sexuality like that?"
+"dmitry" (POS=VP)
+	 in sentence "president dmitry medvedev's statement was posted on the kremlin website and carried in full by state news agencies. "
 
-"whatever" (POS=NP)
-	 in sentence "well, whatever, you are now."
-
-"ignoring" (POS=NP)
-	 in sentence "my final word: ignoring has the effect of normalizing."
-
-"respectfully" (POS=ADVP)
-	 in sentence "respectfully submitted, steve i have seen ufo over warsaw in the past."
-
-"should" (POS=O)
-	 in sentence "should i just tell her how i feel?"
-
-"the unborn is" (POS=NP)
-	 in sentence "some believe not slaughtering the unborn is most important."
-
-"higher than" (POS=NP)
-	 in sentence "higher than  per cent but not very high."
-
-"kutte" (POS=VP)
-	 in sentence "my best, kutte my ex-fiance wouldn't use the va or navy doctor's."
-
-"syn chronic" (POS=NP)
-	 in sentence "the primary focus of systematic dialectics is syn chronic, not dia chronic."
-
-"unaccptable" (POS=ADJP)
-	 in sentence "bienging is unaccptable."
-
-"alzheimer" (POS=NP)
-	 in sentence "genetic predisposition to alzheimer is inferior genetics."
+". urakov" (POS=NP)
+	 in sentence "general nikolai n. urakov stated by telephone that the state scientific center of applied microbiology has quite reliable systems of protection in case of emergency. "
 
 "or" (POS=O)
-	 in sentence "think about all the things you can't "eat, wear, or live in"."
+	 in sentence "the amnesty international report suggested that-- belgium begin immediate talks with india to prevent future sales of the alh, components or military technology to myanmar. "
 
-"@lustig andrei" (POS=NP)
-	 in sentence "@lustig andrei, we're talking about angels and common pins again, right?"
+"announced--" (POS=O)
+	 in sentence "anatoly sokolov announced-- soviet-built a-135 missile defense system around moscow is obsolete and inefficient. "
 
 "how" (POS=ADVP)
-	 in sentence "how about some testimonies from real health experts?"
+	 in sentence "the ministers from china, laos, india, myanmar and thailand will discuss how to find markets for goods produced under crop substitution and other related programs such as eco-tourism and handicraft manufacturing."
 
 "during" (POS=PP)
-	 in sentence "cyclone formation is not expected during the next  hours."
+	 in sentence "the agreement was signed during a regular meeting of chiefs of defense staff from the 26 nato allies."
 
-"@cyracuz" (POS=NP)
-	 in sentence "@cyracuz, what you want to call it is up to you."
+"washington daryl kimball" (POS=NP)
+	 in sentence "executive director of the arms control association in washington daryl kimball stated that-- the iaea report is 1 in a series of bad signs. "
 
-"jacko" (POS=NP)
-	 in sentence "originally posted by jacko!"
+"southeastern" (POS=NP)
+	 in sentence "zahedan is a city in southeastern "
 
-"would miscarriage" (POS=VP)
-	 in sentence "if it wasn't alive, then it would miscarriage on it's own."
+"jordanian prime minister maaruf bakhit" (POS=NP)
+	 in sentence "jordanian prime minister maaruf bakhit said in july 2006 that raghdad hussein and her family were living under the protection of king abdullah ii after iraq issued its"
 
-"could" (POS=VP)
-	 in sentence "except that they couldn't."
+"nikolai" (POS=VP)
+	 in sentence "general nikolai n. urakov stated by telephone that the state scientific center of applied microbiology has quite reliable systems of protection in case of emergency. "
 
-""would" (POS=O)
-	 in sentence ""would you like to pay for others health care?""
-
-"annie" (POS=NP)
-	 in sentence "has annie ever used her sexuality like that?"
-
-"yes" (POS=ADJP)
-	 in sentence "if you answer no to  but yes to  then you are probably straight."
-
-"last night xanis" (POS=NP)
-	 in sentence "got some heine and coors light i started it last night xanis."
-
-"jake" (POS=NP)
-	 in sentence "jake with the assist."
-
-"holy poo poo" (POS=NP)
-	 in sentence "holy poo poo, this show."
+".s" (POS=VP)
+	 in sentence "grenell is spokesman for the u.s. mission to the united nations."
 
 "not" (POS=O)
-	 in sentence "nirvana is not oblivion."
+	 in sentence "a spokesman for stockwell day was not immediately available for "
 
-"so" (POS=SBAR)
-	 in sentence "peeve so we agree that it came down essentially in freefall?"
+"out" (POS=PRT)
+	 in sentence "the anti-defamation league took out full-page advertisments in swiss and international newspapers earlier in april 2008 accusing switzerland of funding terrorism through the deal."
 
-"the government doesnt" (POS=NP)
-	 in sentence "the government doesnt have to declare you married before you can be married."
+"the rs-24 reinforces" (POS=NP)
+	 in sentence "according to the statement the rs-24 reinforces the military potential of the strategic forces to overcome anti-missile defense systems. "
+
+"maseko" (POS=NP)
+	 in sentence "spokesman themba maseko stated as long as administrative papers are in order south africa cannot intervene to prevent weapons being transported through south african territory to zimbabwe."
 
 "that" (POS=NP)
-	 in sentence "the problem is simpler than that."
+	 in sentence "saudi arabia is an absolute monarchy that has taken steps towards reform. "
 
-"h and" (POS=NP)
-	 in sentence "h and i both read the books and thought the movie moved so quickly."
+"kim myong-chol" (POS=NP)
+	 in sentence "kim myong-chol warned that if there was an interdiction of north korean vessels the north korean government would retaliate with a nuclear missile attack on major cities such as new york and washington. "
+
+"entirely" (POS=ADVP)
+	 in sentence "putin stated that russia could discard the treaty entirely if western nations refuse to ratify its amended version."
+
+"raghad" (POS=NP)
+	 in sentence "the judicial order accused raghad of funding terrorism. "
 
 "at" (POS=PP)
-	 in sentence "there is no chance at a fair trial."
+	 in sentence "the spokesman said there will be an exchange of opinions on topical international and regional matters based on a joint working relationship at the heart of the u.n. kamynin said russia recognizes the participation of libya in the work of the u.n. security council. "
 
 "others" (POS=NP)
-	 in sentence "you want others to decide over a woman body."
+	 in sentence "ingo kober stated that some nations had stronger intellectual property rights than others."
 
 "as" (POS=SBAR)
-	 in sentence "as far as legality goes i can use jury nullification."
+	 in sentence "iran has noticeably increased the number of executions in recent months as officials enforce a campaign aimed at promoting virtue and boosting security in "
 
-"eots" (POS=VP)
-	 in sentence "hi eots: you fools..bought the  cover-up..hook.."
+"illegal arms trafficking" (POS=NP)
+	 in sentence "illegal arms trafficking has increased in kenya and raised concern about security."
 
-"lets" (POS=O)
-	 in sentence "lets assume we have % white and % black."
+"especially" (POS=ADVP)
+	 in sentence "china has been praised especially by the asia-pacific states for efforts to resolve the korean peninsula nuclear issue."
 
-"definately" (POS=ADVP)
-	 in sentence "god definately does not exist."
+"down" (POS=PRT)
+	 in sentence "fulvio berghella stated that the digital worm named sq hell has a very high capacity to replicate itself and the digital worm named sq hell is slowing down the poste italiane computer network and making some computers inoperable."
 
-"the springhallconvert" (POS=NP)
-	 in sentence "you mean, you believe the word of the springhallconvert?"
+"tsai" (POS=PP)
+	 in sentence "police stated tsai wen-huang would be extradited to taiwan. "
 
-"eh" (POS=O)
-	 in sentence "appropriate deferments for the time, eh?"
+"such as" (POS=PP)
+	 in sentence "the ministers from china, laos, india, myanmar and thailand will discuss how to find markets for goods produced under crop substitution and other related programs such as eco-tourism and handicraft manufacturing."
 
-"homeopathy" (POS=ADVP)
-	 in sentence "if it wasn't bollocks it wouldn't be homeopathy."
+"sarkozy" (POS=NP)
+	 in sentence "the cyber attack occurred after french president nicolas sarkozy's meeting with exiled tibetan spiritual leader the dalai lama."
 
-"ann romney" (POS=NP)
-	 in sentence "ann romney has never had to get out and be a part of the workforce."
+"its tightly controlled military and" (POS=NP)
+	 in sentence "the legislation is the most recent effort by japan to ascribe more freedom to its tightly controlled military and would overturn a ban on the military use of space. "
 
-"cracklin' rosie" (POS=NP)
-	 in sentence "cracklin' rosie by neil diamond we are all vessels filled with many wonders."
+"to u" (POS=VP)
+	 in sentence "after talks at nato headquarters baluyevsky repeated russia's opposition to u.s. plans to install antimissile defenses in europe and dismissed u.s. assertions that the interceptors were needed to defend against potential threats from iran."
 
-"douche" (POS=ADVP)
-	 in sentence "what is a girl douche?"
+"nato headquarters baluyevsky" (POS=NP)
+	 in sentence "after talks at nato headquarters baluyevsky repeated russia's opposition to u.s. plans to install antimissile defenses in europe and dismissed u.s. assertions that the interceptors were needed to defend against potential threats from iran."
 
-"have to" (POS=VP)
-	 in sentence "you have to much intervention in free markets, not too little."
+"completely" (POS=ADVP)
+	 in sentence "the united states and other nato members have refused ratify the amended treaty until russia completely withdraws from moldova and georgia."
 
 "the npt" (POS=NP)
-	 in sentence "iran is also a signed of the npt and the iaea."
-
-"specifically" (POS=ADVP)
-	 in sentence "specifically a baptist."
+	 in sentence "zhang stated-- china opposes restricting the peaceful use of nuclear energy by non-nuclear-weapon states on the basis of non-proliferation because the peaceful use of nuclear energy is a crucial objective of the npt. "
 
 "also" (POS=ADVP)
-	 in sentence "also, who's to say there aren't testimonies from "real" health experts on there?"
+	 in sentence "the plant will be constructed next to an existing plant also supplied by china and operational since 1999."
 
-"where" (POS=ADVP)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+"that-- al-dosari" (POS=NP)
+	 in sentence "a statement issued by the official spa news agency stated that-- al-dosari was convicted of drug trafficking. "
 
-"english" (POS=VP)
-	 in sentence "pressing one does not "do" english."
+"through" (POS=PP)
+	 in sentence "regional and international non-proliferation issues should be addressed through dialogue and negotiations. "
 
-"charasmatic" (POS=ADJP)
-	 in sentence "i don't want a president who is charasmatic."
+"french energy and transport company alstom" (POS=NP)
+	 in sentence "french energy and transport company alstom may sign a contract to build a high-speed rail link between beijing and shanghai. "
 
-"rid" (POS=ADJP)
-	 in sentence "best way to get money out is to get rid of lobby, all of it."
+"either" (POS=O)
+	 in sentence "saferworld team leader on transfer controls and small arms roy isbister stated that -- the eu embargo explicitly states that no military equipment should be supplied either directly or indirectly for use in myanmar."
 
-"definently" (POS=ADVP)
-	 in sentence "he definently has supporters."
+"africa" (POS=PP)
+	 in sentence "spokesman themba maseko stated as long as administrative papers are in order south africa cannot intervene to prevent weapons being transported through south african territory to zimbabwe."
 
-"again" (POS=ADVP)
-	 in sentence "again, personal responsibility."
+"2007" (POS=NP)
+	 in sentence "iranian officials have increased executions in 2007 as officials enforce a campaign purportedly aimed at promoting virtue and boosting security in society."
 
-"gl" (POS=NP)
-	 in sentence "gl, terral that is absolutely amazing."
+"parliament ) speaker gholam-ali haddad-adel" (POS=NP)
+	 in sentence "the agreements were signed during iranian majlis (parliament) speaker gholam-ali haddad-adel's visit to cuba."
+
+"van der merwe" (POS=NP)
+	 in sentence "van der merwe sentenced geiges to a total of 13 years imprisonment. "
+
+"explicitly" (POS=ADVP)
+	 in sentence "saferworld team leader on transfer controls and small arms roy isbister stated that -- the eu embargo explicitly states that no military equipment should be supplied either directly or indirectly for use in myanmar."
+
+"follow russian" (POS=VP)
+	 in sentence "the cyber attacks follow russian military strikes launched against georgia late last week."
+
+"safe bourada" (POS=NP)
+	 in sentence "safe bourada was sentenced to 15 years in prison. "
 
 "around" (POS=PP)
-	 in sentence "the ideology was built around violent expansion, so yes - violent expansion."
+	 in sentence "anatoly sokolov announced-- soviet-built a-135 missile defense system around moscow is obsolete and inefficient. "
 
-"the messahe" (POS=NP)
-	 in sentence "originally posted by solinvictus the messahe of all the scriptures is oneness."
+"and" (POS=PP)
+	 in sentence "russia ratified the updated treaty in 2004 but the united states and other nato members have refused to do so arguing that moscow must first fulfill obligations to withdraw forces from georgia and from moldova's separatist region of trans-dniester. "
 
-"observe" (POS=NP)
-	 in sentence "@cicerone imposter, frank, i observe and perceive."
+"whether" (POS=O)
+	 in sentence "russian military officials stated the decision would depend on whether the united states proceeds with its plan to deploy missile defense components in poland and the czech republic."
 
-"didnt" (POS=NP)
-	 in sentence "- i didnt say he planned on apprehending him."
+"weaponization" (POS=NP)
+	 in sentence "china stressed that opposition of weaponization and an arms race in outer space."
 
-"the sarg" (POS=NP)
-	 in sentence "tin foil hat for the sarg, what size do u wear?"
+"september 2007" (POS=NP)
+	 in sentence "in september 2007 the united states signed an accord with jordan aimed at supporting the peaceful development of jodran's new nuclear program."
 
-"landon" (POS=VP)
-	 in sentence "landon memory from cats we are all vessels filled with many wonders."
+"foreign minister micheline calmy-rey traveled" (POS=NP)
+	 in sentence "switzerland's trade and diplomatic relations with iran have been criticized in recent months after foreign minister micheline calmy-rey traveled to tehran in march 2008 to sign a deal with iran's state gas firm. "
 
-"more factchecking" (POS=NP)
-	 in sentence "more factchecking: i don't know why anyone is making a fuss over the $, bet."
+"pakistan" (POS=ADJP)
+	 in sentence "sistan-baluchestan borders afghanistan and pakistan."
 
-"all anywhere" (POS=NP)
-	 in sentence "i don't believe there was any iceberg at all anywhere near the titanic."
+"nicolas" (POS=PP)
+	 in sentence "the cyber attack occurred after french president nicolas sarkozy's meeting with exiled tibetan spiritual leader the dalai lama."
 
-"unless" (POS=SBAR)
-	 in sentence "unless it's different in different countries?"
+"fitzpatrick" (POS=NP)
+	 in sentence "non-proliferation expert at the international institute for strategic studies mark fitzpatrick stated that the iaea report -- had an unusually strong tenor. "
 
-"assume" (POS=NP)
-	 in sentence "lets assume we have % white and % black."
+"maaruf bakhit" (POS=NP)
+	 in sentence "in july 2006 jordanian prime minister maaruf bakhit stated that-- raghdad hussein and family were living under the protection of king abdullah ii. "
 
-"almost certainly" (POS=ADVP)
-	 in sentence "warmer , almost certainly a record."
+"saferworld" (POS=NP)
+	 in sentence "amnesty international's report was compiled by european and international non-governmental organizations such as saferworld, which opposes armed violence. "
 
-"yet" (POS=ADVP)
-	 in sentence "and yet, the titanic story is the one that holds up to scrutiny of the evidence."
+"2004" (POS=NP)
+	 in sentence "russia ratified the updated treaty in 2004 but the united states and other nato members have refused to do so arguing that moscow must first fulfill obligations to withdraw forces from georgia and from moldova's separatist region of trans-dniester. "
 
-"doesnt" (POS=NP)
-	 in sentence "doesnt mean its a bad option."
+"anatoly sokolov" (POS=NP)
+	 in sentence "anatoly sokolov announced-- soviet-built a-135 missile defense system around moscow is obsolete and inefficient. "
 
-":/ woops" (POS=NP)
-	 in sentence "my hair is pretty thing tho :/ woops!"
+"ahmad" (POS=NP)
+	 in sentence "ahmad is fighting extradition to the united states and lodged a formal complaint alleging that british police concocted intelligence reports to implicate ahmad in terror activities and desecrated the koran. "
 
-"very heavily" (POS=ADVP)
-	 in sentence "you purport to value life very heavily."
+"donohue" (POS=NP)
+	 in sentence "donohue said it is very difficult to manipulate radioactive isotopes without leaving a trail."
 
-"maybe" (POS=ADVP)
-	 in sentence "warm , maybe record."
+"libyan foreign minister abdel rahman" (POS=NP)
+	 in sentence "libyan foreign minister abdel rahman shalgam visited london during the first visit by a libyan foreign minister since 1969. "
 
-"so" (POS=O)
-	 in sentence "morals do not exist, so technically nothing can be morally wrong."
+"lavrov" (POS=NP)
+	 in sentence "lavrov has told us secretary of state condoleezza rice that russia remains open to dialogue. "
 
-"ultimately" (POS=ADVP)
-	 in sentence "all of the electrical energy ultimately comes from the alternator."
+"anastasio somoza" (POS=NP)
+	 in sentence "nicaragua commemorated the 25th anniversary of the sandinista revolution that toppled the dictatorship of anastasio somoza but imposed a cuban-style leftist regime. "
 
-"did" (POS=O)
-	 in sentence "did the transaction take place?"
+"medvedev" (POS=NP)
+	 in sentence "president dmitry medvedev's statement was posted on the kremlin website and carried in full by state news agencies. "
 
-"normalizing" (POS=NP)
-	 in sentence "my final word: ignoring has the effect of normalizing."
+"out" (POS=PP)
+	 in sentence "the international atomic energy agency plan draws out negotiations for many months."
 
-"everyone" (POS=VP)
-	 in sentence " billion . everyone in the world at mexico's current prosperity level."
+"alstom" (POS=NP)
+	 in sentence "alstom is in competition with japanese and german countries for the contract. "
 
-""opinionated and stubborn" (POS=NP)
-	 in sentence ""opinionated and stubborn" becomes treat with drugs"."
+"europe and dismisses" (POS=NP)
+	 in sentence "the russian government strongly opposes u.s. plans to install antimissile defenses in europe and dismisses u.s. assertions that the interceptors are needed to defend against threats from iran. "
 
-""jane" (POS=NP)
-	 in sentence ""jane" wants me to ask the helpful party guest to pay for it."
+"djamel badaoui" (POS=NP)
+	 in sentence "djamel badaoui was sentenced to five years."
 
-"@nickfun" (POS=NP)
-	 in sentence "@nickfun, has anyone heard from dutchy?"
+"north" (POS=O)
+	 in sentence "china is north korea's closest ally. "
 
-"izzy" (POS=NP)
-	 in sentence "originally posted by izzy!"
-
-"both" (POS=NP)
-	 in sentence "h and i both read the books and thought the movie moved so quickly."
-
-"the bhagavad ghita" (POS=NP)
-	 in sentence "the hindus would say the same thing about the bhagavad ghita."
-
-"right now" (POS=ADVP)
-	 in sentence "you already did that - we have a muslim in office right now."
-
-"touch and untrustworthy" (POS=NP)
-	 in sentence "out of touch and untrustworthy?"
-
-"freefall" (POS=NP)
-	 in sentence "peeve so we agree that it came down essentially in freefall?"
-
-"santorum" (POS=NP)
-	 in sentence "david @omsigdavid, i think santorum's more likely than gingrich."
-
-"n't" (POS=O)
-	 in sentence "also, who's to say there aren't testimonies from "real" health experts on there?"
-
-"omg" (POS=NP)
-	 in sentence "omg, "einstein didn't go to college.""
-
-"tho" (POS=VP)
-	 in sentence "my hair is pretty thing tho :/ quote: ditto."
-
-"although" (POS=PP)
-	 in sentence "although satellite intensity estimates from tafb and sab are only t./"
-
-"anyway" (POS=ADVP)
-	 in sentence "anyway, welcome back."
-
-"thus" (POS=ADVP)
-	 in sentence "thus, ultimate sovereignty."
-
-"hi" (POS=PP)
-	 in sentence "gl, terral hi corn: so, you actually believe every word of what terral wrote?"
-
-"can" (POS=O)
-	 in sentence "can he really make mone from google ad sense."
-
-"gameday" (POS=NP)
-	 in sentence "gameday for the orioles game is frozen for me."
-
-"should" (POS=VP)
-	 in sentence "how long after the obliteration should the kid return to school?"
+"physicist valentin danilov" (POS=NP)
+	 in sentence "physicist valentin danilov was found guilty of selling classified information on space technology to china."
 
 "than" (POS=PP)
-	 in sentence "the problem is simpler than that."
+	 in sentence "ingo kober stated that some nations had stronger intellectual property rights than others."
 
-"the qur" (POS=NP)
-	 in sentence "the muslims would say the same thing about the qur'an."
+"amnesty international is" (POS=NP)
+	 in sentence "amnesty international is a rights group based in london. "
+
+"the agence france-presse" (POS=NP)
+	 in sentence "a siemens spokesman in germany stated to the agence france-presse that siemens was confident about the outcome of the talks to sell the plutonium-processing facility. "
 
 "among" (POS=PP)
-	 in sentence "there is simply no winning for obama among conservatives."
+	 in sentence "vietnam has among the world's strictest drug laws. "
 
-""why" (POS=ADVP)
-	 in sentence "martin said, "why are you following me?""
+"putin" (POS=PP)
+	 in sentence "russian president putin signs decree suspending russia's application of european arms control treaty. "
 
-"the nswp" (POS=NP)
-	 in sentence ".nazi is a slang term for the nswp."
-
-"else" (POS=ADVP)
-	 in sentence "that israel doesn't giva a **** what anybody else thinks."
-
-"hey" (POS=ADVP)
-	 in sentence "hey, blue-eyes, how's things in london?"
-
-"from" (POS=PRT)
-	 in sentence "where does the money come from in the first place?"
+"yu" (POS=NP)
+	 in sentence "chinese foreign ministry spokeswoman jiang yu stated that cyber hacking is a global issue. "
 
 "so" (POS=ADVP)
-	 in sentence "so, i am dropping, for now, asking you the question: " where ' s the marx " ?"
+	 in sentence "russia ratified the updated treaty in 2004 but the united states and other nato members have refused to do so arguing that moscow must first fulfill obligations to withdraw forces from georgia and from moldova's separatist region of trans-dniester. "
 
-"neander" (POS=O)
-	 in sentence "dr. neander's revised version."
+"between" (POS=PP)
+	 in sentence "after the first meeting between leaders of the european union and leaders from albania, bosnia and herzegowina, croatia, macedonia and serbia and montenegro, leaders from the western balkan countries pledge to diminish organized crime and corruption in the balkans to meet requirements of european union membership. "
 
-"my gosh" (POS=NP)
-	 in sentence "my gosh, i'm the one with the pregnancy ticker."
+"michael karras" (POS=NP)
+	 in sentence "the lawyer of michael karras named s.s. dhillon could not be reached for comment. "
 
-"a shithole" (POS=NP)
-	 in sentence "haiti is a shithole."
+"alto huallaga" (POS=NP)
+	 in sentence "alto huallaga is located northeast of the capital lima. "
 
-"ollie" (POS=VP)
-	 in sentence "hi ollie: that is absolutely amazing."
+"mirjaveh" (POS=NP)
+	 in sentence "the area near town of mirjaveh has been the scene of frequent conflicts between iranian police and drug smugglers."
 
-"meta" (POS=NP)
-	 in sentence "thus, meta - system - atic dialectic is diachronico - synchronic dialectic."
-
-"@edgarblythe" (POS=NP)
-	 in sentence "@edgarblythe, so lyndon johnson and john kennedy were compatible?"
+"outside" (POS=PP)
+	 in sentence "india and pakistan remain outside the treaty. "
 
 "when" (POS=ADVP)
-	 in sentence "when did i compare homo sexuaity with a developmental disorder?"
-
-"how" (POS=VP)
-	 in sentence "% how much money does pp take in for abortion services?"
+	 in sentence "russia had threatened several times to withdraw from the cfe when it was at odds with the united states over u.s. plans to install a missile defense shield in eastern "
 
 "as" (POS=PP)
-	 in sentence "as to would i kill  person to save , i have no idea."
+	 in sentence "bombing occurred in afghanistan as attacks by anti-government insurgents increase in recent days. "
+
+"government spokesman maseko" (POS=NP)
+	 in sentence "government spokesman maseko stated that if administrative papers are in order the government of south africa cannot intervene to prevent weapons from being transported through its territory to a neighboring landlocked country. "
+
+"mejri" (POS=NP)
+	 in sentence "spokesman for the swiss justice ministry folco galli stated that the extradition conditions stipulate that mejri can only be prosecuted on a single charge of falsifying documents for which italian authorities could provide sufficient evidence to prosecute."
 

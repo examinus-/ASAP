@@ -58,7 +58,7 @@ public class Process {
 
         p.loadFeaturesFile(args[0]);
         p.loadModels(args[1]);
-        p.calculatePredictions(true);
+        p.calculatePredictions(true, true);
         p.savePredictions(args[2]);
     }
 
@@ -89,7 +89,7 @@ public class Process {
 
 //consider not using file system (streams...)
     public void loadFeaturesFile(String featuresFilename) {
-        loadFeaturesFile(featuresFilename, "relatedness_groundtruth");
+        loadFeaturesFile(featuresFilename, "gold_standard");
     }
 
 //consider not using file system (streams...)
@@ -139,7 +139,7 @@ public class Process {
         }
 
         LinkedList<Classifier> classifiersList = new LinkedList<>();
-        
+
         Object obj;
         for (File listOfFile : listOfFiles) {
             String modelFilename = listOfFile.getAbsolutePath();
@@ -159,23 +159,22 @@ public class Process {
                 System.out.println("\tModel filename given doesn't contain a valid built model!");
             }
         }
-        
+
         classifiers = classifiersList.toArray(new Classifier[classifiersList.size()]);
-        
 
         System.out.println("\tdone.");
         PerformanceCounters.stopTimer("loadModels");
     }
 
     public void calculatePredictions() {
-        calculatePredictions(false);
+        calculatePredictions(false, true);
     }
 
-    public void calculatePredictions(boolean calculateAverage) {
+    public void calculatePredictions(boolean calculateAverage, boolean printEvaluation) {
         PerformanceCounters.startTimer("calculatePredictions");
         System.out.println("Calculating predictions with all models...");
         String idName = "pair_ID";
-        String classAttributeName = "relatedness_groundtruth";
+        String classAttributeName = "gold_standard";
         instances.setClass(instances.attribute(classAttributeName));
 
         if (predictions != null) {
@@ -187,7 +186,7 @@ public class Process {
         for (int i = 0; i < classifiers.length; i++) {
             Classifier classifier = classifiers[i];
 
-            predictions[i] = evaluateModel((AbstractClassifier) classifier, instances);
+            predictions[i] = evaluateModel((AbstractClassifier) classifier, instances, printEvaluation);
         }
 
         if (calculateAverage) {
@@ -248,7 +247,7 @@ public class Process {
             System.out.println("\ttest iteration " + i);
             loadFeaturesFile(featuresFilename);
             buildModelsTo("weka-models");
-            calculatePredictions(true);
+            calculatePredictions(true, false);
             savePredictions("outputs/predictions/" + i + "-test/out");
             // reset variables for next iteration:
             classifiers = null;
@@ -324,7 +323,7 @@ public class Process {
         PerformanceCounters.stopTimer("formatPredictions");
     }
 
-    private static double[] evaluateModel(AbstractClassifier cl, Instances data) {
+    private static double[] evaluateModel(AbstractClassifier cl, Instances data, boolean printEvaluation) {
         PerformanceCounters.startTimer("evaluateModel");
         System.out.println("Evaluating model...");
         double[] predictions = null;
@@ -334,9 +333,11 @@ public class Process {
             Evaluation eval = new Evaluation(data);
 
             predictions = eval.evaluateModel(cl, data);
-            System.out.println("\tstats for model:" + cl.getClass().getName() + " "
-                    + Utils.joinOptions(cl.getOptions()));
-            System.out.println(eval.toSummaryString());
+            if (printEvaluation) {
+                System.out.println("\tstats for model:" + cl.getClass().getName() + " "
+                        + Utils.joinOptions(cl.getOptions()));
+                System.out.println(eval.toSummaryString());
+            }
         } catch (Exception ex) {
             Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -352,7 +353,7 @@ public class Process {
         loadFeaturesFile(preprocessedFilename);
         //loadModels(modelsContainerDirectory);
         buildModelsTo(modelsContainerDirectory);
-        calculatePredictions(true);
+        calculatePredictions(true, false);
         savePredictions(outputFilename);
         PerformanceCounters.stopTimer("buildModelsFromFile");
     }
@@ -395,11 +396,19 @@ public class Process {
         stack.setClassifiers(baseClassifiers);
         stack.setMetaClassifier(metatree);
 
-        try {
-            stack.buildClassifier(instances);
-        } catch (Exception ex) {
-            Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int seed = 0;
+        int folds = 10;
+        System.out.println(
+                CrossValidation.performCrossValidationMT(instances, stack,
+                        seed, folds, null)
+        );
+        /*
+         try {
+         stack.buildClassifier(instances);
+         } catch (Exception ex) {
+         Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
 
         classifiers[0] = stack;
         System.out.println("\tdone.");
@@ -439,11 +448,19 @@ public class Process {
         stack.setClassifiers(baseClassifiers);
         stack.setMetaClassifier(metatree);
 
-        try {
-            stack.buildClassifier(instances);
-        } catch (Exception ex) {
-            Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int seed = 0;
+        int folds = 10;
+        System.out.println(
+                CrossValidation.performCrossValidationMT(instances, stack,
+                        seed, folds, null)
+        );
+        /*
+         try {
+         stack.buildClassifier(instances);
+         } catch (Exception ex) {
+         Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
 
         classifiers[1] = stack;
         System.out.println("\tdone.");
@@ -504,11 +521,19 @@ public class Process {
 
         vote.setClassifiers(baseClassifiers);
 
-        try {
-            vote.buildClassifier(instances);
-        } catch (Exception ex) {
-            Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int seed = 0;
+        int folds = 10;
+        System.out.println(
+                CrossValidation.performCrossValidationMT(instances, vote,
+                        seed, folds, null)
+        );
+        /*
+         try {
+         stack.buildClassifier(instances);
+         } catch (Exception ex) {
+         Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
 
         classifiers[2] = vote;
         System.out.println("\tdone.");
@@ -573,11 +598,19 @@ public class Process {
         stack.setClassifiers(baseClassifiers);
         stack.setMetaClassifier(metatree);
 
-        try {
-            stack.buildClassifier(instances);
-        } catch (Exception ex) {
-            Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int seed = 0;
+        int folds = 10;
+        System.out.println(
+                CrossValidation.performCrossValidationMT(instances, stack,
+                        seed, folds, null)
+        );
+        /*
+         try {
+         stack.buildClassifier(instances);
+         } catch (Exception ex) {
+         Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
 
         classifiers[3] = stack;
         System.out.println("\tdone.");
@@ -587,7 +620,7 @@ public class Process {
     public void loadModelsAndTestFile(String preprocessedFilename, String outputFilename, String modelsDirectory) {
         PerformanceCounters.startTimer("loadModelsAndTestFile");
         loadModels(modelsDirectory);
-        calculatePredictions(true);
+        calculatePredictions(true, true);
         savePredictions(outputFilename);
         PerformanceCounters.stopTimer("loadModelsAndTestFile");
     }
@@ -600,15 +633,15 @@ public class Process {
         PerformanceCounters.startTimer("saveModels");
         for (int i = 0; i < classifiers.length; i++) {
             AbstractClassifier classifier = (AbstractClassifier) classifiers[i];
-            
+
             String filename = i + classifier.getClass().getName();
             try {
-                SerializationHelper.write(modelsContainerPath + File.pathSeparator + filename, classifier);
+                SerializationHelper.write(modelsContainerPath + File.separator + filename, classifier);
             } catch (Exception ex) {
                 Logger.getLogger(Process.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         PerformanceCounters.stopTimer("saveModels");
     }
 }

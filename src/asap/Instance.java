@@ -5,6 +5,7 @@
  */
 package asap;
 
+import asap.textprocessing.TextProcesser;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
@@ -88,7 +89,8 @@ public class Instance {
         }
         Iterator<TextProcesser> it = processed.iterator();
         while (it.hasNext()) {
-            if (it.next().getClass().isInstance(textProcesser)) {
+            //if (it.next().getClass().isInstance(textProcesser)) {
+            if (textProcesser.getClass().isInstance(it.next())) {
                 return true;
             }
         }

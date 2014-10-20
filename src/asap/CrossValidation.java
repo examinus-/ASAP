@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.AbstractClassifier;
+import weka.classifiers.meta.Stacking;
 import weka.core.SerializationHelper;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
@@ -61,7 +62,6 @@ public class CrossValidation {
                         Utils.splitOptions(Utils.getOption("W", args)),
                         Integer.parseInt(Utils.getOption("s", args)),
                         Integer.parseInt(Utils.getOption("x", args)),
-                        Utils.getOption("o", args),
                         Utils.getOption("m", args)
                 )
         );
@@ -74,7 +74,6 @@ public class CrossValidation {
             String[] classifierCmd,
             int seed,
             int folds,
-            String dataOutputFile,
             String modelOutputFile) throws Exception {
 
         // classifier
@@ -82,7 +81,7 @@ public class CrossValidation {
         classifierCmd[0] = "";
         AbstractClassifier cls = (AbstractClassifier) Utils.forName(Classifier.class, classname, classifierCmd);
 
-        return performCrossValidation(dataInput, classIndex, removeIndices, cls, seed, folds, dataOutputFile, modelOutputFile);
+        return performCrossValidation(dataInput, classIndex, removeIndices, cls, seed, folds, modelOutputFile);
     }
 
     public static String performCrossValidation(String dataInput,
@@ -91,9 +90,8 @@ public class CrossValidation {
             AbstractClassifier cls,
             int seed,
             int folds,
-            String dataOutputFilename,
             String modelOutputFile) throws Exception {
-        
+
         PerformanceCounters.startTimer("cross-validation ST");
 
         PerformanceCounters.startTimer("cross-validation init ST");
@@ -137,13 +135,11 @@ public class CrossValidation {
         Instances testSets[] = new Instances[folds];
         Classifier foldCls[] = new Classifier[folds];
 
-
         for (int n = 0; n < folds; n++) {
             trainSets[n] = randData.trainCV(folds, n);
             testSets[n] = randData.testCV(folds, n);
             foldCls[n] = AbstractClassifier.makeCopy(cls);
         }
-
 
         PerformanceCounters.stopTimer("cross-validation init ST");
         PerformanceCounters.startTimer("cross-validation folds+train ST");
@@ -182,10 +178,9 @@ public class CrossValidation {
             SerializationHelper.write(modelOutputFile, cls);
         }
 
-       
         PerformanceCounters.stopTimer("cross-validation post ST");
         PerformanceCounters.stopTimer("cross-validation ST");
-        
+
         return out;
     }
 
@@ -195,13 +190,12 @@ public class CrossValidation {
             AbstractClassifier cls,
             int seed,
             int folds,
-            String dataOutputFilename,
             String modelOutputFile) throws Exception {
-        
+
         PerformanceCounters.startTimer("cross-validation MT");
 
         PerformanceCounters.startTimer("cross-validation init MT");
-        
+
         // loads data and set class index
         Instances data = DataSource.read(dataInput);
         String clsIndex = classIndex;
@@ -241,15 +235,15 @@ public class CrossValidation {
         Instances testSets[] = new Instances[folds];
         Classifier foldCls[] = new Classifier[folds];
         Thread[] foldThreads = new Thread[folds];
-        
+
         for (int n = 0; n < folds; n++) {
             trainSets[n] = randData.trainCV(folds, n);
             testSets[n] = randData.testCV(folds, n);
             foldCls[n] = AbstractClassifier.makeCopy(cls);
             foldThreads[n] = new Thread(
                     new CrossValidationFoldThread(n, foldCls[n], trainSets[n],
-                    testSets[n], eval)
-                    );
+                            testSets[n], eval)
+            );
         }
 
         PerformanceCounters.stopTimer("cross-validation init MT");
@@ -260,13 +254,12 @@ public class CrossValidation {
         }
 
         cls.buildClassifier(data);
-        
+
         for (int n = 0; n < folds; n++) {
             foldThreads[n].join();
         }
-        
+
 //until here!-----------------------------------------------------------------
-        
         PerformanceCounters.stopTimer("cross-validation folds+train MT");
         PerformanceCounters.startTimer("cross-validation post MT");
         // evaluation for output:
@@ -283,6 +276,99 @@ public class CrossValidation {
 
         if (!modelOutputFile.isEmpty()) {
             SerializationHelper.write(modelOutputFile, cls);
+        }
+
+        PerformanceCounters.stopTimer("cross-validation post MT");
+        PerformanceCounters.stopTimer("cross-validation MT");
+        return out;
+    }
+
+    static String performCrossValidationMT(Instances data, AbstractClassifier cls, int seed, int folds, String modelOutputFile) {
+
+        PerformanceCounters.startTimer("cross-validation MT");
+
+        PerformanceCounters.startTimer("cross-validation init MT");
+
+        // randomize data
+        Random rand = new Random(seed);
+        Instances randData = new Instances(data);
+        randData.randomize(rand);
+        if (randData.classAttribute().isNominal()) {
+            randData.stratify(folds);
+        }
+
+        // perform cross-validation and add predictions
+        Evaluation eval;
+        try {
+            eval = new Evaluation(randData);
+        } catch (Exception ex) {
+            Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+            return "Error creating evaluation instance for given data!";
+        }
+        Instances trainSets[] = new Instances[folds];
+        Instances testSets[] = new Instances[folds];
+        Classifier foldCls[] = new Classifier[folds];
+        Thread[] foldThreads = new Thread[folds];
+
+        for (int n = 0; n < folds; n++) {
+            trainSets[n] = randData.trainCV(folds, n);
+            testSets[n] = randData.testCV(folds, n);
+            try {
+                foldCls[n] = AbstractClassifier.makeCopy(cls);
+            } catch (Exception ex) {
+                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                return "Error making copy of classifier!";
+            }
+            foldThreads[n] = new Thread(
+                    new CrossValidationFoldThread(n, foldCls[n], trainSets[n],
+                            testSets[n], eval)
+            );
+        }
+
+        PerformanceCounters.stopTimer("cross-validation init MT");
+        PerformanceCounters.startTimer("cross-validation folds+train MT");
+//paralelize!!:--------------------------------------------------------------
+        for (int n = 0; n < folds; n++) {
+            foldThreads[n].start();
+        }
+
+        try {
+            cls.buildClassifier(data);
+        } catch (Exception ex) {
+            Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (int n = 0; n < folds; n++) {
+            try {
+                foldThreads[n].join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+//until here!-----------------------------------------------------------------
+        PerformanceCounters.stopTimer("cross-validation folds+train MT");
+        PerformanceCounters.startTimer("cross-validation post MT");
+        // evaluation for output:
+        String out = "\n"
+                + "=== Setup ===\n"
+                + "Classifier: " + cls.getClass().getName() + " "
+                + Utils.joinOptions(cls.getOptions()) + "\n"
+                + "Dataset: " + data.relationName() + "\n"
+                + "Folds: " + folds + "\n"
+                + "Seed: " + seed + "\n"
+                + "\n"
+                + eval.toSummaryString("=== " + folds + "-fold Cross-validation ===", false)
+                + "\n";
+
+        if (modelOutputFile != null) {
+            if (!modelOutputFile.isEmpty()) {
+                try {
+                    SerializationHelper.write(modelOutputFile, cls);
+                } catch (Exception ex) {
+                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         PerformanceCounters.stopTimer("cross-validation post MT");
@@ -308,7 +394,7 @@ public class CrossValidation {
         @Override
         public void run() {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-            
+
             try {
                 cls.buildClassifier(trainSet);
             } catch (Exception ex) {

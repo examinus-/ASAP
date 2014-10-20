@@ -1,0 +1,161 @@
+[train, input/STS.input.all.txt, input/STS.gs.all.txt, outputs/predictions/sts.all]
+Loaded 3750 instances from input/STS.input.all.txt with gold standard values from input/STS.gs.all.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loading POS Tagger model ... done (1.574s)
+Loading POS Tagger model ... done (1.136s)
+Loading Chunker model ... done (0.417s)
+Loading POS Tagger model ... done (0.977s)
+Loading POS Tagger model ... done (1.036s)
+Loading Chunker model ... done (0.449s)
+Loading POS Tagger model ... done (1.476s)
+Loading POS Tagger model ... done (0.667s)
+Loading Chunker model ... done (0.425s)
+Loading POS Tagger model ... done (0.944s)
+Loading POS Tagger model ... done (1.087s)
+Loading Chunker model ... done (0.448s)
+Loading POS Tagger model ... done (1.001s)
+Loading POS Tagger model ... done (1.068s)
+Loading Chunker model ... done (0.461s)
+Loading POS Tagger model ... done (1.071s)
+Loading POS Tagger model ... done (2.628s)
+Loading Chunker model ... done (0.329s)
+Starting feature calculation...
+Features calculated.
+Arff dataset saved.
+Loading features file...
+	done.
+Creating models...
+Creating test model 1...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: semeval_preprocessed
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6402
+Mean absolute error                      0.9196
+Root mean squared error                  1.1528
+Relative absolute error                 71.8561 %
+Root relative squared error             76.8252 %
+Total Number of Instances             3750     
+
+
+	done.
+Creating test model 2...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: semeval_preprocessed
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6424
+Mean absolute error                      0.9178
+Root mean squared error                  1.15  
+Relative absolute error                 71.7163 %
+Root relative squared error             76.6368 %
+Total Number of Instances             3750     
+
+
+	done.
+Creating test model 3...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: semeval_preprocessed
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6377
+Mean absolute error                      0.9358
+Root mean squared error                  1.1575
+Relative absolute error                 73.1157 %
+Root relative squared error             77.1372 %
+Total Number of Instances             3750     
+
+
+	done.
+Creating test model 4...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: semeval_preprocessed
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6467
+Mean absolute error                      0.9173
+Root mean squared error                  1.1446
+Relative absolute error                 71.6728 %
+Root relative squared error             76.2753 %
+Total Number of Instances             3750     
+
+
+	done.
+	all models created.
+Calculating predictions with all models...
+Evaluating model...
+	evaluation done.
+Evaluating model...
+	evaluation done.
+Evaluating model...
+	evaluation done.
+Evaluating model...
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/predictions/0-sts.all...
+	done.
+Formatting predictions to file outputs/predictions/1-sts.all...
+	done.
+Formatting predictions to file outputs/predictions/2-sts.all...
+	done.
+Formatting predictions to file outputs/predictions/3-sts.all...
+	done.
+Formatting predictions to file outputs/predictions/avg-sts.all...
+	done.
+	predictions saved.
+
+
+
+-----------------------------------
+{createTestModel3                          }	 1 runs 		 7737.214298ms		1052705272b
+{createTestModel4                          }	 1 runs 		 54112.633597ms		1006443792b
+{process POSTags                           }	 3750 runs		 1.1254376266666668ms	805448014b
+{calculate LexicalOverlapFeatures          }	 3750 runs		 0.0322161888ms		805311640b
+{calculate SemanticSimilarityAndRelatedness}	 3750 runs		 347.6072270330667ms	805303074b
+{createTestModel1                          }	 1 runs 		 21796.709888ms		645950536b
+{buildModelsFromFile                       }	 1 runs 		 123387.695318ms	1118891584b
+{createTestModel2                          }	 1 runs 		 22025.029122ms		741200328b
+{savePredictions                           }	 1 runs 		 176.84047ms		1118891584b
+{saveModels                                }	 1 runs 		 278.487621ms		1014198784b
+{preProcessFileWithGoldStandard            }	 1 runs 		 686136.282481ms	1115375040b
+{buildModelsTo                             }	 1 runs 		 105950.239125ms	1014198784b
+{calculateAveragePredictions               }	 1 runs 		 1.410864ms		1111136600b
+{calculate LexicalCountWords               }	 7500 runs		 0.007072514533333333ms	805046058b
+{calculateFeatures                         }	 1 runs 		 685035.084414ms	1046881384b
+{evaluateModel                             }	 4 runs 		 4269.874192ms		1063637056b
+{cross-validation folds+train MT           }	 4 runs 		 26344.62072275ms	861271614b
+{calculate SyntacticCountChunkTypes        }	 3750 runs		 0.0095789864ms		805314122b
+{formatPredictions                         }	 5 runs 		 35.3316088ms		1115789588b
+{loadSentencePairs                         }	 1 runs 		 701.654776ms		15305160b
+{cross-validation init MT                  }	 4 runs 		 68.1994985ms		893840364b
+{saveArffDataSet                           }	 1 runs 		 399.410635ms		1115375040b
+{process Tokens                            }	 3750 runs		 0.3540975893333333ms	805132131b
+{calculatePredictions                      }	 1 runs 		 17081.10217ms		1111136600b
+{process Chunks                            }	 3750 runs		 3.2795439349333333ms	805462484b
+{loadFeaturesFile                          }	 1 runs 		 179.451614ms		1126294992b
+{cross-validation MT                       }	 4 runs 		 26413.50623875ms	861574982b
+{process ChunkLemmas                       }	 3750 runs		 1.8384382234666667ms	804749117b
+{cross-validation post MT                  }	 4 runs 		 0.659213ms		861574982b
+(Total time: 809.565 seconds)
+

@@ -5,6 +5,13 @@
  */
 package asap;
 
+import asap.featurecalculation.FeatureCalculator;
+import asap.featurecalculation.LexicalOverlapFeaturesCalculator;
+import asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator;
+import asap.featurecalculation.LexicalCountWords;
+import asap.featurecalculation.SyntacticCountChunkTypesFeatures;
+import asap.textprocessing.TextProcessedPartKeyConsts;
+import asap.textprocessing.TextProcessHashWords;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,7 +42,7 @@ public class PreProcess extends TextProcessHashWords {
     int topDown;
     int bottomUp;
 
-    double maxRelatedness_groundtruth, minRelatedness_groundtruth;
+    double maxGoldStandard, minGoldStandard;
 
     private static HashMap<String, WordFrequency> wordFrequencies;
     private static TreeSet<WordFrequency> sortedWordFrequencies;
@@ -94,8 +101,8 @@ public class PreProcess extends TextProcessHashWords {
         instances = new LinkedList<>();
         wordFrequencies = new HashMap<>();
 
-        maxRelatedness_groundtruth = Double.MIN_VALUE;
-        minRelatedness_groundtruth = Double.MAX_VALUE;
+        maxGoldStandard = Double.MIN_VALUE;
+        minGoldStandard = Double.MAX_VALUE;
     }
 
     public void loadSentencePairsWithSideGoldStandardFile(String pairsFilename, String gsFilename) {
@@ -137,11 +144,11 @@ public class PreProcess extends TextProcessHashWords {
                     }
                     relatedness_groundtruth = Double.parseDouble(gsSc.nextLine());
 
-                    if (relatedness_groundtruth < minRelatedness_groundtruth) {
-                        minRelatedness_groundtruth = relatedness_groundtruth;
+                    if (relatedness_groundtruth < minGoldStandard) {
+                        minGoldStandard = relatedness_groundtruth;
                     }
-                    if (relatedness_groundtruth > maxRelatedness_groundtruth) {
-                        maxRelatedness_groundtruth = relatedness_groundtruth;
+                    if (relatedness_groundtruth > maxGoldStandard) {
+                        maxGoldStandard = relatedness_groundtruth;
                     }
                     //NO pair_ID column either:
                     //int pair_ID = Integer.parseInt(attributes[0]);
@@ -150,8 +157,8 @@ public class PreProcess extends TextProcessHashWords {
                     Instance i = new Instance(attributes[0].toLowerCase(), attributes[1].toLowerCase(),
                             pair_ID, relatedness_groundtruth);
 
-                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray());
-                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray());
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence1Words, s1Words.toArray(new String[s1Words.size()]));
+                    i.addProcessedTextPart(TextProcessedPartKeyConsts.sentence2Words, s2Words.toArray(new String[s2Words.size()]));
                     i.addProcessed(this);
 
                     instances.add(i);
@@ -163,8 +170,8 @@ public class PreProcess extends TextProcessHashWords {
         }
 
         System.out.println("Loaded " + instances.size() + " instances from " + pairsFilename + " with gold standard values from " + gsFilename);
-        System.out.println("\tMin relatedness:" + minRelatedness_groundtruth);
-        System.out.println("\tMax relatedness:" + maxRelatedness_groundtruth);
+        System.out.println("\tMin relatedness:" + minGoldStandard);
+        System.out.println("\tMax relatedness:" + maxGoldStandard);
         PerformanceCounters.stopTimer("loadSentencePairs");
     }
 
@@ -201,11 +208,11 @@ public class PreProcess extends TextProcessHashWords {
                     }
                     relatedness_groundtruth = Double.parseDouble(attributes[3]);
 
-                    if (relatedness_groundtruth < minRelatedness_groundtruth) {
-                        minRelatedness_groundtruth = relatedness_groundtruth;
+                    if (relatedness_groundtruth < minGoldStandard) {
+                        minGoldStandard = relatedness_groundtruth;
                     }
-                    if (relatedness_groundtruth > maxRelatedness_groundtruth) {
-                        maxRelatedness_groundtruth = relatedness_groundtruth;
+                    if (relatedness_groundtruth > maxGoldStandard) {
+                        maxGoldStandard = relatedness_groundtruth;
                     }
                     int pair_ID = Integer.parseInt(attributes[0]);
 
@@ -225,8 +232,8 @@ public class PreProcess extends TextProcessHashWords {
         }
 
         System.out.println("Loaded " + instances.size() + " instances from " + filename);
-        System.out.println("\tMin relatedness:" + minRelatedness_groundtruth);
-        System.out.println("\tMax relatedness:" + maxRelatedness_groundtruth);
+        System.out.println("\tMin relatedness:" + minGoldStandard);
+        System.out.println("\tMax relatedness:" + maxGoldStandard);
         PerformanceCounters.stopTimer("loadSentencePairs");
     }
 
@@ -318,31 +325,34 @@ public class PreProcess extends TextProcessHashWords {
         }
 
         System.out.println("Preparing feature calculation...");
-        featureCalculators = new FeatureCalculator[4];
-        featureCalculatorsClone = new FeatureCalculator[4];
-
-        //featureCalculators[0] = new LexicalCountWords("src/negative-stopword-list.txt", "nsw");
-        featureCalculators[0] = new LexicalCountWords("stopword-list.txt", "sw");
-        featureCalculatorsClone[0] = new LexicalCountWords("stopword-list.txt", "sw");
-
-        featureCalculators[1] = new SemanticSimilarityAndRelatednessCalculator();
-        featureCalculatorsClone[1] = new SemanticSimilarityAndRelatednessCalculator();
-
-        featureCalculators[2] = new LexicalOverlapFeaturesCalculator(0, 3);
-        featureCalculatorsClone[2] = new LexicalOverlapFeaturesCalculator(0, 3);
-        featureCalculators[3] = new SyntacticCountChunkTypesFeatures();
-        featureCalculatorsClone[3] = new SyntacticCountChunkTypesFeatures();
-
+        
+        featureCalculators = new FeatureCalculator[5];
+        featureCalculatorsClone = new FeatureCalculator[5];
+        
         Thread worker = new Thread(new FeatureCalculatorWorker(featureCalculators));
         Thread iWorker = new Thread(new FeatureCalculatorInvertedWorker(featureCalculatorsClone));
+        
+        featureCalculators[0] = new LexicalCountWords("negative-stopword-list.txt", "nsw");
+        featureCalculatorsClone[0] = new LexicalCountWords("negative-stopword-list.txt", "nsw");
+        featureCalculators[1] = new LexicalCountWords("stopword-list.txt", "sw");
+        featureCalculatorsClone[1] = new LexicalCountWords("stopword-list.txt", "sw");
+        
+        featureCalculators[2] = new SemanticSimilarityAndRelatednessCalculator(worker);
+        featureCalculatorsClone[2] = new SemanticSimilarityAndRelatednessCalculator(iWorker);
+
+        featureCalculators[3] = new LexicalOverlapFeaturesCalculator(0, 3, worker);
+        featureCalculatorsClone[3] = new LexicalOverlapFeaturesCalculator(0, 3, iWorker);
+        
+        featureCalculators[4] = new SyntacticCountChunkTypesFeatures(worker);
+        featureCalculatorsClone[4] = new SyntacticCountChunkTypesFeatures(iWorker);
 
         System.out.println("Starting feature calculation...");
         worker.start();
-        //iWorker.start();
+        iWorker.start();
 
         try {
             worker.join();
-            //iWorker.join();
+            iWorker.join();
         } catch (InterruptedException ex) {
             Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -382,8 +392,8 @@ public class PreProcess extends TextProcessHashWords {
             topDown = Integer.MIN_VALUE;
             wordFrequencies = new HashMap<>();
 
-            maxRelatedness_groundtruth = Double.MIN_VALUE;
-            minRelatedness_groundtruth = Double.MAX_VALUE;
+            maxGoldStandard = Double.MIN_VALUE;
+            minGoldStandard = Double.MAX_VALUE;
         }
         System.out.println("\ttests done.");
     }
@@ -403,8 +413,8 @@ public class PreProcess extends TextProcessHashWords {
             topDown = Integer.MIN_VALUE;
             wordFrequencies = new HashMap<>();
 
-            maxRelatedness_groundtruth = Double.MIN_VALUE;
-            minRelatedness_groundtruth = Double.MAX_VALUE;
+            maxGoldStandard = Double.MIN_VALUE;
+            minGoldStandard = Double.MAX_VALUE;
         }
         System.out.println("\ttests done.");
     }
