@@ -6,101 +6,155 @@
 package asap.featurecalculation;
 
 import asap.Chunk;
+import asap.Config;
 import asap.Instance;
 import asap.PerformanceCounters;
-import asap.textprocessing.TextProcessedPartKeyConsts;
 import asap.textprocessing.TextProcessChunkLemmas;
+import asap.textprocessing.TextProcessChunkLemmasRemoveSRule;
+import asap.textprocessing.TextProcessedPartKeyConsts;
 import asap.textprocessing.TextProcesser;
-import edu.cmu.lti.ws4j.WS4J;
+import edu.cmu.lti.lexical_db.ILexicalDatabase;
+import edu.cmu.lti.lexical_db.NictWordNet;
+import edu.cmu.lti.ws4j.RelatednessCalculator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Objects;
 
+/**
+ *
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
+ */
 public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
+
+    private static final HashMap<Long, SemanticSimilarityAndRelatednessCalculator> perThreadInstances = new HashMap<>();
 
     private final double MAX_VALUE = 100;
 
     private final TextProcesser textProcesserDependency;
+    private static ILexicalDatabase db = new NictWordNet();
 
+    private final LinkedList<edu.cmu.lti.ws4j.RelatednessCalculator> relatednessCalculators;
+    private final HashMap<RelatednessCalculator, HashMap<String, Calculation>> previousCalculations;
+
+    /**
+     *
+     * @param t
+     */
     public SemanticSimilarityAndRelatednessCalculator(Thread t) {
-        this.textProcesserDependency = 
-                TextProcessChunkLemmas.getTextProcessChunkLemmas(t);
+        PerformanceCounters.startTimer("SemanticSimilarityAndRelatednessCalculator");
+        if (Config.useDBPediaLemmaLookup()) {
+            this.textProcesserDependency = TextProcessChunkLemmasRemoveSRule
+                    .getTextProcessChunkLemmasRemoveSRule(t);
+        } else {
+            this.textProcesserDependency
+                    = TextProcessChunkLemmas.getTextProcessChunkLemmas(t);
+        }
+        relatednessCalculators = new LinkedList<>();
+
+        previousCalculations = new HashMap<>();
+        perThreadInstances.put(t.getId(), this);
+        PerformanceCounters.stopTimer("SemanticSimilarityAndRelatednessCalculator");
     }
 
+    /**
+     *
+     */
     public SemanticSimilarityAndRelatednessCalculator() {
-        this.textProcesserDependency = 
-                TextProcessChunkLemmas.getTextProcessChunkLemmas();
+        this(Thread.currentThread());
     }
-    
 
+    /**
+     *
+     * @param t
+     * @return
+     */
+    @Override
+    public FeatureCalculator getInstance(Thread t) {
+
+        if (perThreadInstances.containsKey(t.getId())) {
+            return perThreadInstances.get(t.getId());
+        }
+        return new SemanticSimilarityAndRelatednessCalculator(t);
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
     @Override
     public boolean textProcessingDependenciesMet(Instance i) {
         return i.isProcessed(textProcesserDependency);
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void calculate(Instance i) {
         if (!textProcessingDependenciesMet(i)) {
             textProcesserDependency.process(i);
         }
+        if (relatednessCalculators.isEmpty()) {
+            addCalculators();
+        }
+
         PerformanceCounters.startTimer("calculate SemanticSimilarityAndRelatedness");
-        
+
 //        System.out.println("calculating " + Arrays.toString(getFeatureNames())
 //                + " for instance " + i.getAttributeAt(0));
-        
         Object o;
         Chunk[] s1Chunks, s2Chunks;
         String[] s1Lemmas, s2Lemmas;
-        TreeSet<LemmaSimilarity> lemmaPairSimilarityValues;
+        List<LemmaSimilarity> lemmaPairSimilarityValues;
         o = i.getProcessedTextPart(sentence1Chunks);
-        if (!(o instanceof Chunk[]))
+        if (!(o instanceof Chunk[])) {
             return;
+        }
         s1Chunks = (Chunk[]) o;
-        
+
         o = i.getProcessedTextPart(sentence2Chunks);
-        if (!(o instanceof Chunk[]))
+        if (!(o instanceof Chunk[])) {
             return;
+        }
         s2Chunks = (Chunk[]) o;
-        
-        
+
         o = i.getProcessedTextPart(sentence1ChunkLemmas);
-        if (!(o instanceof String[]))
+        if (!(o instanceof String[])) {
             return;
-        s1Lemmas = (String[])o;
-        
+        }
+        s1Lemmas = (String[]) o;
+
         o = i.getProcessedTextPart(sentence2ChunkLemmas);
-        if (!(o instanceof String[]))
+        if (!(o instanceof String[])) {
             return;
-        s2Lemmas = (String[])o;
-        
-        
-        lemmaPairSimilarityValues = calculateLemmaPairJcnSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
-        //System.out.println("lemma pair similarities calculated");
+        }
+        s2Lemmas = (String[]) o;
 
-        resolveConflicts(lemmaPairSimilarityValues);
-        //System.out.println("best lemma pairs determined");
+        for (RelatednessCalculator relatednessCalculator : relatednessCalculators) {
+            lemmaPairSimilarityValues = calculateLemmaPairSimilarityValues(s1Chunks, s2Chunks, getEqualChunkPairs(s1Chunks, s2Chunks), relatednessCalculator);
+            //System.out.println("lemma pair similarities calculated");
 
-        i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
-        //System.out.println("added max JCN sum measure");
-        
-        lemmaPairSimilarityValues = calculateLemmaPairLeskSimilarityValues(s1Lemmas, s2Lemmas, getEqualChunkPairs(s1Chunks, s2Chunks));
-        //System.out.println("lemma pair similarities calculated");
+            resolveConflicts(lemmaPairSimilarityValues);
+            //System.out.println("best lemma pairs determined");
 
-        resolveConflicts(lemmaPairSimilarityValues);
-        //System.out.println("best lemma pairs determined");
+            i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
 
-        i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
-        //System.out.println("added max Lesk sum measure");
-        
+        }
+
 //        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate SemanticSimilarityAndRelatedness");
     }
 
     //maybe should be another TextProcesser?
     private List<Entry<Integer, Integer>> getEqualChunkPairs(Chunk[] s1Chunks, Chunk[] s2Chunks) {
+        PerformanceCounters.startTimer("getEqualChunkPairs()");
         LinkedList<Entry<Integer, Integer>> pairList
                 = new LinkedList<>();
 
@@ -110,26 +164,34 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
                     || sentence1Chunk.getChunkType().equalsIgnoreCase("VP")) {
                 for (int j = 0; j < s2Chunks.length; j++) {
                     Chunk sentence2Chunk = s2Chunks[j];
-                    if (sentence1Chunk.getChunkType().equals(sentence2Chunk.getChunkType())) {
+                    if (sentence1Chunk.getChunkType().equals(sentence2Chunk.getChunkType())
+                            && !(sentence1Chunk.getLemma() == null ? true
+                                    : sentence1Chunk.getLemma().isEmpty())
+                            && !(sentence2Chunk.getLemma() == null ? true
+                                    : sentence2Chunk.getLemma().isEmpty())) {
                         pairList.add(new Entry<>(i, j));
                     }
                 }
             }
         }
 
+        PerformanceCounters.stopTimer("getEqualChunkPairs()");
         return pairList;
     }
 
-    private void resolveConflicts(TreeSet<LemmaSimilarity> lemmaPairSimilarityValues) {
-        LemmaSimilarity[] lemmaSimilarities;
+    private void resolveConflicts(List<LemmaSimilarity> lemmaPairSimilarityValues) {
+        PerformanceCounters.startTimer("resolveConflicts()");
+        LemmaSimilarity[] lemmaPairSimilarityValuesArray;
+
+        Collections.sort(lemmaPairSimilarityValues);
 
         //TODO: if slow, there must be a better way than always converting the whole collection to array...
         for (int i = 0; i + 1 < lemmaPairSimilarityValues.size(); i++) {
-            lemmaSimilarities = lemmaPairSimilarityValues.toArray(new LemmaSimilarity[lemmaPairSimilarityValues.size()]);
+            lemmaPairSimilarityValuesArray = lemmaPairSimilarityValues.toArray(new LemmaSimilarity[lemmaPairSimilarityValues.size()]);
 
-            LemmaSimilarity lemmaPairSimilarityValue = lemmaSimilarities[i];
+            LemmaSimilarity lemmaPairSimilarityValue = lemmaPairSimilarityValuesArray[i];
 
-            Iterator<LemmaSimilarity> it = lemmaPairSimilarityValues.tailSet(lemmaSimilarities[i + 1]).iterator();
+            Iterator<LemmaSimilarity> it = lemmaPairSimilarityValues.subList(i + 1, lemmaPairSimilarityValues.size()).iterator();
 
             while (it.hasNext()) {
                 LemmaSimilarity lemmaSimilarity = it.next();
@@ -139,51 +201,94 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
                 }
             }
         }
+        PerformanceCounters.stopTimer("resolveConflicts()");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String[] getFeatureNames() {
-        String[] featureNames = {"JCN_sum_max","LESK_sum_max"};
+        List<String> featureNamesList = new LinkedList<>();
+
+        for (RelatednessCalculator relatednessCalculator : relatednessCalculators) {
+            String rcName = relatednessCalculator.getClass().getSimpleName();
+            featureNamesList.add(rcName + "_sum_max");
+            featureNamesList.add(rcName + "_lin_norm");
+            featureNamesList.add(rcName + "_log_norm");
+        }
+
+        String[] featureNames = featureNamesList.toArray(new String[featureNamesList.size()]);
+
         return featureNames;
     }
 
-
-    private double getJCNValueOf(String wordA, String wordB) {
-        double value = WS4J.runJCN(wordA, wordB);
-        //System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
-        return value;
-    }
-    private double getLeskValueOf(String wordA, String wordB) {
-        double value = WS4J.runLESK(wordA, wordB);
-        //System.out.println("jcn(" + wordA + "," + wordB + ")=" + value);
-        return value;
+    private double[] getValueSum(List<LemmaSimilarity> lemmasPairSimilarityValues) {
+        return getValueSum(lemmasPairSimilarityValues, 1000000000d);
     }
 
-    private double getValueSum(Set<LemmaSimilarity> lemmaPairSimilarityValues) {
-        double sum = 0d;
+    private double[] getValueSum(List<LemmaSimilarity> lemmaPairSimilarityValues, double max) {
+        PerformanceCounters.startTimer("getValueSum()");
+
+        double sum = 0d, linNormalizedSum = 0d, logNormalizedSum = 0d, current;
+
         for (LemmaSimilarity lemmaPairSimilarityValue : lemmaPairSimilarityValues) {
-            sum += lemmaPairSimilarityValue.getSimilarityValue();
-        }
-        //Check what to do in this case::
-        if (sum >= MAX_VALUE) {
-            return 1000;
-        }
+            current = lemmaPairSimilarityValue.getSimilarityValue();
 
-        return sum;
+            //ignore exact matches:
+            if (Config.ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum()
+                    && current == Double.MAX_VALUE) {
+                continue;
+            }
+            //avoid values greater than 'max':
+            if (Config.limitSemanticSimilarityAndRelatednessCalculatorPreSum()
+                    && current >= Config.getSemanticSimilarityAndRelatednessCalculatorPreSumValueLimit()) {
+                current = Config.getSemanticSimilarityAndRelatednessCalculatorPreSumValueLimit();
+
+            }
+            sum += current;
+            linNormalizedSum += current / max;
+            logNormalizedSum += Math.log(current) / Math.log(max);
+        }
+        double[] ret = {sum, linNormalizedSum, logNormalizedSum};
+
+        //always avoid infinity so we don't get any errors in post-processing:
+        for (int i = 0; i < ret.length; i++) {
+            double s = ret[i];
+            if (ret[i] > Double.MAX_VALUE) {
+                ret[i] = Double.MAX_VALUE;
+            }
+        }
+        //avoid values greater than 'max':
+        if (Config.limitSemanticSimilarityAndRelatednessCalculatorPostSum()) {
+
+            for (int i = 0; i < ret.length; i++) {
+                double s = ret[i];
+                if (ret[i] > Config.getSemanticSimilarityAndRelatednessCalculatorPostSumValueLimit()) {
+                    ret[i] = Config.getSemanticSimilarityAndRelatednessCalculatorPostSumValueLimit();
+                }
+            }
+        }
+        PerformanceCounters.stopTimer("getValueSum()");
+        return ret;
     }
 
-    private TreeSet<LemmaSimilarity> calculateLemmaPairJcnSimilarityValues(String[] s1ChunkLemmas, 
-            String[] s2ChunkLemmas, List<Entry<Integer, Integer>> chunkPairs) {
-        TreeSet<LemmaSimilarity> lemmaSimilarities
-                = new TreeSet<>();
-        
+    private List<LemmaSimilarity> calculateLemmaPairSimilarityValues(Chunk[] s1Chunks,
+            Chunk[] s2Chunks, List<Entry<Integer, Integer>> chunkPairs,
+            RelatednessCalculator relatednessCalculator) {
+
+        PerformanceCounters.startTimer("calculateLemmaPairSimilarityValues()");
+        List<LemmaSimilarity> lemmaSimilarities
+                = new ArrayList<>();
+
         for (Entry<Integer, Integer> chunkPair : chunkPairs) {
             LemmaSimilarity lemmaSimilarity
                     = new LemmaSimilarity(chunkPair.getKey(),
                             chunkPair.getValue(),
-                            getJcnSimilarityValueOf(
-                                    s1ChunkLemmas[chunkPair.getKey()],
-                                    s2ChunkLemmas[chunkPair.getValue()]
+                            getSimilarityValueOf(relatednessCalculator,
+                                    s1Chunks[chunkPair.getKey()].getLemma(),
+                                    s2Chunks[chunkPair.getValue()].getLemma()
                             ));
 
             if (lemmaSimilarity.getSimilarityValue() > 0) {
@@ -191,47 +296,102 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
             }
         }
 
+        PerformanceCounters.stopTimer("calculateLemmaPairSimilarityValues()");
         return lemmaSimilarities;
     }
 
-    protected double getJcnSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
-        return getJCNValueOf(s1ChunkLemma, s2ChunkLemma);
-    }
+    /**
+     *
+     * @param relatednessCalculator
+     * @param s1ChunkLemma
+     * @param s2ChunkLemma
+     * @return
+     */
+    protected double getSimilarityValueOf(
+            RelatednessCalculator relatednessCalculator, String s1ChunkLemma,
+            String s2ChunkLemma) {
+        PerformanceCounters.startTimer("getSimilarityValueOf()");
 
-    private TreeSet<LemmaSimilarity> calculateLemmaPairLeskSimilarityValues(String[] s1ChunkLemmas, 
-            String[] s2ChunkLemmas, List<Entry<Integer, Integer>> chunkPairs) {
-        TreeSet<LemmaSimilarity> lemmaSimilarities
-                = new TreeSet<>();
-        
-        for (Entry<Integer, Integer> chunkPair : chunkPairs) {
-            LemmaSimilarity lemmaSimilarity
-                    = new LemmaSimilarity(chunkPair.getKey(),
-                            chunkPair.getValue(),
-                            getLeskSimilarityValueOf(
-                                    s1ChunkLemmas[chunkPair.getKey()],
-                                    s2ChunkLemmas[chunkPair.getValue()]
-                            ));
-
-            if (lemmaSimilarity.getSimilarityValue() > 0) {
-                lemmaSimilarities.add(lemmaSimilarity);
-            }
+        String key = s1ChunkLemma + " - " + s2ChunkLemma;
+        if (previousCalculations.get(relatednessCalculator).containsKey(key)) {
+            PerformanceCounters.stopTimer("getSimilarityValueOf()");
+            return previousCalculations.get(relatednessCalculator).get(key).getResult();
         }
 
-        return lemmaSimilarities;
+        Calculation calc = new Calculation(relatednessCalculator, s1ChunkLemma, s2ChunkLemma);
+        previousCalculations.get(relatednessCalculator).put(key, calc);
+        PerformanceCounters.stopTimer("getSimilarityValueOf()");
+        return calc.getResult();
     }
 
-    protected double getLeskSimilarityValueOf(String s1ChunkLemma, String s2ChunkLemma) {
-        return getLeskValueOf(s1ChunkLemma, s2ChunkLemma);
-    }
-    
-    protected double getTotalSimilarityValueOf(Set<LemmaSimilarity> values) {
+    /**
+     *
+     * @param values
+     * @return
+     */
+    protected double[] getTotalSimilarityValueOf(List<LemmaSimilarity> values) {
         return getValueSum(values);
     }
 
-    
-    
-    
-    
+    /**
+     *
+     */
+    protected void addCalculators() {
+        PerformanceCounters.startTimer("addCalculators()");
+        relatednessCalculators.add(new edu.cmu.lti.ws4j.impl.JiangConrath(db));
+        relatednessCalculators.add(new edu.cmu.lti.ws4j.impl.Lesk(db));
+        relatednessCalculators.add(new edu.cmu.lti.ws4j.impl.Resnik(db));
+
+        for (RelatednessCalculator relatednessCalculator : relatednessCalculators) {
+            previousCalculations.put(relatednessCalculator, new HashMap<String, Calculation>());
+        }
+        PerformanceCounters.stopTimer("addCalculators()");
+
+    }
+
+    private class Calculation {
+
+        private final RelatednessCalculator relatednessCalculator;
+        private final String s1;
+        private final String s2;
+        private final double result;
+
+        public Calculation(RelatednessCalculator relatednessCalculator, String s1, String s2) {
+            this.relatednessCalculator = relatednessCalculator;
+            this.s1 = s1;
+            this.s2 = s2;
+            result = relatednessCalculator.calcRelatednessOfWords(s1, s2);
+        }
+
+        public double getResult() {
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return (s1 + " - " + s2).hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Calculation other = (Calculation) obj;
+            if (!Objects.equals(this.relatednessCalculator, other.relatednessCalculator)) {
+                return false;
+            }
+            if (!Objects.equals(this.s1, other.s1)) {
+                return false;
+            }
+            return Objects.equals(this.s2, other.s2);
+        }
+
+    }
+
     private class Entry<K, V> implements Map.Entry {
 
         private final K key;
@@ -258,12 +418,21 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
         }
     }
 
+    /**
+     *
+     */
     protected class LemmaSimilarity implements Comparable<LemmaSimilarity> {
 
         private final int sentence1ChunkIndex;
         private final int sentence2ChunkIndex;
         private final double similarityValue;
 
+        /**
+         *
+         * @param sentence1ChunkIndex
+         * @param sentence2ChunkIndex
+         * @param similarityValue
+         */
         public LemmaSimilarity(int sentence1ChunkIndex, int sentence2ChunkIndex, double similarityValue) {
             this.sentence1ChunkIndex = sentence1ChunkIndex;
             this.sentence2ChunkIndex = sentence2ChunkIndex;
@@ -275,23 +444,46 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
             return Double.compare(o.similarityValue, similarityValue);
         }
 
+        /**
+         *
+         * @param sentence1ChunkIndex
+         * @param sentence2ChunkIndex
+         * @return
+         */
         public boolean isEither(int sentence1ChunkIndex, int sentence2ChunkIndex) {
             return this.sentence1ChunkIndex == sentence1ChunkIndex
                     || this.sentence2ChunkIndex == sentence2ChunkIndex;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getSentence1ChunkIndex() {
             return sentence1ChunkIndex;
         }
 
+        /**
+         *
+         * @return
+         */
         public int getSentence2ChunkIndex() {
             return sentence2ChunkIndex;
         }
 
+        /**
+         *
+         * @return
+         */
         public double getSimilarityValue() {
             return similarityValue;
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "SemanticSimilarityAndRelatednessCalculator (" + 3 * relatednessCalculators.size() + " features)";
     }
 
 }

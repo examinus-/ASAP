@@ -1,0 +1,13 @@
++add licensing data
++add missing javadoc
++restructure textprocessors into proper OO hierarchy
++thread specific TextProcessor/FeatureCalculator need to allow multiple instances for different configurations
++add LDA FeatureCalculators
++
++save preprocessed data into arff (all data, including intermediate steps like tokenization, POSTagging, etc...)
++load preprocessed data from arff
+
+
++path spaces need escape?
+
+

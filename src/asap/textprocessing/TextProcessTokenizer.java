@@ -5,10 +5,11 @@
  */
 package asap.textprocessing;
 
+import asap.Config;
 import asap.Instance;
 import asap.PerformanceCounters;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -22,13 +23,26 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.PlainTextByLineStream;
 
+/**
+ *  This processer takes care of tokenizing text.
+ * processing input: original sentences
+ * processing output: sentences split by words (String[])
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
+ */
 public class TextProcessTokenizer implements TextProcesser, TextProcessedPartKeyConsts {
 
     private Tokenizer tokenizer;
 
+    private static TokenizerModel model;
+
     private static final HashMap<Long, TextProcessTokenizer> tpts
             = new HashMap<>();
-    
+
+    /**
+     *
+     * @param t
+     * @return
+     */
     public static TextProcessTokenizer getTextProcessTokenizer(Thread t) {
         TextProcessTokenizer r;
         if (tpts.containsKey(t.getId())) {
@@ -38,35 +52,44 @@ public class TextProcessTokenizer implements TextProcesser, TextProcessedPartKey
         tpts.put(t.getId(), r);
         return r;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public static TextProcessTokenizer getTextProcessTokenizer() {
         return getTextProcessTokenizer(Thread.currentThread());
     }
-    private TextProcessTokenizer(String modelsPath) {
 
+    /**
+     *
+     * @param t
+     * @return
+     */
+    @Override
+    public TextProcesser getInstance(Thread t) {
+        return getTextProcessTokenizer(t);
+    }
+
+    private TextProcessTokenizer(String modelsPath) {
+        boolean modelLoaded = false;
         InputStream modelIn = null;
         try {
-
-            modelIn = new FileInputStream(modelsPath + "/en-token.bin");
-            try {
-
-                TokenizerModel model = new TokenizerModel(modelIn);
-                tokenizer = new TokenizerME(model);
-            } catch (IOException e) {
-            } finally {
-                try {
-                    modelIn.close();
-                } catch (IOException e) {
-                }
-
+            if (model == null) {
+                modelIn = new FileInputStream(Config.getOpenNlpModelsDirectory() + File.separator + Config.getTokenizerModelFilename());
+                model = new TokenizerModel(modelIn);
+                modelLoaded = true;
             }
-        } catch (FileNotFoundException ex) {
+            tokenizer = new TokenizerME(model);
+        } catch (IOException ex) {
             Logger.getLogger(TextProcessTokenizer.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                modelIn.close();
-            } catch (IOException ex) {
-                Logger.getLogger(TextProcessTokenizer.class.getName()).log(Level.SEVERE, null, ex);
+            if (modelLoaded && modelIn != null) {
+                try {
+                    modelIn.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TextProcessTokenizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -75,30 +98,48 @@ public class TextProcessTokenizer implements TextProcesser, TextProcessedPartKey
         this("opennlp-models");
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     @Override
     public boolean textProcessingDependenciesMet(Instance i) {
         return true;
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void process(Instance i) {
-        PerformanceCounters.startTimer("process Tokens");
-        i.addProcessedTextPart(sentence1Tokens, tokenizeSentence(i.getSentence1()));
-        i.addProcessedTextPart(sentence2Tokens, tokenizeSentence(i.getSentence2()));
-
+        PerformanceCounters.startTimer("process TextProcessTokenizer");
+        if (Config.calculateWithoutCaseSensitivity()) {
+            i.addProcessedTextPart(sentence1Tokens, tokenizeSentence(i.getSentence1().toLowerCase()));
+            i.addProcessedTextPart(sentence2Tokens, tokenizeSentence(i.getSentence2().toLowerCase()));
+        }
+        if (Config.calculateWithCaseSensitivity()) {
+            i.addProcessedTextPart(sentence1TokensCaseSensitive, tokenizeSentence(i.getSentence1()));
+            i.addProcessedTextPart(sentence2TokensCaseSensitive, tokenizeSentence(i.getSentence2()));
+        }
         i.addProcessed(this);
-        PerformanceCounters.stopTimer("process Tokens");
+        PerformanceCounters.stopTimer("process TextProcessTokenizer");
     }
 
-    private String[] tokenizeSentence(String sentence) {
+    /**
+     *
+     * @param sentence
+     * @return
+     */
+    protected String[] tokenizeSentence(String sentence) {
         return tokenizeSentenceWithModel(sentence);
     }
 
-    
     private synchronized String[] tokenizeSentenceWithModel(String sentence) {
         return tokenizer.tokenize(sentence);
     }
-    
+
     private String[] tokenizeSentenceWithWhiteSpace(String sentence) {
         ObjectStream<String> lineStream
                 = new PlainTextByLineStream(new StringReader(sentence));

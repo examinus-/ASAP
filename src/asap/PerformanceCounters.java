@@ -5,11 +5,17 @@
  */
 package asap;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author exam
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt)
  */
 public class PerformanceCounters {
 
@@ -19,7 +25,7 @@ public class PerformanceCounters {
     HashMap<String, Stat> counters;
     private int longestCounterName;
 
-    static class Stat {
+    static class Stat implements Comparable<Stat> {
 
         private final String timerName;
         private Long startTime;
@@ -47,8 +53,7 @@ public class PerformanceCounters {
             while (tmp.length() < pc.longestCounterName) {
                 tmp += " ";
             }
-            return "{" + tmp + "}\t " + noRuns + " runs\t\t "
-                    + avgTime + "ms\t" + getAvgMemoryUsage() + "b";
+            return String.format("{%s}\t %6s runs\t\t %10.7sms\t\t %10sb", tmp, noRuns, avgTime, getAvgMemoryUsage());
         }
 
         public synchronized void startTimer() {
@@ -96,6 +101,10 @@ public class PerformanceCounters {
             return r;
         }
 
+        @Override
+        public int compareTo(Stat o) {
+            return (int)(o.getAvgTime() - this.getAvgTime());
+        }
     }
 
     private PerformanceCounters() {
@@ -113,6 +122,10 @@ public class PerformanceCounters {
         return r;
     }
 
+    /**
+     *
+     * @param timerName
+     */
     public static void startTimer(String timerName) {
         PerformanceCounters pc = getThreadPC(Thread.currentThread());
         Stat stat = pc.counters.get(timerName);
@@ -126,6 +139,10 @@ public class PerformanceCounters {
         stat.startTimer();
     }
 
+    /**
+     *
+     * @param timerName
+     */
     public static void stopTimer(String timerName) {
         PerformanceCounters pc = getThreadPC(Thread.currentThread());
         Stat stat = pc.counters.get(timerName);
@@ -136,10 +153,17 @@ public class PerformanceCounters {
         }
     }
 
+    /**
+     *
+     */
     public static void printStats() {
+        StringBuilder sb = new StringBuilder();
         HashMap<String, Stat> list = new HashMap<>();
-
+        int maxLongestCounterName = 0;
         for (PerformanceCounters pc : pcs.values()) {
+            if (maxLongestCounterName < pc.longestCounterName) {
+                maxLongestCounterName = pc.longestCounterName;
+            }
             for (Stat value : pc.counters.values()) {
                 if (list.containsKey(value.timerName)) {
                     Stat valueAdded = value.add(list.get(value.timerName));
@@ -149,11 +173,34 @@ public class PerformanceCounters {
                 }
             }
         }
-        
-        for (Stat value : list.values()) {
-            System.out.println(value.toString());
+
+        for (PerformanceCounters pc : pcs.values()) {
+            pc.longestCounterName = maxLongestCounterName;
         }
 
-        System.out.println("(Total time: " + ((System.currentTimeMillis() - totalStartTime) / 1000d) + " seconds)");
+        ArrayList<Stat> stats = new ArrayList<>(list.values());
+        
+        Collections.sort(stats);
+        
+        for (Stat value : stats) {
+            sb.append(value.toString())
+                    .append("\n");
+        }
+
+        sb.append("(Total time: ")
+                .append((System.currentTimeMillis() - totalStartTime) / 1000d)
+                .append(" seconds)")
+                .append("\n");
+
+        String out = sb.toString();
+
+        System.out.println(out);
+
+        try (FileOutputStream fos = new FileOutputStream(Config.getLogTimingsOutputFilename())) {
+            fos.write(out.getBytes());
+        } catch (IOException ex) {
+            Logger.getLogger(PerformanceCounters.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

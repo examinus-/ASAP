@@ -1,0 +1,1314 @@
+[-i, input/STS.input.OnWN.2012.txt;input/STS.gs.OnWN.2012.txt, -i, input/STS.input.OnWN.2013.txt;input/STS.gs.OnWN.2013.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/OnWN/LemmasFoundInDBP-train.log, -lpef, outputs/2014-task10/simulation5/OnWN/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/OnWN/predictions/STS.OnWN.txt, -mo, outputs/2014-task10/simulation5/weka-models-OnWN, -fo, outputs/2014-task10/simulation5/OnWN/features-sts2014-OnWN-train.txt, -tof, outputs/2014-task10/simulation5/OnWN/preprocessed-OnWN-train.txt, -llf, outputs/2014-task10/simulation5/OnWN/LemmasNotFound-OnWN-train.log, -lgf, outputs/2014-task10/simulation5/OnWN/GrammarCounters-OnWN-train.log, -lt, -ltf, outputs/2014-task10/simulation5/OnWN/Timings-OnWN-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/OnWN/NamedEntitiesFound-OnWN-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 750 instances from input/STS.input.OnWN.2012.txt with gold standard values from input/STS.gs.OnWN.2012.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Loaded 561 instances from input/STS.input.OnWN.2013.txt with gold standard values from input/STS.gs.OnWN.2013.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-OnWN/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.707 
+Mean absolute error                      0.8442
+Root mean squared error                  1.1188
+Relative absolute error                 63.6782 %
+Root relative squared error             70.7183 %
+Total Number of Instances             1311     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-OnWN/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7082
+Mean absolute error                      0.8398
+Root mean squared error                  1.117 
+Relative absolute error                 63.3432 %
+Root relative squared error             70.6067 %
+Total Number of Instances             1311     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-OnWN/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7002
+Mean absolute error                      0.8659
+Root mean squared error                  1.1318
+Relative absolute error                 65.313  %
+Root relative squared error             71.5426 %
+Total Number of Instances             1311     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-OnWN/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7148
+Mean absolute error                      0.8345
+Root mean squared error                  1.1063
+Relative absolute error                 62.9449 %
+Root relative squared error             69.9306 %
+Total Number of Instances             1311     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.8024
+Mean absolute error                      0.7217
+Root mean squared error                  0.9554
+Relative absolute error                 54.435  %
+Root relative squared error             60.3873 %
+Total Number of Instances             1311     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.801 
+Mean absolute error                      0.704 
+Root mean squared error                  0.9549
+Relative absolute error                 53.1029 %
+Root relative squared error             60.3598 %
+Total Number of Instances             1311     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8615
+Mean absolute error                      0.6527
+Root mean squared error                  0.8461
+Relative absolute error                 49.2306 %
+Root relative squared error             53.4811 %
+Total Number of Instances             1311     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.774 
+Mean absolute error                      0.7577
+Root mean squared error                  1.0047
+Relative absolute error                 57.1487 %
+Root relative squared error             63.5054 %
+Total Number of Instances             1311     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 1311 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN/predictions/0-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN/predictions/1-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN/predictions/2-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN/predictions/3-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN/predictions/avg-STS.OnWN.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN/predictions/0-STS.OnWN.txt.training):0.8024
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN/predictions/1-STS.OnWN.txt.training):0.801
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN/predictions/2-STS.OnWN.txt.training):0.8615
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN/predictions/3-STS.OnWN.txt.training):0.774
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN/predictions/avg-STS.OnWN.txt.training):0.8163
+
+Best correlation = 0.8615
+
+
+
+{calculateFeatures                                                    }	      1 runs		    593115.ms		   95813560b
+{cross-validation MT                                                  }	      4 runs		    21887.2ms		   31917424b
+{cross-validation folds+train MT                                      }	      4 runs		    21772.6ms		   29855004b
+{calculatePredictions                                                 }	      1 runs		    3393.74ms		   42902672b
+{process ChunkLemmas                                                  }	   1311 runs		    1701.30ms		      85630b
+{savePredictions                                                      }	      1 runs		    1138.56ms		   99771488b
+{evaluateModel                                                        }	      4 runs		    818.779ms		    9032168b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    406.874ms		   12128808b
+{savePreprocessedFeatures                                             }	      2 runs		    204.464ms		  -71583264b
+{loadSentencePairs                                                    }	      2 runs		    136.157ms		    5951976b
+{loadFeaturesStream                                                   }	      1 runs		    104.998ms		    4774464b
+{PerlPearsonsCorrelation                                              }	      5 runs		    100.796ms		   14643628b
+{getOutputStream                                                      }	      2 runs		    94.3361ms		   35241828b
+{calculate SemanticSimilarityAndRelatedness                           }	   1311 runs		    81.0210ms		    -268005b
+{cross-validation post MT                                             }	      4 runs		    64.5555ms		     314442b
+{cross-validation init MT                                             }	      4 runs		    49.9363ms		    1747978b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   3933 runs		    26.9724ms		     -93327b
+{formatPredictions                                                    }	      5 runs		    23.1448ms		     451603b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    7.71065ms		     214538b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	  19389 runs		    5.46353ms		     -19607b
+{LexicalCountWordsConstructor                                         }	     10 runs		    4.08808ms		      67139b
+{process Chunks                                                       }	   1311 runs		    3.56070ms		     145495b
+{process NER                                                          }	   1311 runs		    2.36310ms		     173491b
+{process POSTags                                                      }	   1311 runs		    0.88794ms		      25267b
+{calculateAveragePredictions                                          }	      1 runs		    0.47603ms		          0b
+{process TextProcessTokenizer                                         }	   1311 runs		    0.35452ms		      40951b
+{calculate LexicalOverlapFeatures                                     }	   1311 runs		    0.04318ms		       4611b
+{calculate LexicalCountWords                                          }	   2622 runs		    0.01830ms		       3940b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   3933 runs		    0.01041ms		       2055b
+{calculate SyntacticCountChunkTypes                                   }	   1311 runs		    0.00670ms		        206b
+{calculate FeatureCalculatorOverlappingLemmas                         }	   1311 runs		    0.00491ms		          9b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   3933 runs		    0.00431ms		        549b
+{LexicalCountWords countWords()                                       }	   5244 runs		    0.00419ms		       1339b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   3933 runs		    0.00232ms		         33b
+{calculate FeatureCalculatorSentenceLengths                           }	   1311 runs		    0.00194ms		         80b
+(Total time: 695.457 seconds)
+
+[-i, input/STS.input.headlines.2013.txt;input/STS.gs.headlines.2013.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/headlines/LemmasFoundInDBP-headlines-train.log, -lpef, outputs/2014-task10/simulation5/headlines/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/headlines/predictions/STS.headlines-train.txt, -mo, outputs/2014-task10/simulation5/weka-models-headlines, -fo, outputs/2014-task10/simulation5/headlines/features-sts2014-headlines-train.txt, -tof, outputs/2014-task10/simulation5/headlines/preprocessed-headlines-train.txt, -llf, outputs/2014-task10/simulation5/headlines/LemmasNotFound-headlines-train.log, -lgf, outputs/2014-task10/simulation5/headlines/GrammarCounters-headlines-train.log, -lt, -ltf, outputs/2014-task10/simulation5/headlines/Timings-headlines-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/headlines/NamedEntitiesFound-headlines-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 750 instances from input/STS.input.headlines.2013.txt with gold standard values from input/STS.gs.headlines.2013.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-headlines/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6473
+Mean absolute error                      0.888 
+Root mean squared error                  1.0805
+Relative absolute error                 71.1856 %
+Root relative squared error             76.232  %
+Total Number of Instances              750     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-headlines/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6459
+Mean absolute error                      0.89  
+Root mean squared error                  1.0821
+Relative absolute error                 71.3433 %
+Root relative squared error             76.3492 %
+Total Number of Instances              750     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-headlines/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6211
+Mean absolute error                      0.9157
+Root mean squared error                  1.111 
+Relative absolute error                 73.407  %
+Root relative squared error             78.3841 %
+Total Number of Instances              750     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-headlines/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6464
+Mean absolute error                      0.8883
+Root mean squared error                  1.0817
+Relative absolute error                 71.2056 %
+Root relative squared error             76.3187 %
+Total Number of Instances              750     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7549
+Mean absolute error                      0.7708
+Root mean squared error                  0.9378
+Relative absolute error                 61.7929 %
+Root relative squared error             66.1684 %
+Total Number of Instances              750     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.7462
+Mean absolute error                      0.7809
+Root mean squared error                  0.9504
+Relative absolute error                 62.5983 %
+Root relative squared error             67.0507 %
+Total Number of Instances              750     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8401
+Mean absolute error                      0.6806
+Root mean squared error                  0.8218
+Relative absolute error                 54.5559 %
+Root relative squared error             57.9782 %
+Total Number of Instances              750     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7506
+Mean absolute error                      0.7651
+Root mean squared error                  0.943 
+Relative absolute error                 61.3332 %
+Root relative squared error             66.5331 %
+Total Number of Instances              750     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 750 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/headlines/predictions/0-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines/predictions/1-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines/predictions/2-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines/predictions/3-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines/predictions/avg-STS.headlines-train.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines/predictions/0-STS.headlines-train.txt.training):0.7549
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines/predictions/1-STS.headlines-train.txt.training):0.7462
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines/predictions/2-STS.headlines-train.txt.training):0.8401
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines/predictions/3-STS.headlines-train.txt.training):0.7506
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines/predictions/avg-STS.headlines-train.txt.training):0.7819
+
+Best correlation = 0.8401
+
+
+
+{calculateFeatures                                                    }	      1 runs		    386465.ms		   45834680b
+{cross-validation MT                                                  }	      4 runs		    12061.7ms		   31107692b
+{cross-validation folds+train MT                                      }	      4 runs		    11961.9ms		   29588262b
+{process ChunkLemmas                                                  }	    750 runs		    1943.28ms		     -16498b
+{calculatePredictions                                                 }	      1 runs		    1409.74ms		   23552816b
+{savePredictions                                                      }	      1 runs		    905.705ms		    6763656b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    490.224ms		   10825670b
+{evaluateModel                                                        }	      4 runs		    339.470ms		    4849134b
+{savePreprocessedFeatures                                             }	      2 runs		    121.017ms		   44169164b
+{PerlPearsonsCorrelation                                              }	      5 runs		    101.862ms		   10267953b
+{loadFeaturesStream                                                   }	      1 runs		    82.1988ms		    3412616b
+{calculate SemanticSimilarityAndRelatedness                           }	    750 runs		    70.9681ms		    -245829b
+{loadSentencePairs                                                    }	      1 runs		    57.3240ms		    7599000b
+{cross-validation post MT                                             }	      4 runs		    56.8967ms		     162500b
+{getOutputStream                                                      }	      2 runs		    53.0705ms		  -22885320b
+{cross-validation init MT                                             }	      4 runs		    42.8535ms		    1356930b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   2250 runs		    23.6232ms		     -84273b
+{formatPredictions                                                    }	      5 runs		    23.1151ms		     277084b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    10.3457ms		     283468b
+{LexicalCountWordsConstructor                                         }	     10 runs		    3.79455ms		      39787b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	  15579 runs		    3.40614ms		     -12293b
+{process Chunks                                                       }	    750 runs		    3.09259ms		     166055b
+{process NER                                                          }	    750 runs		    1.93092ms		     205794b
+{process POSTags                                                      }	    750 runs		    1.11338ms		      48331b
+{calculateAveragePredictions                                          }	      1 runs		    0.27699ms		          0b
+{process TextProcessTokenizer                                         }	    750 runs		    0.24676ms		      28092b
+{calculate LexicalOverlapFeatures                                     }	    750 runs		    0.05158ms		       8993b
+{calculate LexicalCountWords                                          }	   1500 runs		    0.01853ms		       4775b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   2250 runs		    0.01050ms		       1211b
+{calculate SyntacticCountChunkTypes                                   }	    750 runs		    0.00627ms		          0b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   2250 runs		    0.00624ms		        408b
+{calculate FeatureCalculatorOverlappingLemmas                         }	    750 runs		    0.00564ms		        791b
+{LexicalCountWords countWords()                                       }	   3000 runs		    0.00421ms		       1265b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   2250 runs		    0.00305ms		        404b
+{calculate FeatureCalculatorSentenceLengths                           }	    750 runs		    0.00268ms		          0b
+(Total time: 447.017 seconds)
+
+[-i, input/STS.input.SMTnews.2012.txt;input/STS.gs.SMTnews.2012.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/deft-news/LemmasFoundInDBP-deft-news-train.log, -lpef, outputs/2014-task10/simulation5/deft-news/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/deft-news/predictions/STS.deft-news.txt, -mo, outputs/2014-task10/simulation5/weka-models-deft-news, -fo, outputs/2014-task10/simulation5/deft-news/features-sts2014-deft-news-train.txt, -tof, outputs/2014-task10/simulation5/deft-news/preprocessed-deft-news-train.txt, -llf, outputs/2014-task10/simulation5/deft-news/LemmasNotFound-deft-news-train.log, -lgf, outputs/2014-task10/simulation5/deft-news/GrammarCounters-deft-news-train.log, -lt, -ltf, outputs/2014-task10/simulation5/deft-news/Timings-deft-news-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/NamedEntitiesFound-deft-news-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 399 instances from input/STS.input.SMTnews.2012.txt with gold standard values from input/STS.gs.SMTnews.2012.txt
+	Min relatedness:0.25
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-deft-news/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.SMTnews.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6196
+Mean absolute error                      0.4405
+Root mean squared error                  0.6424
+Relative absolute error                 74.3287 %
+Root relative squared error             78.5095 %
+Total Number of Instances              399     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-deft-news/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.SMTnews.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6336
+Mean absolute error                      0.4438
+Root mean squared error                  0.6341
+Relative absolute error                 74.8731 %
+Root relative squared error             77.4864 %
+Total Number of Instances              399     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-deft-news/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.SMTnews.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6056
+Mean absolute error                      0.4431
+Root mean squared error                  0.6592
+Relative absolute error                 74.7647 %
+Root relative squared error             80.5529 %
+Total Number of Instances              399     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-deft-news/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.SMTnews.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6151
+Mean absolute error                      0.4444
+Root mean squared error                  0.6458
+Relative absolute error                 74.9841 %
+Root relative squared error             78.9206 %
+Total Number of Instances              399     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.8444
+Mean absolute error                      0.3261
+Root mean squared error                  0.4469
+Relative absolute error                 55.0204 %
+Root relative squared error             54.6155 %
+Total Number of Instances              399     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.762 
+Mean absolute error                      0.3706
+Root mean squared error                  0.5336
+Relative absolute error                 62.5247 %
+Root relative squared error             65.2031 %
+Total Number of Instances              399     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8741
+Mean absolute error                      0.3231
+Root mean squared error                  0.4722
+Relative absolute error                 54.5147 %
+Root relative squared error             57.7095 %
+Total Number of Instances              399     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.8408
+Mean absolute error                      0.3238
+Root mean squared error                  0.4496
+Relative absolute error                 54.6388 %
+Root relative squared error             54.9415 %
+Total Number of Instances              399     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 399 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/deft-news/predictions/0-STS.deft-news.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/deft-news/predictions/1-STS.deft-news.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/deft-news/predictions/2-STS.deft-news.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/deft-news/predictions/3-STS.deft-news.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/deft-news/predictions/avg-STS.deft-news.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/deft-news/predictions/0-STS.deft-news.txt.training):0.8444
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/deft-news/predictions/1-STS.deft-news.txt.training):0.7619
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/deft-news/predictions/2-STS.deft-news.txt.training):0.8741
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/deft-news/predictions/3-STS.deft-news.txt.training):0.8408
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/deft-news/predictions/avg-STS.deft-news.txt.training):0.8489
+
+Best correlation = 0.8741
+
+
+
+{calculateFeatures                                                    }	      1 runs		    193237.ms		   23499736b
+{cross-validation MT                                                  }	      4 runs		    9256.67ms		    2478570b
+{cross-validation folds+train MT                                      }	      4 runs		    9159.99ms		    1227190b
+{process ChunkLemmas                                                  }	    399 runs		    1824.22ms		    -372323b
+{savePredictions                                                      }	      1 runs		    591.690ms		   46444040b
+{calculatePredictions                                                 }	      1 runs		    582.541ms		   12847192b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    408.369ms		   12085760b
+{loadSentencePairs                                                    }	      1 runs		    232.155ms		    4032976b
+{evaluateModel                                                        }	      4 runs		    130.855ms		    2498034b
+{PerlPearsonsCorrelation                                              }	      5 runs		    101.348ms		    5458084b
+{calculate SemanticSimilarityAndRelatedness                           }	    399 runs		    88.2377ms		    1162289b
+{savePreprocessedFeatures                                             }	      2 runs		    83.9542ms		   23698572b
+{loadFeaturesStream                                                   }	      1 runs		    59.5012ms		    1126120b
+{cross-validation post MT                                             }	      4 runs		    52.7053ms		     240774b
+{cross-validation init MT                                             }	      4 runs		    43.9459ms		    1010606b
+{getOutputStream                                                      }	      2 runs		    42.8211ms		   11826104b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   1197 runs		    29.3420ms		     441143b
+{formatPredictions                                                    }	      5 runs		    17.8304ms		     142739b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    7.68601ms		     489676b
+{process Chunks                                                       }	    399 runs		    6.57292ms		     262077b
+{process NER                                                          }	    399 runs		    4.24330ms		    -639901b
+{LexicalCountWordsConstructor                                         }	     10 runs		    3.12581ms		      40186b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	  15321 runs		    2.28705ms		      34165b
+{process POSTags                                                      }	    399 runs		    1.80524ms		     299090b
+{process TextProcessTokenizer                                         }	    399 runs		    0.66462ms		      63549b
+{calculateAveragePredictions                                          }	      1 runs		    0.22928ms		          0b
+{calculate LexicalOverlapFeatures                                     }	    399 runs		    0.06649ms		       1342b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   1197 runs		    0.02674ms		     -56190b
+{calculate LexicalCountWords                                          }	    798 runs		    0.02429ms		       4282b
+{calculate FeatureCalculatorOverlappingLemmas                         }	    399 runs		    0.02307ms		        839b
+{calculate FeatureCalculatorSentenceLengths                           }	    399 runs		    0.02100ms		    -206153b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   1197 runs		    0.01680ms		        957b
+{calculate SyntacticCountChunkTypes                                   }	    399 runs		    0.00801ms		          0b
+{LexicalCountWords countWords()                                       }	   1596 runs		    0.00596ms		       1438b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   1197 runs		    0.00367ms		        551b
+(Total time: 241.469 seconds)
+
+[-i, input/STS.input.MSRvid.2012.txt;input/STS.gs.MSRvid.2012.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/images/LemmasFoundInDBP-images-train.log, -lpef, outputs/2014-task10/simulation5/images/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/images/predictions/STS.images-train.txt, -mo, outputs/2014-task10/simulation5/weka-models-images, -fo, outputs/2014-task10/simulation5/images/features-sts2014-images-train.txt, -tof, outputs/2014-task10/simulation5/images/preprocessed-images-train.txt, -llf, outputs/2014-task10/simulation5/images/LemmasNotFound-images-train.log, -lgf, outputs/2014-task10/simulation5/images/GrammarCounters-images-train.log, -lt, -ltf, outputs/2014-task10/simulation5/images/Timings-images-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/images/NamedEntitiesFound-images-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 1500 instances from input/STS.input.MSRvid.2012.txt with gold standard values from input/STS.gs.MSRvid.2012.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-images/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRvid.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.779 
+Mean absolute error                      0.7737
+Root mean squared error                  1.0162
+Relative absolute error                 53.8627 %
+Root relative squared error             62.7048 %
+Total Number of Instances             1500     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-images/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.MSRvid.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7811
+Mean absolute error                      0.7707
+Root mean squared error                  1.0121
+Relative absolute error                 53.6514 %
+Root relative squared error             62.4461 %
+Total Number of Instances             1500     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-images/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.MSRvid.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7733
+Mean absolute error                      0.7962
+Root mean squared error                  1.033 
+Relative absolute error                 55.429  %
+Root relative squared error             63.7392 %
+Total Number of Instances             1500     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-images/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRvid.2012.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.7796
+Mean absolute error                      0.7726
+Root mean squared error                  1.0151
+Relative absolute error                 53.7879 %
+Root relative squared error             62.637  %
+Total Number of Instances             1500     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.8508
+Mean absolute error                      0.6486
+Root mean squared error                  0.8536
+Relative absolute error                 45.1516 %
+Root relative squared error             52.6677 %
+Total Number of Instances             1500     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.8509
+Mean absolute error                      0.6435
+Root mean squared error                  0.8538
+Relative absolute error                 44.802  %
+Root relative squared error             52.6815 %
+Total Number of Instances             1500     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8958
+Mean absolute error                      0.5882
+Root mean squared error                  0.7567
+Relative absolute error                 40.9486 %
+Root relative squared error             46.6918 %
+Total Number of Instances             1500     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.843 
+Mean absolute error                      0.6503
+Root mean squared error                  0.8728
+Relative absolute error                 45.2704 %
+Root relative squared error             53.8514 %
+Total Number of Instances             1500     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 1500 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/images/predictions/0-STS.images-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/images/predictions/1-STS.images-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/images/predictions/2-STS.images-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/images/predictions/3-STS.images-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/images/predictions/avg-STS.images-train.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/images/predictions/0-STS.images-train.txt.training):0.8508
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/images/predictions/1-STS.images-train.txt.training):0.8509
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/images/predictions/2-STS.images-train.txt.training):0.8958
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/images/predictions/3-STS.images-train.txt.training):0.843
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/images/predictions/avg-STS.images-train.txt.training):0.8653
+
+Best correlation = 0.8958
+
+
+
+{calculateFeatures                                                    }	      1 runs		    127559.ms		  271626328b
+{cross-validation MT                                                  }	      4 runs		    26543.2ms		   48229350b
+{cross-validation folds+train MT                                      }	      4 runs		    26415.3ms		   46398078b
+{calculatePredictions                                                 }	      1 runs		    5204.01ms		   49819776b
+{savePredictions                                                      }	      1 runs		    2678.91ms		   96384856b
+{evaluateModel                                                        }	      4 runs		    1274.01ms		   10083252b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    417.935ms		   12180484b
+{calculate SemanticSimilarityAndRelatedness                           }	   1500 runs		    241.281ms		     223973b
+{loadSentencePairs                                                    }	      1 runs		    210.043ms		   12918664b
+{savePreprocessedFeatures                                             }	      2 runs		    169.871ms		  -42310692b
+{loadFeaturesStream                                                   }	      1 runs		    117.530ms		 -252791312b
+{PerlPearsonsCorrelation                                              }	      5 runs		    96.6339ms		   17784139b
+{process ChunkLemmas                                                  }	   1500 runs		    86.6448ms		     -12175b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   4500 runs		    80.3719ms		     109913b
+{cross-validation post MT                                             }	      4 runs		    74.7568ms		        518b
+{getOutputStream                                                      }	      2 runs		    74.5268ms		   44048148b
+{cross-validation init MT                                             }	      4 runs		    53.0657ms		    1830754b
+{formatPredictions                                                    }	      5 runs		    34.4459ms		     474334b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	  26286 runs		    13.7443ms		      18836b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    5.13962ms		     679530b
+{process Chunks                                                       }	   1500 runs		    4.54306ms		     294186b
+{LexicalCountWordsConstructor                                         }	     10 runs		    4.26345ms		      39922b
+{process NER                                                          }	   1500 runs		    3.12208ms		      19763b
+{process POSTags                                                      }	   1500 runs		    1.01879ms		    -170233b
+{process TextProcessTokenizer                                         }	   1500 runs		    0.53244ms		     -88987b
+{calculateAveragePredictions                                          }	      1 runs		    0.48358ms		          0b
+{calculate LexicalOverlapFeatures                                     }	   1500 runs		    0.06165ms		      20510b
+{calculate LexicalCountWords                                          }	   3000 runs		    0.02380ms		       9573b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   4500 runs		    0.01713ms		       3610b
+{calculate SyntacticCountChunkTypes                                   }	   1500 runs		    0.01264ms		       4708b
+{calculate FeatureCalculatorOverlappingLemmas                         }	   1500 runs		    0.01214ms		       8457b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   4500 runs		    0.00914ms		     -43504b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   4500 runs		    0.00787ms		       2207b
+{LexicalCountWords countWords()                                       }	   6000 runs		    0.00483ms		       2028b
+{calculate FeatureCalculatorSentenceLengths                           }	   1500 runs		    0.00211ms		       1539b
+(Total time: 251.543 seconds)
+
+[-i, input/STS.input.MSRpar.2012.txt;input/STS.gs.MSRpar.2012.txt, -i, input/STS.input.OnWN.2012.txt;input/STS.gs.OnWN.2012.txt, -i, input/STS.input.OnWN.2013.txt;input/STS.gs.OnWN.2013.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/OnWN2/LemmasFoundInDBP-train.log, -lpef, outputs/2014-task10/simulation5/OnWN2/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/OnWN2/predictions/STS.OnWN.txt, -mo, outputs/2014-task10/simulation5/weka-models-OnWN2, -fo, outputs/2014-task10/simulation5/OnWN2/features-sts2014-OnWN-train.txt, -tof, outputs/2014-task10/simulation5/OnWN2/preprocessed-OnWN-train.txt, -llf, outputs/2014-task10/simulation5/OnWN2/LemmasNotFound-OnWN-train.log, -lgf, outputs/2014-task10/simulation5/OnWN2/GrammarCounters-OnWN-train.log, -lt, -ltf, outputs/2014-task10/simulation5/OnWN2/Timings-OnWN-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/OnWN2/NamedEntitiesFound-OnWN-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 1500 instances from input/STS.input.MSRpar.2012.txt with gold standard values from input/STS.gs.MSRpar.2012.txt
+	Min relatedness:0.25
+	Max relatedness:5.0
+Loaded 750 instances from input/STS.input.OnWN.2012.txt with gold standard values from input/STS.gs.OnWN.2012.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Loaded 561 instances from input/STS.input.OnWN.2013.txt with gold standard values from input/STS.gs.OnWN.2013.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-OnWN2/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6409
+Mean absolute error                      0.7479
+Root mean squared error                  0.9791
+Relative absolute error                 75.2586 %
+Root relative squared error             76.767  %
+Total Number of Instances             2811     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-OnWN2/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6395
+Mean absolute error                      0.7475
+Root mean squared error                  0.9805
+Relative absolute error                 75.2202 %
+Root relative squared error             76.8796 %
+Total Number of Instances             2811     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-OnWN2/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6359
+Mean absolute error                      0.7613
+Root mean squared error                  0.9853
+Relative absolute error                 76.6089 %
+Root relative squared error             77.2582 %
+Total Number of Instances             2811     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-OnWN2/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.OnWN.2012.txt, input/STS.input.OnWN.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6525
+Mean absolute error                      0.7386
+Root mean squared error                  0.9665
+Relative absolute error                 74.3226 %
+Root relative squared error             75.7829 %
+Total Number of Instances             2811     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7622
+Mean absolute error                      0.6427
+Root mean squared error                  0.8365
+Relative absolute error                 64.67   %
+Root relative squared error             65.5909 %
+Total Number of Instances             2811     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.7629
+Mean absolute error                      0.6374
+Root mean squared error                  0.8343
+Relative absolute error                 64.1392 %
+Root relative squared error             65.4137 %
+Total Number of Instances             2811     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8443
+Mean absolute error                      0.578 
+Root mean squared error                  0.7435
+Relative absolute error                 58.1619 %
+Root relative squared error             58.2968 %
+Total Number of Instances             2811     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7245
+Mean absolute error                      0.6706
+Root mean squared error                  0.8816
+Relative absolute error                 67.4735 %
+Root relative squared error             69.1235 %
+Total Number of Instances             2811     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 2811 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN2/predictions/0-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN2/predictions/1-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN2/predictions/2-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN2/predictions/3-STS.OnWN.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/OnWN2/predictions/avg-STS.OnWN.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN2/predictions/0-STS.OnWN.txt.training):0.7622
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN2/predictions/1-STS.OnWN.txt.training):0.7629
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN2/predictions/2-STS.OnWN.txt.training):0.8443
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN2/predictions/3-STS.OnWN.txt.training):0.7245
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/OnWN2/predictions/avg-STS.OnWN.txt.training):0.7818
+
+Best correlation = 0.8443
+
+
+
+{calculateFeatures                                                    }	      1 runs		    2908653ms		  110358784b
+{cross-validation MT                                                  }	      4 runs		    58566.9ms		  160050354b
+{cross-validation folds+train MT                                      }	      4 runs		    58388.1ms		  159234542b
+{calculatePredictions                                                 }	      1 runs		    19874.6ms		   88899808b
+{evaluateModel                                                        }	      4 runs		    4933.22ms		   17779958b
+{process ChunkLemmas                                                  }	   2811 runs		    3899.97ms		    -758659b
+{savePredictions                                                      }	      1 runs		    3122.68ms		 -708130248b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    658.991ms		    7706080b
+{PerlPearsonsCorrelation                                              }	      5 runs		    300.723ms		   67444579b
+{savePreprocessedFeatures                                             }	      2 runs		    269.938ms		  161361032b
+{calculate SemanticSimilarityAndRelatedness                           }	   2811 runs		    212.975ms		    -393330b
+{loadSentencePairs                                                    }	      3 runs		    151.949ms		    9150960b
+{getOutputStream                                                      }	      2 runs		    139.329ms		  -91297672b
+{loadFeaturesStream                                                   }	      1 runs		    135.981ms		    9635696b
+{cross-validation post MT                                             }	      4 runs		    116.895ms		        518b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   8433 runs		    70.9556ms		    -120617b
+{cross-validation init MT                                             }	      4 runs		    61.8859ms		     815294b
+{formatPredictions                                                    }	      5 runs		    25.5959ms		    1185318b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    7.90365ms		     159904b
+{process Chunks                                                       }	   2811 runs		    5.31171ms		     405676b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	 149202 runs		    4.00689ms		      -6979b
+{process NER                                                          }	   2811 runs		    3.86896ms		     549585b
+{LexicalCountWordsConstructor                                         }	     10 runs		    3.77464ms		      40518b
+{process POSTags                                                      }	   2811 runs		    1.47710ms		     269074b
+{calculateAveragePredictions                                          }	      1 runs		    0.88034ms		          0b
+{process TextProcessTokenizer                                         }	   2811 runs		    0.54021ms		      51711b
+{calculate LexicalOverlapFeatures                                     }	   2811 runs		    0.03463ms		       4544b
+{calculate LexicalCountWords                                          }	   5622 runs		    0.02032ms		       4069b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   8433 runs		    0.01366ms		     -12901b
+{calculate SyntacticCountChunkTypes                                   }	   2811 runs		    0.00940ms		        169b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   8433 runs		    0.00795ms		       1607b
+{calculate FeatureCalculatorOverlappingLemmas                         }	   2811 runs		    0.00672ms		        315b
+{LexicalCountWords countWords()                                       }	  11244 runs		    0.00501ms		       1208b
+{calculate FeatureCalculatorSentenceLengths                           }	   2811 runs		    0.00210ms		          0b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   8433 runs		    0.00188ms		          1b
+(Total time: 3178.139 seconds)
+
+[-i, input/STS.input.MSRpar.2012.txt;input/STS.gs.MSRpar.2012.txt, -i, input/STS.input.headlines.2013.txt;input/STS.gs.headlines.2013.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/headlines2/LemmasFoundInDBP-headlines-train.log, -lpef, outputs/2014-task10/simulation5/headlines2/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/headlines2/predictions/STS.headlines-train.txt, -mo, outputs/2014-task10/simulation5/weka-models-headlines2, -fo, outputs/2014-task10/simulation5/headlines2/features-sts2014-headlines-train.txt, -tof, outputs/2014-task10/simulation5/headlines2/preprocessed-headlines-train.txt, -llf, outputs/2014-task10/simulation5/headlines2/LemmasNotFound-headlines-train.log, -lgf, outputs/2014-task10/simulation5/headlines2/GrammarCounters-headlines-train.log, -lt, -ltf, outputs/2014-task10/simulation5/headlines2/Timings-headlines-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/headlines2/NamedEntitiesFound-headlines-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 1500 instances from input/STS.input.MSRpar.2012.txt with gold standard values from input/STS.gs.MSRpar.2012.txt
+	Min relatedness:0.25
+	Max relatedness:5.0
+Loaded 750 instances from input/STS.input.headlines.2013.txt with gold standard values from input/STS.gs.headlines.2013.txt
+	Min relatedness:0.0
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....	done.
+OutputStream created.
+Cleared dataset.
+
+
+-----------------POST-PROCESS----------------
+Loading features stream...	done.
+	Building model 0 (outputs/2014-task10/simulation5/weka-models-headlines2/0weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.5975
+Mean absolute error                      0.7431
+Root mean squared error                  0.9341
+Relative absolute error                 79.6969 %
+Root relative squared error             80.1865 %
+Total Number of Instances             2250     
+
+
+	Building model 1 (outputs/2014-task10/simulation5/weka-models-headlines2/1weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.5984
+Mean absolute error                      0.741 
+Root mean squared error                  0.9333
+Relative absolute error                 79.4694 %
+Root relative squared error             80.118  %
+Total Number of Instances             2250     
+
+
+	Building model 2 (outputs/2014-task10/simulation5/weka-models-headlines2/2weka.classifiers.meta.Vote.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.5942
+Mean absolute error                      0.7436
+Root mean squared error                  0.9372
+Relative absolute error                 79.7475 %
+Root relative squared error             80.4532 %
+Total Number of Instances             2250     
+
+
+	Building model 3 (outputs/2014-task10/simulation5/weka-models-headlines2/3weka.classifiers.meta.Stacking.model) and doing cross-validation...
+
+=== Setup ===
+Classifier: weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+Dataset: [input/STS.input.MSRpar.2012.txt, input/STS.input.headlines.2013.txt]-weka.filters.unsupervised.attribute.Remove-R11-weka.filters.unsupervised.attribute.RemoveType-Tstring
+Folds: 10
+Seed: 0
+
+=== 10-fold Cross-validation ===
+Correlation coefficient                  0.6068
+Mean absolute error                      0.7347
+Root mean squared error                  0.926 
+Relative absolute error                 78.7892 %
+Root relative squared error             79.4906 %
+Total Number of Instances             2250     
+
+
+Calculating predictions with all models...
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7034
+Mean absolute error                      0.6671
+Root mean squared error                  0.8361
+Relative absolute error                 71.5408 %
+Root relative squared error             71.7682 %
+Total Number of Instances             2250     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -B "weka.classifiers.rules.ZeroR " -B "weka.classifiers.functions.IsotonicRegression "
+
+Correlation coefficient                  0.701 
+Mean absolute error                      0.6679
+Root mean squared error                  0.8387
+Relative absolute error                 71.6323 %
+Root relative squared error             71.9982 %
+Total Number of Instances             2250     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Vote -S 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8" -R AVG
+
+Correlation coefficient                  0.8212
+Mean absolute error                      0.5573
+Root mean squared error                  0.7019
+Relative absolute error                 59.7646 %
+Root relative squared error             60.2485 %
+Total Number of Instances             2250     
+
+	evaluation done.
+Evaluating model...
+	stats for model:weka.classifiers.meta.Stacking -X 10 -M "weka.classifiers.trees.M5P -M 4.0" -S 1 -num-slots 1 -B "weka.classifiers.trees.M5P -R -M 4.0" -B "weka.classifiers.lazy.IBk -K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 10.0" -B "weka.classifiers.lazy.IBk -K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.trees.M5P -R -M 20.0" -B "weka.classifiers.lazy.IBk -K 5 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"" -B "weka.classifiers.functions.LinearRegression -S 0 -R 1.0E-8"
+
+Correlation coefficient                  0.7012
+Mean absolute error                      0.6652
+Root mean squared error                  0.8365
+Relative absolute error                 71.3337 %
+Root relative squared error             71.8076 %
+Total Number of Instances             2250     
+
+	evaluation done.
+Calculating average of predictions...
+	done.
+	predictions calculated for 2250 instances.
+Saving predictions to file(s)...
+Formatting predictions to file outputs/2014-task10/simulation5/headlines2/predictions/0-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines2/predictions/1-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines2/predictions/2-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines2/predictions/3-STS.headlines-train.txt.training...
+	done.
+Formatting predictions to file outputs/2014-task10/simulation5/headlines2/predictions/avg-STS.headlines-train.txt.training...
+	done.
+	predictions saved.
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines2/predictions/0-STS.headlines-train.txt.training):0.7034
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines2/predictions/1-STS.headlines-train.txt.training):0.701
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines2/predictions/2-STS.headlines-train.txt.training):0.8212
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines2/predictions/3-STS.headlines-train.txt.training):0.7013
+
+Pearson's Correlation Coefficient (outputs/2014-task10/simulation5/headlines2/predictions/avg-STS.headlines-train.txt.training):0.7384
+
+Best correlation = 0.8212
+
+
+
+{calculateFeatures                                                    }	      1 runs		    3238316ms		  286873368b
+{cross-validation MT                                                  }	      4 runs		    44234.9ms		  163227636b
+{cross-validation folds+train MT                                      }	      4 runs		    44085.1ms		  161334634b
+{calculatePredictions                                                 }	      1 runs		    13997.7ms		   70251528b
+{process ChunkLemmas                                                  }	   2250 runs		    5417.31ms		    1099447b
+{evaluateModel                                                        }	      4 runs		    3463.39ms		   14050368b
+{savePredictions                                                      }	      1 runs		    2279.39ms		  154499512b
+{SemanticSimilarityAndRelatednessCalculatorConstructor                }	      5 runs		    956.845ms		   11827356b
+{calculate SemanticSimilarityAndRelatedness                           }	   2250 runs		    296.828ms		   -1091917b
+{savePreprocessedFeatures                                             }	      2 runs		    243.338ms		 -175751464b
+{loadSentencePairs                                                    }	      2 runs		    239.452ms		    4836876b
+{loadFeaturesStream                                                   }	      1 runs		    157.433ms		    9022616b
+{PerlPearsonsCorrelation                                              }	      5 runs		    133.071ms		 -176075281b
+{SemanticSimilarityAndRelatedness calculateLemmaPairSimilarityValues()}	   6750 runs		    98.9075ms		    -368147b
+{getOutputStream                                                      }	      2 runs		    88.3788ms		   66990456b
+{cross-validation init MT                                             }	      4 runs		    81.4855ms		    1892484b
+{cross-validation post MT                                             }	      4 runs		    68.2553ms		        518b
+{LexicalCountWordsConstructor                                         }	     10 runs		    53.4811ms		    -622961b
+{formatPredictions                                                    }	      5 runs		    37.5441ms		     936667b
+{SemanticSimilarityAndRelatedness addCalculators()                    }	      4 runs		    28.5940ms		     488622b
+{process Chunks                                                       }	   2250 runs		    5.51342ms		    -424668b
+{SemanticSimilarityAndRelatedness getSimilarityValueOf()              }	 145392 runs		    4.58866ms		     -17202b
+{process NER                                                          }	   2250 runs		    3.91747ms		     684894b
+{process POSTags                                                      }	   2250 runs		    1.67788ms		     238609b
+{calculateAveragePredictions                                          }	      1 runs		    0.72816ms		          0b
+{process TextProcessTokenizer                                         }	   2250 runs		    0.54561ms		     -52554b
+{calculate LexicalOverlapFeatures                                     }	   2250 runs		    0.03831ms		       8142b
+{calculate LexicalCountWords                                          }	   4500 runs		    0.02263ms		       6291b
+{calculate SyntacticCountChunkTypes                                   }	   2250 runs		    0.01177ms		        185b
+{SemanticSimilarityAndRelatedness resolveConflicts()                  }	   6750 runs		    0.01100ms		        952b
+{SemanticSimilarityAndRelatedness getEqualChunkPairs()                }	   6750 runs		    0.00853ms		       1785b
+{calculate FeatureCalculatorOverlappingLemmas                         }	   2250 runs		    0.00687ms		        997b
+{LexicalCountWords countWords()                                       }	   9000 runs		    0.00562ms		       2125b
+{SemanticSimilarityAndRelatedness getValueSum()                       }	   6750 runs		    0.00375ms		        471b
+{calculate FeatureCalculatorSentenceLengths                           }	   2250 runs		    0.00196ms		        108b
+(Total time: 3447.93 seconds)
+
+[-i, input/STS.input.MSRpar.2012.txt;input/STS.gs.MSRpar.2012.txt, -i, input/STS.input.SMTnews.2012.txt;input/STS.gs.SMTnews.2012.txt, -ll, -lg, -lt, -lflf, outputs/2014-task10/simulation5/deft-news2/LemmasFoundInDBP-deft-news-train.log, -lpef, outputs/2014-task10/simulation5/deft-news2/errors/training.log, -mt, 4, -o, outputs/2014-task10/simulation5/deft-news2/predictions/STS.deft-news.txt, -mo, outputs/2014-task10/simulation5/weka-models-deft-news2, -fo, outputs/2014-task10/simulation5/deft-news2/features-sts2014-deft-news-train.txt, -tof, outputs/2014-task10/simulation5/deft-news2/preprocessed-deft-news-train.txt, -llf, outputs/2014-task10/simulation5/deft-news2/LemmasNotFound-deft-news-train.log, -lgf, outputs/2014-task10/simulation5/deft-news2/GrammarCounters-deft-news-train.log, -lt, -ltf, outputs/2014-task10/simulation5/deft-news2/Timings-deft-news-train.log, -lner, -lnerf, outputs/2014-task10/simulation5/NamedEntitiesFound-deft-news-train.log, -ssaroplpostv, 1000000000000]
+Loading config...Loaded JWI Dictionary.
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-location.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-organization.bin
+loading TokenNameFinderModel from:/home/skit/Dropbox/Portfolio/SemEval2015 - Projecto/java-project/ASAP-Project/opennlp-models/en-ner-person.bin
+	done.
+
+
+-----------------PRE-PROCESS-----------------
+Loaded 1500 instances from input/STS.input.MSRpar.2012.txt with gold standard values from input/STS.gs.MSRpar.2012.txt
+	Min relatedness:0.25
+	Max relatedness:5.0
+Loaded 399 instances from input/STS.input.SMTnews.2012.txt with gold standard values from input/STS.gs.SMTnews.2012.txt
+	Min relatedness:0.25
+	Max relatedness:5.0
+Preparing feature calculation...
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Loaded JWI Dictionary.
+Calculating features with:
+	SemanticSimilarityAndRelatednessCalculator (0 features)
+	LexicalCountWords Features(3 features) with 36 words (negative-stopword-list.txt).
+	LexicalCountWords Features(3 features) with 334 words (stopword-list.txt).
+	LexicalOverlapFeaturesCalculator (4 features)
+	SyntacticCountChunkTypesFeatures (3 features)
+	FeatureCalculatorSentenceLengths (3 features)
+	FeatureCalculatorOverlappingLemmas (3 features)
+	DummyFeatureCalculator (0 features)
+....

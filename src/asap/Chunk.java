@@ -5,36 +5,65 @@
  */
 package asap;
 
-import edu.cmu.lti.jawjaw.pobj.POS;
 import edu.smu.tspell.wordnet.SynsetType;
+import java.util.Objects;
 
 /**
  *
- * @author skit
+ * @author David Simões
  */
 public class Chunk {
 
     private final String chunkType;
-    private final String chunkText;
+    private String chunkText;
     private String lemma;
 
+    /**
+     *
+     * @param chunkType
+     * @param chunkText
+     */
     public Chunk(String chunkType, String chunkText) {
         this.chunkType = chunkType;
         this.chunkText = chunkText;
     }
-    
+
+    /**
+     *
+     * @param chunkText
+     */
+    public void setChunkText(String chunkText) {
+        this.chunkText = chunkText;
+    }
+
+    /**
+     *
+     * @param lemma
+     */
     public void setLemma(String lemma) {
         this.lemma = lemma;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getChunkType() {
         return chunkType;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getChunkText() {
         return chunkText;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public String getLemma() {
         return lemma;
     }
@@ -44,6 +73,30 @@ public class Chunk {
         return "[" + chunkType + " " + chunkText + "]";
     }
 
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Chunk other = (Chunk) obj;
+        if (!Objects.equals(this.chunkType, other.chunkType)) {
+            return false;
+        }
+        return Objects.equals(this.chunkText, other.chunkText);
+    }
+
+    /**
+     *
+     * @return
+     */
     public SynsetType toSynsetType() {
 
         switch (chunkType) {
@@ -53,5 +106,21 @@ public class Chunk {
                 return SynsetType.VERB;
         }
         return SynsetType.ADJECTIVE;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String toWNPos() {
+
+        switch (chunkType) {
+            case "NP":
+                return "#n";
+            case "VP":
+                return "#v";
+        }
+
+        return "";
     }
 }

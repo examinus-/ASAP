@@ -11,20 +11,61 @@ import asap.PerformanceCounters;
 import asap.textprocessing.TextProcessChunks;
 import asap.textprocessing.TextProcessedPartKeyConsts;
 import asap.textprocessing.TextProcesser;
+import java.util.HashMap;
 
+/**
+ *
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
+ */
 public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, TextProcessedPartKeyConsts {
 
+    private static final HashMap<Long, SyntacticCountChunkTypesFeatures> perThreadInstances = new HashMap<>();
     private final TextProcesser textProcessorDependency;
-            
+
+    /**
+     *
+     * @param t
+     */
     public SyntacticCountChunkTypesFeatures(Thread t) {
         textProcessorDependency = TextProcessChunks.getTextProcessChunks(t);
+        perThreadInstances.put(t.getId(), this);
     }
 
+    /**
+     *
+     */
+    public SyntacticCountChunkTypesFeatures() {
+        this(Thread.currentThread());
+    }
+
+    /**
+     *
+     * @param t
+     * @return
+     */
+    @Override
+    public FeatureCalculator getInstance(Thread t) {
+
+        if (perThreadInstances.containsKey(t.getId())) {
+            return perThreadInstances.get(t.getId());
+        }
+        return new SyntacticCountChunkTypesFeatures(t);
+    }
+
+    /**
+     *
+     * @param i
+     * @return
+     */
     @Override
     public boolean textProcessingDependenciesMet(Instance i) {
         return i.isProcessed(textProcessorDependency);
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void calculate(Instance i) {
         if (!textProcessingDependenciesMet(i)) {
@@ -60,6 +101,10 @@ public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, Text
         PerformanceCounters.stopTimer("calculate SyntacticCountChunkTypes");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String[] getFeatureNames() {
         String r[] = {"syn_count_dif_NPs",
@@ -82,6 +127,11 @@ public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, Text
             }
         }
         return counters;
+    }
+
+    @Override
+    public String toString() {
+        return "SyntacticCountChunkTypesFeatures (3 features)";
     }
 
 }

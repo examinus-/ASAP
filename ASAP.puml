@@ -1,0 +1,520 @@
+@startuml
+annotation java.lang.Override
+class asap.Chunk
+class asap.Config
+class asap.CrossValidation
+class asap.GrammarCounters
+class asap.Instance
+class asap.LemmasInDBPedia
+class asap.LemmasNotFound
+class asap.NamedEntitiesFound
+class asap.NamedEntity
+class asap.PerformanceCounters
+class asap.PerlCorrelation
+class asap.PostProcess
+class asap.PreProcess
+class asap.PreProcessOutputStream
+class asap.WordFrequency
+class asap.featurecalculation.DummyFeatureCalculator
+class asap.featurecalculation.ExternalFeatureCalculator
+class asap.featurecalculation.ExtraFeatures
+class asap.featurecalculation.FeatureCalculatorOverlappingLemmas
+class asap.featurecalculation.FeatureCalculatorSentenceLengths
+class asap.featurecalculation.LexicalCountWords
+class asap.featurecalculation.LexicalOverlapFeaturesCalculator
+class asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator
+class asap.featurecalculation.SyntacticCountChunkTypesFeatures
+class asap.textprocessing.TextProcessChunkLemmas
+class asap.textprocessing.TextProcessChunkLemmasRemoveSRule
+class asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups
+class asap.textprocessing.TextProcessChunks
+class asap.textprocessing.TextProcessHashWords
+class asap.textprocessing.TextProcessNamedEntities
+class asap.textprocessing.TextProcessNamedEntitiesStanford
+class asap.textprocessing.TextProcessPOSTags
+class asap.textprocessing.TextProcessPOSTagsStanford
+class asap.textprocessing.TextProcessTokenizer
+class edu.cmu.lti.jawjaw.pobj.Lang
+class edu.cmu.lti.jawjaw.pobj.POS
+class edu.cmu.lti.jawjaw.pobj.Synset
+class edu.cmu.lti.jawjaw.pobj.Word
+class edu.cmu.lti.lexical_db.ILexicalDatabase
+class edu.cmu.lti.lexical_db.NictWordNet
+class edu.cmu.lti.ws4j.RelatednessCalculator
+class edu.mit.jwi.Dictionary
+class edu.mit.jwi.item.IIndexWord
+class edu.mit.jwi.morph.WordnetStemmer
+class edu.smu.tspell.wordnet.SynsetType
+class edu.stanford.nlp.ie.AbstractSequenceClassifier
+class edu.stanford.nlp.ie.crf.CRFClassifier
+class edu.stanford.nlp.ling.CoreLabel
+class edu.stanford.nlp.ling.HasWord
+class edu.stanford.nlp.ling.TaggedWord
+class edu.stanford.nlp.tagger.maxent.MaxentTagger
+class java.io.File
+class java.io.FileFilter
+class java.io.FileInputStream
+class java.io.FileNotFoundException
+class java.io.FileOutputStream
+class java.io.IOException
+class java.io.InputStream
+class java.io.PrintWriter
+class java.io.StringReader
+class java.net.MalformedURLException
+class java.net.URL
+class java.net.URLConnection
+class java.security.InvalidParameterException
+class java.text.DecimalFormat
+class java.text.DecimalFormatSymbols
+class java.text.NumberFormat
+class java.util.ArrayList
+class java.util.Arrays
+class java.util.Collection
+class java.util.Collections
+class java.util.Enumeration
+class java.util.HashMap
+class java.util.HashSet
+class java.util.Iterator
+class java.util.LinkedList
+class java.util.List
+class java.util.ListIterator
+class java.util.Locale
+class java.util.Map
+class java.util.Objects
+class java.util.Random
+class java.util.Scanner
+class java.util.Set
+class java.util.TreeSet
+class java.util.logging.Level
+class java.util.logging.Logger
+class opennlp.tools.chunker.ChunkerME
+class opennlp.tools.chunker.ChunkerModel
+class opennlp.tools.cmdline.chunker.ChunkerModelLoader
+class opennlp.tools.cmdline.postag.POSModelLoader
+class opennlp.tools.namefind.NameFinderME
+class opennlp.tools.namefind.TokenNameFinderModel
+class opennlp.tools.postag.POSModel
+class opennlp.tools.postag.POSSample
+class opennlp.tools.postag.POSTaggerME
+class opennlp.tools.tokenize.Tokenizer
+class opennlp.tools.tokenize.TokenizerME
+class opennlp.tools.tokenize.TokenizerModel
+class opennlp.tools.tokenize.WhitespaceTokenizer
+class opennlp.tools.util.ObjectStream
+class opennlp.tools.util.PlainTextByLineStream
+class opennlp.tools.util.Span
+class weka.classifiers.AbstractClassifier
+class weka.classifiers.Classifier
+class weka.classifiers.Evaluation
+class weka.classifiers.functions.IsotonicRegression
+class weka.classifiers.functions.LinearRegression
+class weka.classifiers.lazy.IBk
+class weka.classifiers.meta.Stacking
+class weka.classifiers.meta.Vote
+class weka.classifiers.rules.ZeroR
+class weka.classifiers.trees.M5P
+class weka.core.Attribute
+class weka.core.Instances
+class weka.core.SerializationHelper
+class weka.core.Utils
+class weka.core.converters.ConverterUtils.DataSource
+class weka.filters.Filter
+class weka.filters.unsupervised.attribute.Remove
+class weka.filters.unsupervised.attribute.RemoveType
+interface asap.featurecalculation.FeatureCalculator
+interface asap.textprocessing.TextProcessedPartKeyConsts
+interface asap.textprocessing.TextProcesser
+interface java.lang.Comparable
+asap.Chunk ..> java.lang.Override
+asap.Chunk ..> edu.smu.tspell.wordnet.SynsetType
+asap.Chunk ..> java.util.Objects
+asap.Config ..> asap.featurecalculation.DummyFeatureCalculator
+asap.Config ..> asap.featurecalculation.FeatureCalculatorOverlappingLemmas
+asap.Config ..> asap.featurecalculation.FeatureCalculatorSentenceLengths
+asap.Config ..> asap.featurecalculation.LexicalCountWords
+asap.Config ..> asap.featurecalculation.LexicalOverlapFeaturesCalculator
+asap.Config ..> asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator
+asap.Config ..> asap.featurecalculation.SyntacticCountChunkTypesFeatures
+asap.Config ..> asap.textprocessing.TextProcessNamedEntities
+asap.Config ..> asap.textprocessing.TextProcessNamedEntitiesStanford
+asap.Config ..> java.security.InvalidParameterException
+asap.Config ..> java.util.Collections
+asap.Config ..> java.util.LinkedList
+asap.Config ..> java.util.List
+asap.Config ..> asap.featurecalculation.FeatureCalculator
+asap.CrossValidation ..> java.lang.Override
+asap.CrossValidation ..> java.util.Collections
+asap.CrossValidation ..> java.util.LinkedList
+asap.CrossValidation ..> java.util.List
+asap.CrossValidation ..> java.util.Random
+asap.CrossValidation ..> java.util.logging.Level
+asap.CrossValidation ..> java.util.logging.Logger
+asap.CrossValidation ..> weka.classifiers.AbstractClassifier
+asap.CrossValidation ..> weka.classifiers.Classifier
+asap.CrossValidation ..> weka.classifiers.Evaluation
+asap.CrossValidation ..> weka.core.Instances
+asap.CrossValidation ..> weka.core.SerializationHelper
+asap.CrossValidation ..> weka.core.Utils
+asap.CrossValidation ..> weka.core.converters.ConverterUtils.DataSource
+asap.CrossValidation ..> weka.filters.Filter
+asap.CrossValidation ..> weka.filters.unsupervised.attribute.Remove
+asap.GrammarCounters ..> java.lang.Override
+asap.GrammarCounters ..> java.io.File
+asap.GrammarCounters ..> java.io.FileNotFoundException
+asap.GrammarCounters ..> java.io.FileOutputStream
+asap.GrammarCounters ..> java.io.IOException
+asap.GrammarCounters ..> java.util.HashMap
+asap.GrammarCounters ..> java.util.HashSet
+asap.GrammarCounters ..> java.util.Iterator
+asap.GrammarCounters ..> java.util.logging.Level
+asap.GrammarCounters ..> java.util.logging.Logger
+asap.Instance ..> java.lang.Override
+asap.Instance ..> java.text.DecimalFormat
+asap.Instance ..> java.text.DecimalFormatSymbols
+asap.Instance ..> java.util.Collections
+asap.Instance ..> java.util.HashMap
+asap.Instance ..> java.util.Iterator
+asap.Instance ..> java.util.LinkedList
+asap.Instance ..> java.util.Locale
+asap.Instance ..> java.util.Map
+asap.Instance ..> java.util.Set
+asap.Instance ..> asap.textprocessing.TextProcessedPartKeyConsts
+asap.Instance ..> asap.textprocessing.TextProcesser
+asap.Instance --|> java.lang.Comparable
+asap.LemmasInDBPedia ..> java.io.File
+asap.LemmasInDBPedia ..> java.io.FileNotFoundException
+asap.LemmasInDBPedia ..> java.io.FileOutputStream
+asap.LemmasInDBPedia ..> java.io.IOException
+asap.LemmasInDBPedia ..> java.util.HashMap
+asap.LemmasInDBPedia ..> java.util.logging.Level
+asap.LemmasInDBPedia ..> java.util.logging.Logger
+asap.LemmasNotFound ..> java.io.File
+asap.LemmasNotFound ..> java.io.FileNotFoundException
+asap.LemmasNotFound ..> java.io.FileOutputStream
+asap.LemmasNotFound ..> java.io.IOException
+asap.LemmasNotFound ..> java.util.HashMap
+asap.LemmasNotFound ..> java.util.logging.Level
+asap.LemmasNotFound ..> java.util.logging.Logger
+asap.NamedEntitiesFound ..> java.io.File
+asap.NamedEntitiesFound ..> java.io.FileNotFoundException
+asap.NamedEntitiesFound ..> java.io.FileOutputStream
+asap.NamedEntitiesFound ..> java.io.IOException
+asap.NamedEntitiesFound ..> java.util.HashSet
+asap.NamedEntitiesFound ..> java.util.logging.Level
+asap.NamedEntitiesFound ..> java.util.logging.Logger
+asap.NamedEntity ..> java.util.Collections
+asap.NamedEntity ..> java.util.HashSet
+asap.NamedEntity ..> java.util.Set
+asap.PerformanceCounters ..> java.lang.Override
+asap.PerformanceCounters ..> java.io.FileOutputStream
+asap.PerformanceCounters ..> java.io.IOException
+asap.PerformanceCounters ..> java.util.ArrayList
+asap.PerformanceCounters ..> java.util.Collections
+asap.PerformanceCounters ..> java.util.HashMap
+asap.PerformanceCounters ..> java.util.logging.Level
+asap.PerformanceCounters ..> java.util.logging.Logger
+asap.PerlCorrelation ..> java.util.logging.Level
+asap.PerlCorrelation ..> java.util.logging.Logger
+asap.PostProcess ..> java.lang.Override
+asap.PostProcess ..> java.io.File
+asap.PostProcess ..> java.io.FileFilter
+asap.PostProcess ..> java.io.FileNotFoundException
+asap.PostProcess ..> java.io.FileOutputStream
+asap.PostProcess ..> java.io.IOException
+asap.PostProcess ..> java.io.PrintWriter
+asap.PostProcess ..> java.text.DecimalFormat
+asap.PostProcess ..> java.text.DecimalFormatSymbols
+asap.PostProcess ..> java.text.NumberFormat
+asap.PostProcess ..> java.util.Arrays
+asap.PostProcess ..> java.util.Enumeration
+asap.PostProcess ..> java.util.LinkedList
+asap.PostProcess ..> java.util.List
+asap.PostProcess ..> java.util.Locale
+asap.PostProcess ..> java.util.Map
+asap.PostProcess ..> java.util.TreeSet
+asap.PostProcess ..> java.util.logging.Level
+asap.PostProcess ..> java.util.logging.Logger
+asap.PostProcess ..> weka.classifiers.AbstractClassifier
+asap.PostProcess ..> weka.classifiers.Classifier
+asap.PostProcess ..> weka.classifiers.Evaluation
+asap.PostProcess ..> weka.classifiers.functions.IsotonicRegression
+asap.PostProcess ..> weka.classifiers.functions.LinearRegression
+asap.PostProcess ..> weka.classifiers.lazy.IBk
+asap.PostProcess ..> weka.classifiers.meta.Stacking
+asap.PostProcess ..> weka.classifiers.meta.Vote
+asap.PostProcess ..> weka.classifiers.rules.ZeroR
+asap.PostProcess ..> weka.classifiers.trees.M5P
+asap.PostProcess ..> weka.core.Attribute
+asap.PostProcess ..> weka.core.Instances
+asap.PostProcess ..> weka.core.SerializationHelper
+asap.PostProcess ..> weka.core.Utils
+asap.PostProcess ..> weka.core.converters.ConverterUtils.DataSource
+asap.PostProcess ..> weka.filters.Filter
+asap.PostProcess ..> weka.filters.unsupervised.attribute.Remove
+asap.PostProcess ..> weka.filters.unsupervised.attribute.RemoveType
+asap.PreProcess ..> java.lang.Override
+asap.PreProcess ..> asap.featurecalculation.ExtraFeatures
+asap.PreProcess --|> asap.textprocessing.TextProcessHashWords
+asap.PreProcess ..> java.io.File
+asap.PreProcess ..> java.io.FileInputStream
+asap.PreProcess ..> java.io.FileOutputStream
+asap.PreProcess ..> java.io.IOException
+asap.PreProcess ..> java.security.InvalidParameterException
+asap.PreProcess ..> java.util.ArrayList
+asap.PreProcess ..> java.util.Arrays
+asap.PreProcess ..> java.util.Collections
+asap.PreProcess ..> java.util.HashMap
+asap.PreProcess ..> java.util.HashSet
+asap.PreProcess ..> java.util.Iterator
+asap.PreProcess ..> java.util.LinkedList
+asap.PreProcess ..> java.util.List
+asap.PreProcess ..> java.util.ListIterator
+asap.PreProcess ..> java.util.Random
+asap.PreProcess ..> java.util.Scanner
+asap.PreProcess ..> java.util.TreeSet
+asap.PreProcess ..> java.util.logging.Level
+asap.PreProcess ..> java.util.logging.Logger
+asap.PreProcess ..> asap.featurecalculation.FeatureCalculator
+asap.PreProcess ..> asap.textprocessing.TextProcessedPartKeyConsts
+asap.PreProcessOutputStream ..> java.lang.Override
+asap.PreProcessOutputStream ..> java.io.IOException
+asap.PreProcessOutputStream --|> java.io.InputStream
+asap.WordFrequency ..> java.lang.Override
+asap.WordFrequency --|> java.lang.Comparable
+asap.featurecalculation.DummyFeatureCalculator ..> java.lang.Override
+asap.featurecalculation.DummyFeatureCalculator ..> asap.Instance
+asap.featurecalculation.DummyFeatureCalculator ..> java.util.HashMap
+asap.featurecalculation.DummyFeatureCalculator --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.DummyFeatureCalculator ..> asap.textprocessing.TextProcesser
+asap.featurecalculation.ExternalFeatureCalculator ..> java.lang.Override
+asap.featurecalculation.ExternalFeatureCalculator ..> asap.Instance
+asap.featurecalculation.ExternalFeatureCalculator ..> java.util.List
+asap.featurecalculation.ExternalFeatureCalculator --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.ExtraFeatures ..> java.lang.Override
+asap.featurecalculation.ExtraFeatures ..> asap.Instance
+asap.featurecalculation.ExtraFeatures ..> asap.PerformanceCounters
+asap.featurecalculation.ExtraFeatures ..> java.io.File
+asap.featurecalculation.ExtraFeatures ..> java.io.FileInputStream
+asap.featurecalculation.ExtraFeatures ..> java.io.IOException
+asap.featurecalculation.ExtraFeatures ..> java.util.Iterator
+asap.featurecalculation.ExtraFeatures ..> java.util.LinkedList
+asap.featurecalculation.ExtraFeatures ..> java.util.List
+asap.featurecalculation.ExtraFeatures ..> java.util.Scanner
+asap.featurecalculation.ExtraFeatures ..> java.util.logging.Level
+asap.featurecalculation.ExtraFeatures ..> java.util.logging.Logger
+asap.featurecalculation.ExtraFeatures --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> java.lang.Override
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.Chunk
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.Config
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.Instance
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.PerformanceCounters
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.textprocessing.TextProcessChunkLemmas
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> java.util.HashMap
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.featurecalculation.FeatureCalculatorOverlappingLemmas ..> asap.textprocessing.TextProcesser
+asap.featurecalculation.FeatureCalculatorSentenceLengths ..> java.lang.Override
+asap.featurecalculation.FeatureCalculatorSentenceLengths ..> asap.Instance
+asap.featurecalculation.FeatureCalculatorSentenceLengths ..> asap.PerformanceCounters
+asap.featurecalculation.FeatureCalculatorSentenceLengths ..> java.util.HashMap
+asap.featurecalculation.FeatureCalculatorSentenceLengths --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.LexicalCountWords ..> java.lang.Override
+asap.featurecalculation.LexicalCountWords ..> asap.Instance
+asap.featurecalculation.LexicalCountWords ..> asap.PerformanceCounters
+asap.featurecalculation.LexicalCountWords ..> java.io.FileInputStream
+asap.featurecalculation.LexicalCountWords ..> java.io.FileNotFoundException
+asap.featurecalculation.LexicalCountWords ..> java.io.IOException
+asap.featurecalculation.LexicalCountWords ..> java.util.Collection
+asap.featurecalculation.LexicalCountWords ..> java.util.HashMap
+asap.featurecalculation.LexicalCountWords ..> java.util.HashSet
+asap.featurecalculation.LexicalCountWords ..> java.util.Scanner
+asap.featurecalculation.LexicalCountWords ..> java.util.logging.Level
+asap.featurecalculation.LexicalCountWords ..> java.util.logging.Logger
+asap.featurecalculation.LexicalCountWords --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.LexicalCountWords --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.lang.Override
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> asap.Instance
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> asap.PerformanceCounters
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> asap.PreProcess
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> asap.textprocessing.TextProcessHashWords
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.util.Arrays
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.util.HashMap
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.util.HashSet
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.util.Iterator
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> java.util.TreeSet
+asap.featurecalculation.LexicalOverlapFeaturesCalculator --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.LexicalOverlapFeaturesCalculator --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.featurecalculation.LexicalOverlapFeaturesCalculator ..> asap.textprocessing.TextProcesser
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.lang.Override
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.Chunk
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.Config
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.Instance
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.PerformanceCounters
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.textprocessing.TextProcessChunkLemmas
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.textprocessing.TextProcessChunkLemmasRemoveSRule
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> edu.cmu.lti.lexical_db.ILexicalDatabase
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> edu.cmu.lti.lexical_db.NictWordNet
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> edu.cmu.lti.ws4j.RelatednessCalculator
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.ArrayList
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.Collections
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.HashMap
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.Iterator
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.LinkedList
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.List
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.Map
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> java.util.Objects
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator ..> asap.textprocessing.TextProcesser
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> java.lang.Override
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> asap.Chunk
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> asap.Instance
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> asap.PerformanceCounters
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> asap.textprocessing.TextProcessChunks
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> java.util.HashMap
+asap.featurecalculation.SyntacticCountChunkTypesFeatures --|> asap.featurecalculation.FeatureCalculator
+asap.featurecalculation.SyntacticCountChunkTypesFeatures --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.featurecalculation.SyntacticCountChunkTypesFeatures ..> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessChunkLemmas ..> java.lang.Override
+asap.textprocessing.TextProcessChunkLemmas ..> asap.Chunk
+asap.textprocessing.TextProcessChunkLemmas ..> asap.Config
+asap.textprocessing.TextProcessChunkLemmas ..> asap.Instance
+asap.textprocessing.TextProcessChunkLemmas ..> asap.LemmasNotFound
+asap.textprocessing.TextProcessChunkLemmas ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessChunkLemmas ..> edu.cmu.lti.jawjaw.pobj.Lang
+asap.textprocessing.TextProcessChunkLemmas ..> edu.cmu.lti.jawjaw.pobj.POS
+asap.textprocessing.TextProcessChunkLemmas ..> edu.cmu.lti.jawjaw.pobj.Synset
+asap.textprocessing.TextProcessChunkLemmas ..> edu.cmu.lti.jawjaw.pobj.Word
+asap.textprocessing.TextProcessChunkLemmas ..> edu.mit.jwi.Dictionary
+asap.textprocessing.TextProcessChunkLemmas ..> edu.mit.jwi.item.IIndexWord
+asap.textprocessing.TextProcessChunkLemmas ..> edu.mit.jwi.morph.WordnetStemmer
+asap.textprocessing.TextProcessChunkLemmas ..> java.io.IOException
+asap.textprocessing.TextProcessChunkLemmas ..> java.net.MalformedURLException
+asap.textprocessing.TextProcessChunkLemmas ..> java.net.URL
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.ArrayList
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.HashMap
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.Iterator
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.List
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.logging.Level
+asap.textprocessing.TextProcessChunkLemmas ..> java.util.logging.Logger
+asap.textprocessing.TextProcessChunkLemmas --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessChunkLemmas --|> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessChunkLemmasRemoveSRule ..> java.lang.Override
+asap.textprocessing.TextProcessChunkLemmasRemoveSRule ..> asap.Chunk
+asap.textprocessing.TextProcessChunkLemmasRemoveSRule --|> asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups
+asap.textprocessing.TextProcessChunkLemmasRemoveSRule ..> java.io.File
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.lang.Override
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> asap.Chunk
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> asap.LemmasInDBPedia
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups --|> asap.textprocessing.TextProcessChunkLemmas
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.io.File
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.io.FileInputStream
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.io.FileOutputStream
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.io.IOException
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.net.URL
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.net.URLConnection
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.Collections
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.HashMap
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.LinkedList
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.Map
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.Scanner
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.logging.Level
+asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups ..> java.util.logging.Logger
+asap.textprocessing.TextProcessChunks ..> java.lang.Override
+asap.textprocessing.TextProcessChunks ..> asap.Chunk
+asap.textprocessing.TextProcessChunks ..> asap.Config
+asap.textprocessing.TextProcessChunks ..> asap.GrammarCounters
+asap.textprocessing.TextProcessChunks ..> asap.Instance
+asap.textprocessing.TextProcessChunks ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessChunks ..> java.io.File
+asap.textprocessing.TextProcessChunks ..> java.util.ArrayList
+asap.textprocessing.TextProcessChunks ..> java.util.HashMap
+asap.textprocessing.TextProcessChunks ..> opennlp.tools.chunker.ChunkerME
+asap.textprocessing.TextProcessChunks ..> opennlp.tools.chunker.ChunkerModel
+asap.textprocessing.TextProcessChunks ..> opennlp.tools.cmdline.chunker.ChunkerModelLoader
+asap.textprocessing.TextProcessChunks --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessChunks --|> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessHashWords ..> java.lang.Override
+asap.textprocessing.TextProcessHashWords ..> asap.Config
+asap.textprocessing.TextProcessHashWords ..> asap.Instance
+asap.textprocessing.TextProcessHashWords ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessHashWords ..> java.util.ArrayList
+asap.textprocessing.TextProcessHashWords ..> java.util.HashMap
+asap.textprocessing.TextProcessHashWords --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessHashWords --|> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessNamedEntities ..> java.lang.Override
+asap.textprocessing.TextProcessNamedEntities ..> asap.Config
+asap.textprocessing.TextProcessNamedEntities ..> asap.Instance
+asap.textprocessing.TextProcessNamedEntities ..> asap.NamedEntitiesFound
+asap.textprocessing.TextProcessNamedEntities ..> asap.NamedEntity
+asap.textprocessing.TextProcessNamedEntities ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessNamedEntities ..> java.io.File
+asap.textprocessing.TextProcessNamedEntities ..> java.io.IOException
+asap.textprocessing.TextProcessNamedEntities ..> java.util.HashMap
+asap.textprocessing.TextProcessNamedEntities ..> java.util.LinkedList
+asap.textprocessing.TextProcessNamedEntities ..> java.util.List
+asap.textprocessing.TextProcessNamedEntities ..> java.util.logging.Level
+asap.textprocessing.TextProcessNamedEntities ..> java.util.logging.Logger
+asap.textprocessing.TextProcessNamedEntities ..> opennlp.tools.namefind.NameFinderME
+asap.textprocessing.TextProcessNamedEntities ..> opennlp.tools.namefind.TokenNameFinderModel
+asap.textprocessing.TextProcessNamedEntities ..> opennlp.tools.util.Span
+asap.textprocessing.TextProcessNamedEntities --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessNamedEntities --|> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.lang.Override
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> asap.Config
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> asap.NamedEntity
+asap.textprocessing.TextProcessNamedEntitiesStanford --|> asap.textprocessing.TextProcessNamedEntities
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> edu.stanford.nlp.ie.AbstractSequenceClassifier
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> edu.stanford.nlp.ie.crf.CRFClassifier
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> edu.stanford.nlp.ling.CoreLabel
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.io.File
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.io.IOException
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.util.LinkedList
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.util.logging.Level
+asap.textprocessing.TextProcessNamedEntitiesStanford ..> java.util.logging.Logger
+asap.textprocessing.TextProcessPOSTags ..> java.lang.Override
+asap.textprocessing.TextProcessPOSTags ..> asap.Config
+asap.textprocessing.TextProcessPOSTags ..> asap.Instance
+asap.textprocessing.TextProcessPOSTags ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessPOSTags ..> java.io.File
+asap.textprocessing.TextProcessPOSTags ..> java.util.HashMap
+asap.textprocessing.TextProcessPOSTags ..> opennlp.tools.cmdline.postag.POSModelLoader
+asap.textprocessing.TextProcessPOSTags ..> opennlp.tools.postag.POSModel
+asap.textprocessing.TextProcessPOSTags ..> opennlp.tools.postag.POSSample
+asap.textprocessing.TextProcessPOSTags ..> opennlp.tools.postag.POSTaggerME
+asap.textprocessing.TextProcessPOSTags --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessPOSTags --|> asap.textprocessing.TextProcesser
+asap.textprocessing.TextProcessPOSTagsStanford ..> java.lang.Override
+asap.textprocessing.TextProcessPOSTagsStanford ..> asap.Config
+asap.textprocessing.TextProcessPOSTagsStanford --|> asap.textprocessing.TextProcessPOSTags
+asap.textprocessing.TextProcessPOSTagsStanford ..> edu.stanford.nlp.ling.HasWord
+asap.textprocessing.TextProcessPOSTagsStanford ..> edu.stanford.nlp.ling.TaggedWord
+asap.textprocessing.TextProcessPOSTagsStanford ..> edu.stanford.nlp.tagger.maxent.MaxentTagger
+asap.textprocessing.TextProcessPOSTagsStanford ..> java.io.File
+asap.textprocessing.TextProcessPOSTagsStanford ..> java.io.StringReader
+asap.textprocessing.TextProcessPOSTagsStanford ..> java.util.List
+asap.textprocessing.TextProcessTokenizer ..> java.lang.Override
+asap.textprocessing.TextProcessTokenizer ..> asap.Config
+asap.textprocessing.TextProcessTokenizer ..> asap.Instance
+asap.textprocessing.TextProcessTokenizer ..> asap.PerformanceCounters
+asap.textprocessing.TextProcessTokenizer ..> java.io.File
+asap.textprocessing.TextProcessTokenizer ..> java.io.FileInputStream
+asap.textprocessing.TextProcessTokenizer ..> java.io.IOException
+asap.textprocessing.TextProcessTokenizer ..> java.io.InputStream
+asap.textprocessing.TextProcessTokenizer ..> java.io.StringReader
+asap.textprocessing.TextProcessTokenizer ..> java.util.HashMap
+asap.textprocessing.TextProcessTokenizer ..> java.util.logging.Level
+asap.textprocessing.TextProcessTokenizer ..> java.util.logging.Logger
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.tokenize.Tokenizer
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.tokenize.TokenizerME
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.tokenize.TokenizerModel
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.tokenize.WhitespaceTokenizer
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.util.ObjectStream
+asap.textprocessing.TextProcessTokenizer ..> opennlp.tools.util.PlainTextByLineStream
+asap.textprocessing.TextProcessTokenizer --|> asap.textprocessing.TextProcessedPartKeyConsts
+asap.textprocessing.TextProcessTokenizer --|> asap.textprocessing.TextProcesser
+asap.featurecalculation.FeatureCalculator ..> asap.Instance
+asap.textprocessing.TextProcesser ..> asap.Instance
+@enduml

@@ -6,6 +6,7 @@
 package asap.textprocessing;
 
 import asap.Chunk;
+import asap.Config;
 import asap.Instance;
 import asap.LemmasNotFound;
 import asap.PerformanceCounters;
@@ -26,18 +27,29 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
+ */
 public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartKeyConsts {
 
-    private static final HashMap<Long, TextProcessChunkLemmas> tpcls
+    /**
+     *
+     */
+    protected static final HashMap<Long, TextProcessChunkLemmas> tpcls
             = new HashMap<>();
-    
-    
+
     private final TextProcesser textProcesserDependency;
-    
+
     //use jwi only for "lematisation"
     private edu.mit.jwi.IDictionary dict;
     private edu.mit.jwi.morph.WordnetStemmer stemmer;
-    
+
+    /**
+     *
+     * @param t
+     * @return
+     */
     public static TextProcessChunkLemmas getTextProcessChunkLemmas(Thread t) {
         TextProcessChunkLemmas r;
         if (tpcls.containsKey(t.getId())) {
@@ -47,18 +59,37 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
         tpcls.put(t.getId(), r);
         return r;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public static TextProcessChunkLemmas getTextProcessChunkLemmas() {
         return getTextProcessChunkLemmas(Thread.currentThread());
     }
 
-    private TextProcessChunkLemmas(String wordnetDatabasePath, Thread t) {
+    /**
+     *
+     * @param wordnetDatabasePath
+     * @param t
+     */
+    protected TextProcessChunkLemmas(String wordnetDatabasePath, Thread t) {
 
         loadJWI(wordnetDatabasePath);
-        
+
         textProcesserDependency = TextProcessChunks.getTextProcessChunks(t);
     }
-    
+
+    /**
+     *
+     * @param t
+     * @return
+     */
+    @Override
+    public TextProcesser getInstance(Thread t) {
+        return getTextProcessChunkLemmas(t);
+    }
+
     private void loadJWI(String wordnetDatabasePath) {
         String path = wordnetDatabasePath;
         URL url;
@@ -78,26 +109,36 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
         System.out.println("Loaded JWI Dictionary.");
     }
 
-    private TextProcessChunkLemmas(Thread t) {
+    /**
+     *
+     * @param t
+     */
+    protected TextProcessChunkLemmas(Thread t) {
         this("/usr/share/wordnet", t);
     }
-    
+
     private TextProcessChunkLemmas() {
         this(Thread.currentThread());
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     @Override
     public boolean textProcessingDependenciesMet(Instance i) {
         return i.isProcessed(textProcesserDependency);
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void process(Instance i) {
         if (!textProcessingDependenciesMet(i)) {
             textProcesserDependency.process(i);
-        }
-        if (i.getProcessedTextPart(sentence1ChunkLemmas) != null) {
-            System.out.println("Duplicate calculation detected in ..ChunkLemmas!");
         }
         PerformanceCounters.startTimer("process ChunkLemmas");
 
@@ -106,133 +147,240 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
         String[] lemmas;
         int j;
 
-        o = i.getProcessedTextPart(sentence1Chunks);
-        if (!(o instanceof Chunk[])) {
-            return;
-        }
-        chunks = (Chunk[]) o;
-        lemmas = new String[chunks.length];
-        j = 0;
-        for (Chunk chunk : chunks) {
-            chunk.setLemma(lemmatizeChunk(chunk));
-            lemmas[j++] = chunk.getLemma();
-            if (chunk.getLemma() == null) {
-                LemmasNotFound.log(chunk, i.getSentence1());
+        if (Config.calculateWithoutCaseSensitivity()) {
+            o = i.getProcessedTextPart(sentence1Chunks);
+            if (!(o instanceof Chunk[])) {
+                return;
             }
-        }
-        i.addProcessedTextPart(sentence1ChunkLemmas, lemmas);
-
-        o = i.getProcessedTextPart(sentence2Chunks);
-        if (!(o instanceof Chunk[])) {
-            return;
-        }
-        chunks = (Chunk[]) o;
-        lemmas = new String[chunks.length];
-        j = 0;
-        for (Chunk chunk : chunks) {
-            chunk.setLemma(lemmatizeChunk(chunk));
-            lemmas[j++] = chunk.getLemma();
-            if (chunk.getLemma() == null) {
-                LemmasNotFound.log(chunk, i.getSentence2());
+            chunks = (Chunk[]) o;
+            lemmas = new String[chunks.length];
+            j = 0;
+            for (Chunk chunk : chunks) {
+                String lemma = lemmatizeChunk(chunk);
+                if (lemma == null) {
+                    LemmasNotFound.log(chunk, i.getSentence1().toLowerCase(), i.getPair_ID());
+                    chunk.setLemma(null);
+                    continue;
+                }
+                lemma = lemma + chunk.toWNPos();
+                chunk.setLemma(lemma);
+                lemmas[j++] = lemma;
             }
-        }
-        i.addProcessedTextPart(sentence2ChunkLemmas, lemmas);
+            i.addProcessedTextPart(sentence1ChunkLemmas, lemmas);
 
+            o = i.getProcessedTextPart(sentence2Chunks);
+            if (!(o instanceof Chunk[])) {
+                return;
+            }
+            chunks = (Chunk[]) o;
+            lemmas = new String[chunks.length];
+            j = 0;
+            for (Chunk chunk : chunks) {
+                String lemma = lemmatizeChunk(chunk);
+                if (lemma == null) {
+                    LemmasNotFound.log(chunk, i.getSentence2().toLowerCase(), i.getPair_ID());
+                    chunk.setLemma(null);
+                    continue;
+                }
+                lemma = lemma + chunk.toWNPos();
+                chunk.setLemma(lemma);
+                lemmas[j++] = lemma;
+            }
+            i.addProcessedTextPart(sentence2ChunkLemmas, lemmas);
+        }
+        
+        
+        
+        
+        if (Config.calculateWithCaseSensitivity()) {
+            o = i.getProcessedTextPart(sentence1ChunksCaseSensitive);
+            if (!(o instanceof Chunk[])) {
+                return;
+            }
+            chunks = (Chunk[]) o;
+            lemmas = new String[chunks.length];
+            j = 0;
+            for (Chunk chunk : chunks) {
+                String lemma = lemmatizeChunk(chunk);
+                if (lemma == null) {
+                    LemmasNotFound.log(chunk, i.getSentence1(), i.getPair_ID());
+                    chunk.setLemma(null);
+                    continue;
+                }
+                lemma = lemma + chunk.toWNPos();
+                chunk.setLemma(lemma);
+                lemmas[j++] = lemma;
+            }
+            i.addProcessedTextPart(sentence1ChunkLemmasCaseSensitive, lemmas);
+
+            o = i.getProcessedTextPart(sentence2ChunksCaseSensitive);
+            if (!(o instanceof Chunk[])) {
+                return;
+            }
+            chunks = (Chunk[]) o;
+            lemmas = new String[chunks.length];
+            j = 0;
+            for (Chunk chunk : chunks) {
+                String lemma = lemmatizeChunk(chunk);
+                if (lemma == null) {
+                    LemmasNotFound.log(chunk, i.getSentence2(), i.getPair_ID());
+                    chunk.setLemma(null);
+                    continue;
+                }
+                lemma = lemma + chunk.toWNPos();
+                chunk.setLemma(lemma);
+                lemmas[j++] = lemma;
+            }
+            i.addProcessedTextPart(sentence2ChunkLemmasCaseSensitive, lemmas);
+        }
+        
         i.addProcessed(this);
         PerformanceCounters.stopTimer("process ChunkLemmas");
     }
 
-    private String lemmatizeChunk(Chunk chunk) {
+    private String changeChunkText(Chunk chunk) {
+        String r = chunk.getChunkText();
+        /* inflate have n't, do n't... to have not, do not... */
+
+        r = r.replaceAll("ca n't", "can not");
+        r = r.replaceAll("wo n't", "will not");
+
+        r = r.replaceAll(" n't", " not");
+
+        /* inflate verbal 's to is: */
+        if (chunk.getChunkType().equalsIgnoreCase("VP")) {
+            if (r.startsWith("'s ") || r.equalsIgnoreCase("'s")) {
+                r = "is" + r.substring(2);
+            }
+
+        }
+
+        //DEBUG only::
+        /*
+         if (!chunk.getChunkText().equalsIgnoreCase(r)) {
+         System.out.println("changed from \"" + chunk.getChunkText()
+         + "\" to \"" + r + "\"");
+         }
+         */
+        return r;
+    }
+
+    /**
+     *
+     * @param chunk
+     * @return
+     */
+    protected String lemmatizeChunk(Chunk chunk) {
+        LemmasNotFound.incTotal(chunk);
         return lemmatizeChunkMethodJWI(chunk);
     }
-    
-    private String lemmatizeChunkMethodJWI(Chunk chunk) {
+
+    /**
+     *
+     * @param chunk
+     * @return
+     */
+    protected String lemmatizeChunkMethodJWI(Chunk chunk) {
         String chunkText = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
-        if (chunkText.isEmpty())
-            return "";
-        
-        edu.mit.jwi.item.POS pos = edu.mit.jwi.item.POS.getPartOfSpeech(chunk.getChunkType().charAt(0));
-        
-        if (pos == null)
+//        Logger.getLogger("Lemmatizer").log(Level.INFO, "chunkText reduced from \"{0}\"\n\t to \"{1}\"", new Object[]{chunk.getChunkText(), chunkText});
+        if (chunkText.isEmpty()) {
+//            Logger.getLogger("Lemmatizer").log(Level.INFO, "\tlemma = null");
             return null;
-        
+        }
+
+        edu.mit.jwi.item.POS pos = null;
+
+        switch (chunk.getChunkType()) {
+            case "NP":
+                pos = edu.mit.jwi.item.POS.NOUN;
+                break;
+            case "VP":
+                pos = edu.mit.jwi.item.POS.VERB;
+        }
+
+        if (pos == null) {
+//            Logger.getLogger("Lemmatizer").log(Level.INFO, "\tlemma = null");
+            return null;
+        }
+//        Logger.getLogger("Lemmatizer").log(Level.INFO, "\tlemma most likely POS = {0}", pos);
+
         return lemmatizeJWIMethod0(chunkText, pos);
     }
-/*    
-    private String lemmatizeChunkMethodCombinedWs4jAndJaws(Chunk chunk) {
-        String lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
-        String validLemma = WNCheckValidMethod0(lemma.replace(" ", "_"), chunk.toPOS(), chunk.toSynsetType());
-        while (validLemma == null) {
-            int indexOfSpace = lemma.indexOf(" ");
-            if (indexOfSpace < 0) {
-                lemma = null;
-                break;
-            }
-            lemma = lemma.substring(indexOfSpace + 1);
+    /*    
+     private String lemmatizeChunkMethodCombinedWs4jAndJaws(Chunk chunk) {
+     String lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
+     String validLemma = WNCheckValidMethod0(lemma.replace(" ", "_"), chunk.toPOS(), chunk.toSynsetType());
+     while (validLemma == null) {
+     int indexOfSpace = lemma.indexOf(" ");
+     if (indexOfSpace < 0) {
+     lemma = null;
+     break;
+     }
+     lemma = lemma.substring(indexOfSpace + 1);
 
-            validLemma = WNCheckValidMethod0(lemma.replace(" ", "_"), chunk.toPOS(), chunk.toSynsetType());
-        }
+     validLemma = WNCheckValidMethod0(lemma.replace(" ", "_"), chunk.toPOS(), chunk.toSynsetType());
+     }
 
-        if (lemma == null) {
-            lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
-            validLemma = WNCheckValidMethod1(lemma, chunk.toPOS(), chunk.toSynsetType());
-            while (validLemma == null) {
-                int indexOfSpace = lemma.indexOf(" ");
-                if (indexOfSpace < 0) {
-                    break;
-                }
-                lemma = lemma.substring(indexOfSpace + 1);
+     if (lemma == null) {
+     lemma = chunk.getChunkText().replaceAll("[^a-zA-Z0-9]", " ").trim();
+     validLemma = WNCheckValidMethod1(lemma, chunk.toPOS(), chunk.toSynsetType());
+     while (validLemma == null) {
+     int indexOfSpace = lemma.indexOf(" ");
+     if (indexOfSpace < 0) {
+     break;
+     }
+     lemma = lemma.substring(indexOfSpace + 1);
 
-                validLemma = WNCheckValidMethod1(lemma, chunk.toPOS(), chunk.toSynsetType());
-            }
-        }
+     validLemma = WNCheckValidMethod1(lemma, chunk.toPOS(), chunk.toSynsetType());
+     }
+     }
 
-//        System.out.println("\tChunk's (" + chunk.getChunkText()
-//                + ") lemma is:" + validLemma);
-        return validLemma;
-    }
-*/
-/*    
-    private String WNCheckValidMethod1(String lemma, POS pos, SynsetType pos2) {
-        //use JAWS method1:
-        String[] wordCandidates = wndb.getBaseFormCandidates(lemma, pos2);
-        if (wordCandidates == null) {
-            return null;
-        }
-        if (wordCandidates.length == 0) {
-            return null;
-        }
+     //        System.out.println("\tChunk's (" + chunk.getChunkText()
+     //                + ") lemma is:" + validLemma);
+     return validLemma;
+     }
+     */
+    /*    
+     private String WNCheckValidMethod1(String lemma, POS pos, SynsetType pos2) {
+     //use JAWS method1:
+     String[] wordCandidates = wndb.getBaseFormCandidates(lemma, pos2);
+     if (wordCandidates == null) {
+     return null;
+     }
+     if (wordCandidates.length == 0) {
+     return null;
+     }
 
-        for (String wordCandidate : wordCandidates) {
-            if (wordCandidate.equalsIgnoreCase(lemma)) {
-                return lemma;
-            }
-        }
+     for (String wordCandidate : wordCandidates) {
+     if (wordCandidate.equalsIgnoreCase(lemma)) {
+     return lemma;
+     }
+     }
 
-        String doubleCheck;
-        for (String wordCandidate : wordCandidates) {
-            doubleCheck = WNCheckValidMethod0(wordCandidate.replace(" ", "_"), pos, pos2);
-            if (doubleCheck != null) {
-                return doubleCheck;
-            }
-        }
+     String doubleCheck;
+     for (String wordCandidate : wordCandidates) {
+     doubleCheck = WNCheckValidMethod0(wordCandidate.replace(" ", "_"), pos, pos2);
+     if (doubleCheck != null) {
+     return doubleCheck;
+     }
+     }
 
-        return null;
+     return null;
 
         
-//         //USE JAWS method1:
-//        
-//         Synset[] synsets;
-//         try {
-//         synsets = (Synset[]) wndb.getSynsets(lemma);
-//         } catch (WordNetException wne) {
-//         return null;
-//         }
-//         return Arrays.toString(synsets);
+     //         //USE JAWS method1:
+     //        
+     //         Synset[] synsets;
+     //         try {
+     //         synsets = (Synset[]) wndb.getSynsets(lemma);
+     //         } catch (WordNetException wne) {
+     //         return null;
+     //         }
+     //         return Arrays.toString(synsets);
          
-    }
-*/
-    
+     }
+     */
+
     private String WNCheckValidMethod0(String lemma, POS pos) {
         //USE ws4J:
 
@@ -254,9 +402,6 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
             return null;
         }
 
-        Word maxFreqWord = null;
-        int maxFreq = 0;
-        
         for (Word word : words) {
             if (word.getLemma().equalsIgnoreCase(lemma)) {
                 return lemma;
@@ -266,8 +411,9 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
         return words.get(0).getLemma();
 
     }
+
     private IIndexWord getIndexWord(String wordForm, edu.mit.jwi.item.POS pos) {
-        
+
         List<String> stems = stemmer.findStems(wordForm, pos);
         if (stems.isEmpty()) {
             return null;
@@ -278,20 +424,27 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
 
     private String lemmatizeJWIMethod0(String chunkText, edu.mit.jwi.item.POS pos) {
         String lemma = chunkText;
+//        Logger.getLogger("Lemmatizer").log(Level.INFO, "\tgetIndexWord({0})", lemma);
         IIndexWord validLemma = getIndexWord(lemma, pos);
         while (validLemma == null) {
+            validLemma = getIndexWord(lemma.toLowerCase(), pos);
+            if (validLemma != null)
+                break;
+            
             int indexOfSpace = lemma.indexOf(" ");
             if (indexOfSpace < 0) {
                 break;
             }
             lemma = lemma.substring(indexOfSpace + 1);
-
+//            Logger.getLogger("Lemmatizer").log(Level.INFO, "\tgetIndexWord({0})", lemma);
             validLemma = getIndexWord(lemma, pos);
         }
 
         if (validLemma != null) {
+//            Logger.getLogger("Lemmatizer").log(Level.INFO, "\tlemma = {0}", validLemma.getLemma());
             return validLemma.getLemma();
         }
+//        Logger.getLogger("Lemmatizer").log(Level.INFO, "\tlemma = null");
 
         return null;
     }

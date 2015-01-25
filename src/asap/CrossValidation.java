@@ -5,18 +5,19 @@
  */
 package asap;
 
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.core.Utils;
-import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
-
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import weka.classifiers.AbstractClassifier;
-import weka.classifiers.meta.Stacking;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.core.Instances;
 import weka.core.SerializationHelper;
+import weka.core.Utils;
+import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
@@ -68,6 +69,18 @@ public class CrossValidation {
 
     }
 
+    /**
+     *
+     * @param dataInput
+     * @param classIndex
+     * @param removeIndices
+     * @param classifierCmd
+     * @param seed
+     * @param folds
+     * @param modelOutputFile
+     * @return
+     * @throws Exception
+     */
     public static String performCrossValidation(String dataInput,
             String classIndex,
             String removeIndices,
@@ -84,6 +97,18 @@ public class CrossValidation {
         return performCrossValidation(dataInput, classIndex, removeIndices, cls, seed, folds, modelOutputFile);
     }
 
+    /**
+     *
+     * @param dataInput
+     * @param classIndex
+     * @param removeIndices
+     * @param cls
+     * @param seed
+     * @param folds
+     * @param modelOutputFile
+     * @return
+     * @throws Exception
+     */
     public static String performCrossValidation(String dataInput,
             String classIndex,
             String removeIndices,
@@ -184,6 +209,18 @@ public class CrossValidation {
         return out;
     }
 
+    /**
+     *
+     * @param dataInput
+     * @param classIndex
+     * @param removeIndices
+     * @param cls
+     * @param seed
+     * @param folds
+     * @param modelOutputFile
+     * @return
+     * @throws Exception
+     */
     public static String performCrossValidationMT(String dataInput,
             String classIndex,
             String removeIndices,
@@ -231,32 +268,40 @@ public class CrossValidation {
 
         // perform cross-validation and add predictions
         Evaluation eval = new Evaluation(randData);
-        Instances trainSets[] = new Instances[folds];
-        Instances testSets[] = new Instances[folds];
-        Classifier foldCls[] = new Classifier[folds];
-        Thread[] foldThreads = new Thread[folds];
+        List<Thread> foldThreads = (List<Thread>) Collections.synchronizedList(new LinkedList<Thread>());
+
+        List<FoldSet> foldSets = (List<FoldSet>) Collections.synchronizedList(new LinkedList<FoldSet>());
 
         for (int n = 0; n < folds; n++) {
-            trainSets[n] = randData.trainCV(folds, n);
-            testSets[n] = randData.testCV(folds, n);
-            foldCls[n] = AbstractClassifier.makeCopy(cls);
-            foldThreads[n] = new Thread(
-                    new CrossValidationFoldThread(n, foldCls[n], trainSets[n],
-                            testSets[n], eval)
-            );
+            foldSets.add(new FoldSet(randData.trainCV(folds, n),
+                    randData.testCV(folds, n),
+                    AbstractClassifier.makeCopy(cls)
+            ));
+
+            //TODO: use Config.getNumThreads() for limiting these::
+            if (n < Config.getNumThreads() - 1) {
+                Thread foldThread = new Thread(
+                        new CrossValidationFoldThread(n, foldSets, eval)
+                );
+                foldThreads.add(foldThread);
+            }
         }
 
         PerformanceCounters.stopTimer("cross-validation init MT");
         PerformanceCounters.startTimer("cross-validation folds+train MT");
 //paralelize!!:--------------------------------------------------------------
-        for (int n = 0; n < folds; n++) {
-            foldThreads[n].start();
+        if (Config.getNumThreads() > 1) {
+            for (Thread foldThread : foldThreads) {
+                foldThread.start();
+            }
+        } else {
+            new CrossValidationFoldThread(0, foldSets, eval).run();
         }
 
         cls.buildClassifier(data);
 
-        for (int n = 0; n < folds; n++) {
-            foldThreads[n].join();
+        for (Thread foldThread : foldThreads) {
+            foldThread.join();
         }
 
 //until here!-----------------------------------------------------------------
@@ -305,31 +350,38 @@ public class CrossValidation {
             Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
             return "Error creating evaluation instance for given data!";
         }
-        Instances trainSets[] = new Instances[folds];
-        Instances testSets[] = new Instances[folds];
-        Classifier foldCls[] = new Classifier[folds];
-        Thread[] foldThreads = new Thread[folds];
+        List<Thread> foldThreads = (List<Thread>) Collections.synchronizedList(new LinkedList<Thread>());
+
+        List<FoldSet> foldSets = (List<FoldSet>) Collections.synchronizedList(new LinkedList<FoldSet>());
 
         for (int n = 0; n < folds; n++) {
-            trainSets[n] = randData.trainCV(folds, n);
-            testSets[n] = randData.testCV(folds, n);
             try {
-                foldCls[n] = AbstractClassifier.makeCopy(cls);
+                foldSets.add(new FoldSet(randData.trainCV(folds, n),
+                        randData.testCV(folds, n),
+                        AbstractClassifier.makeCopy(cls)
+                ));
             } catch (Exception ex) {
                 Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
-                return "Error making copy of classifier!";
             }
-            foldThreads[n] = new Thread(
-                    new CrossValidationFoldThread(n, foldCls[n], trainSets[n],
-                            testSets[n], eval)
-            );
+
+            //TODO: use Config.getNumThreads() for limiting these::
+            if (n < Config.getNumThreads() - 1) {
+                Thread foldThread = new Thread(
+                        new CrossValidationFoldThread(n, foldSets, eval)
+                );
+                foldThreads.add(foldThread);
+            }
         }
 
         PerformanceCounters.stopTimer("cross-validation init MT");
         PerformanceCounters.startTimer("cross-validation folds+train MT");
 //paralelize!!:--------------------------------------------------------------
-        for (int n = 0; n < folds; n++) {
-            foldThreads[n].start();
+        if (Config.getNumThreads() > 1) {
+            for (Thread foldThread : foldThreads) {
+                foldThread.start();
+            }
+        } else {
+            new CrossValidationFoldThread(0, foldSets, eval).run();
         }
 
         try {
@@ -338,9 +390,9 @@ public class CrossValidation {
             Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        for (int n = 0; n < folds; n++) {
+        for (Thread foldThread : foldThreads) {
             try {
-                foldThreads[n].join();
+                foldThread.join();
             } catch (InterruptedException ex) {
                 Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -378,35 +430,68 @@ public class CrossValidation {
 
     private static class CrossValidationFoldThread implements Runnable {
 
-        Classifier cls;
-        Instances trainSet, testSet;
         final Evaluation eval;
-        int fold;
+        final List<FoldSet> foldSets;
+        int threadNumber;
 
-        public CrossValidationFoldThread(int aFold, Classifier aCls, Instances aTrainSet, Instances aTestSet, Evaluation aEval) {
-            fold = aFold;
-            cls = aCls;
-            trainSet = aTrainSet;
-            testSet = aTestSet;
-            eval = aEval;
+        public CrossValidationFoldThread(int threadNumber, List<FoldSet> foldSets, Evaluation eval) {
+            this.threadNumber = threadNumber;
+            this.foldSets = foldSets;
+            this.eval = eval;
         }
 
         @Override
         public void run() {
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
-            try {
-                cls.buildClassifier(trainSet);
-            } catch (Exception ex) {
-                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                synchronized (eval) {
-                    eval.evaluateModel(cls, testSet);
+            FoldSet foldSet;
+            Instances trainSet, testSet;
+            Classifier cls;
+
+            while (!foldSets.isEmpty()) {
+                foldSet = foldSets.remove(0);
+                trainSet = foldSet.getTrainSet();
+                testSet = foldSet.getTestSet();
+                cls = foldSet.getClassifier();
+
+                try {
+                    cls.buildClassifier(trainSet);
+                } catch (Exception ex) {
+                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (Exception ex) {
-                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    synchronized (eval) {
+                        eval.evaluateModel(cls, testSet);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+        }
+
+    }
+
+    private static class FoldSet {
+
+        private final Instances trainSet, testSet;
+        private final Classifier cls;
+
+        public FoldSet(Instances trainSet, Instances testSet, Classifier cls) {
+            this.cls = cls;
+            this.trainSet = trainSet;
+            this.testSet = testSet;
+        }
+
+        public Instances getTrainSet() {
+            return trainSet;
+        }
+
+        public Instances getTestSet() {
+            return testSet;
+        }
+
+        public Classifier getClassifier() {
+            return cls;
         }
 
     }

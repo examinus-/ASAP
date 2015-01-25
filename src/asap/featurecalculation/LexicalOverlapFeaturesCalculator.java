@@ -12,38 +12,69 @@ import asap.textprocessing.TextProcessHashWords;
 import asap.textprocessing.TextProcessedPartKeyConsts;
 import asap.textprocessing.TextProcesser;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+/**
+ *
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
+ */
 public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
 
+    private static final HashMap<Long, LexicalOverlapFeaturesCalculator> perThreadInstances
+            = new HashMap<>();
     private final int minStopWords;
     private final int maxStopWords;
-    private final TreeSet<String> topWords;
+    private TreeSet<String> topWords;
     private final TextProcesser textProcesserDependency;
 
-
+    /**
+     *
+     * @param minStopWords
+     * @param maxStopWords
+     * @param t
+     */
     public LexicalOverlapFeaturesCalculator(int minStopWords, int maxStopWords, Thread t) {
         this.minStopWords = minStopWords;
         this.maxStopWords = maxStopWords;
         this.topWords = PreProcess.getTopWords();
         textProcesserDependency = TextProcessHashWords.getTextProcessHashWords(t);
+
+        perThreadInstances.put(t.getId(), this);
     }
-    
+
+    /**
+     *
+     * @param minStopWords
+     * @param maxStopWords
+     */
     public LexicalOverlapFeaturesCalculator(int minStopWords, int maxStopWords) {
         this(minStopWords, maxStopWords, Thread.currentThread());
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     @Override
     public boolean textProcessingDependenciesMet(Instance i) {
         return i.isProcessed(textProcesserDependency);
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void calculate(Instance i) {
         if (!textProcessingDependenciesMet(i)) {
             textProcesserDependency.process(i);
+        }
+        if (this.topWords == null) {
+            this.topWords = PreProcess.getTopWords();
         }
         PerformanceCounters.startTimer("calculate LexicalOverlapFeatures");
 
@@ -106,6 +137,10 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, Text
         PerformanceCounters.stopTimer("calculate LexicalOverlapFeatures");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String[] getFeatureNames() {
         String r[] = new String[maxStopWords + 1 - minStopWords];
@@ -115,6 +150,25 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, Text
         }
 
         return r;
+    }
+
+    /**
+     *
+     * @param t
+     * @return
+     */
+    @Override
+    public FeatureCalculator getInstance(Thread t) {
+
+        if (perThreadInstances.containsKey(t.getId())) {
+            return perThreadInstances.get(t.getId());
+        }
+        return new LexicalOverlapFeaturesCalculator(minStopWords, maxStopWords, t);
+    }
+
+    @Override
+    public String toString() {
+        return "LexicalOverlapFeaturesCalculator (" + (1 + maxStopWords - minStopWords) + " features)";
     }
 
 }
