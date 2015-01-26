@@ -2,7 +2,6 @@
 Automatic Semantic Alignment for Phrases
 
 A Natural Language Processing tool for paraphrase detection/scoring. For more information refer to:
-
   http://aclanthology.info/papers/asap-automatic-semantic-alignment-for-phrases
   
   
