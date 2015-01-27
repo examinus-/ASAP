@@ -16,7 +16,6 @@ import asap.PreProcessOutputStream;
 import asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups;
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -165,9 +164,7 @@ public class Run {
      * Flushes out Logs
      */
     private static void finishPostProcessLogs() {
-        /*TODO:
-         move prediction errors to a log class, add config vars, etc.
-         add above generated class log flush here
+        /*TODO: move prediction errors to a log class, add config vars, etc. add above generated class log flush here
          */
 
     }
@@ -237,6 +234,7 @@ public class Run {
 
     /**
      * Main program entry
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -245,8 +243,7 @@ public class Run {
             printUsage();
             return;
         }
-        
-        
+
         //System.out.println(Arrays.toString(args)); //maybe useful as logging purpose?
         try {
             Config.loadConfig(args);
