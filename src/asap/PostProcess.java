@@ -55,30 +55,12 @@ public class PostProcess {
     private double[][] predictions;
     private double[] predictionsAvg;
     private String[] predictionsFiles;
-    private String inputFile;
-
-    /**
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(args));
-        if (args.length < 3) {
-            return;
-        }
-
-        if (!(new File(args[0]).isFile()) || !(new File(args[1]).isDirectory())) {
-            return;
-        }
-        PostProcess p = new PostProcess();
-
-        p.loadFeaturesFile(args[0]);
-        p.loadModels(args[1]);
-        p.calculatePredictions(true, true);
-        p.savePredictionsSemeval2014Task1Format(args[2]);
-        p.calculatePearsonsCorrelations();
-    }
-
+    
+    //TODO: to remove after pearson's correlation is calculated without the Perl script
+    private String goldStandardFile;
+    
+    private List<NLPSystem> systems;
+    
     /**
      *
      */
@@ -882,7 +864,7 @@ public class PostProcess {
             return;
         }
 
-        inputFile = tmp.getAbsolutePath();
+        goldStandardFile = tmp.getAbsolutePath();
 
         FileOutputStream fos;
         try {
@@ -922,7 +904,7 @@ public class PostProcess {
 
         for (String predictionsFile : predictionsFiles) {
             double correlation = PerlCorrelation
-                    .getCorrelation(inputFile, predictionsFile);
+                    .getCorrelation(goldStandardFile, predictionsFile);
 
             if (maxCorrelation < correlation) {
                 maxCorrelation = correlation;
@@ -1034,7 +1016,7 @@ public class PostProcess {
      */
     public void clearInput() {
         instances = null;
-        inputFile = null;
+        goldStandardFile = null;
         predictions = null;
         predictionsAvg = null;
         predictionsFiles = null;
@@ -1132,7 +1114,7 @@ public class PostProcess {
 
         @Override
         public String toString() {
-            //TODO: complete power log:
+
             StringBuilder log = new StringBuilder(String.format("%5.3f error (predicted = %5s | expected = %5s) on %5s from %s", getError(), prediction, expected, pairID, sourceFile));
 
             log.append("\n")
@@ -1150,9 +1132,7 @@ public class PostProcess {
                 String value = processedTextPart.getValue().toString();
 
                 if (processedTextPart.getValue().getClass().getName().startsWith("[L")) {
-                    
-                    //TODO: if processedTextPart.getValue() is an array of some sort, it'll print the object type and instance hash...
-                    //  change to print the contents.
+
                     value = Arrays.deepToString((Object[]) processedTextPart.getValue());
 
                 }

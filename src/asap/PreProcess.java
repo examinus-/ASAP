@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * classe que recebe os pares de frases e gera as features numericas para que
  * possam ser usadas pelos classificadores
  *
- * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt)
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
 public final class PreProcess extends TextProcessHashWords {
 
