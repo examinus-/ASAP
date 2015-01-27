@@ -29,13 +29,12 @@ public class Config {
     private static boolean saveConfig = false;
     private static boolean loadConfig = false;
     private static String configFilename = "asap.conf";
-    
-    
+
     //--------------------------------------------------------------------------
     //-         Interface config                                         -
     //--------------------------------------------------------------------------
     private static boolean showProgress = false;
-    
+
     //--------------------------------------------------------------------------
     //-         Multiprocessing config                                         -
     //--------------------------------------------------------------------------
@@ -86,7 +85,6 @@ public class Config {
     private static String serializedModelFilesDirectory = "outputs/models";
 
     //TODO: change all possible configurations like preprocessing features and weka models here.
-    //TODO: change to false when config's "load" is done
     //--------------------------------------------------------------------------
     //-         Preprocessing options                                          -
     //--------------------------------------------------------------------------
@@ -211,8 +209,6 @@ public class Config {
     public static boolean showProgress() {
         return showProgress;
     }
-    
-    
 
     private Config() {
         featureCalculators = new LinkedList<>();
@@ -228,7 +224,7 @@ public class Config {
     private void _loadConfig(String[] args) throws InvalidParameterException {
         int tmp;
         double tmpd;
-        System.out.print("Loading config...");
+        java.lang.System.out.print("Loading config...");
         for (int i = 0; i < args.length; i++) {
             String argument = args[i];
             switch (argument) {
@@ -432,7 +428,7 @@ public class Config {
                 _saveConfig(configFilename);
             }
         }
-        System.out.println("\tdone.");
+        java.lang.System.out.println("\tdone.");
     }
 
     private void _loadConfig(String filename) {
@@ -455,12 +451,11 @@ public class Config {
     //--------------------------------------------------------------------------
     //-         Getters                                                        -
     //--------------------------------------------------------------------------
-
     /**
      *
      * @return
      */
-        public static boolean needsPreProcessing() {
+    public static boolean needsPreProcessing() {
         return !inputTrainingFilenames.isEmpty() || !inputEvaluationFilenames.isEmpty();
     }
 

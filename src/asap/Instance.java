@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * classe auxiliar ao preprocessamento
  *
- * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt)
+ * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
 public class Instance implements Comparable<Instance> {
 
@@ -157,7 +157,7 @@ public class Instance implements Comparable<Instance> {
         }
         r += goldStandard;
 
-//        System.out.println("Wrote " + (values.size() + 1) + " values");
+//        java.lang.System.out.println("Wrote " + (values.size() + 1) + " values");
         return r;
     }
 
@@ -211,8 +211,8 @@ public class Instance implements Comparable<Instance> {
             r += "0";
         }
 
-//        System.out.println("Wrote " + (values.size() + 1) + " values");
-//        System.out.println(r);
+//        java.lang.System.out.println("Wrote " + (values.size() + 1) + " values");
+//        java.lang.System.out.println(r);
         return r;
     }
 
@@ -317,7 +317,7 @@ public class Instance implements Comparable<Instance> {
                 double value = doubleArray[i];
                 values.add(value);
             }
-//            System.out.println("Added " + doubleArray.length + " attribute to " + getAttributeAt(0));
+//            java.lang.System.out.println("Added " + doubleArray.length + " attribute to " + getAttributeAt(0));
         } else if (o instanceof int[]) {
 
             int[] intArray = (int[]) o;
@@ -325,10 +325,10 @@ public class Instance implements Comparable<Instance> {
                 double value = intArray[i];
                 values.add(value);
             }
-//            System.out.println("Added " + intArray.length + " attribute to " + getAttributeAt(0));
+//            java.lang.System.out.println("Added " + intArray.length + " attribute to " + getAttributeAt(0));
         } else {
             values.add(o);
-//            System.out.println("Added 1 attribute to " + getAttributeAt(0));
+//            java.lang.System.out.println("Added 1 attribute to " + getAttributeAt(0));
         }
     }
 
