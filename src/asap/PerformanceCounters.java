@@ -194,7 +194,7 @@ public class PerformanceCounters {
 
         String out = sb.toString();
 
-        System.out.println(out);
+        java.lang.System.out.println(out);
 
         try (FileOutputStream fos = new FileOutputStream(Config.getLogTimingsOutputFilename())) {
             fos.write(out.getBytes());
