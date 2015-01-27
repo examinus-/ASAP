@@ -1,4 +1,32 @@
-/dist/
-/build/
-/outputs/
+#netbeans directories
+dist/
+build/
+nbproject/
+
+#netbeans files
+build.xml
+manifest.mf
+
+#data directories
+input/
+*models/
+outputs/
+
+
+#lib files and directories
+openNLP/
+jaws/
+*.jar
+
+
+#script files
+*.list
+*.sh
+
+
+#others
+*.cache
+*.zip
+*.puml
+*.log
 

@@ -5,7 +5,6 @@
  */
 package asap;
 
-import edu.smu.tspell.wordnet.SynsetType;
 import java.util.Objects;
 
 /**
@@ -93,20 +92,6 @@ public class Chunk {
         return Objects.equals(this.chunkText, other.chunkText);
     }
 
-    /**
-     *
-     * @return
-     */
-    public SynsetType toSynsetType() {
-
-        switch (chunkType) {
-            case "NP":
-                return SynsetType.NOUN;
-            case "VP":
-                return SynsetType.VERB;
-        }
-        return SynsetType.ADJECTIVE;
-    }
 
     /**
      *
