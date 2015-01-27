@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ import opennlp.tools.util.Span;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessNamedEntities implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessNamedEntities implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     /**
      *
@@ -83,7 +84,7 @@ public class TextProcessNamedEntities implements TextProcesser, TextProcessedPar
             for (String nerModelsFilename : Config.getNerModelFilenames()) {
                 File modelFile = new File(Config.getOpenNlpModelsDirectory() + File.separator + nerModelsFilename);
                 try {
-                    System.out.println("loading TokenNameFinderModel from:" + modelFile.getAbsolutePath());
+                    java.lang.System.out.println("loading TokenNameFinderModel from:" + modelFile.getAbsolutePath());
                     model = new TokenNameFinderModel(modelFile);
                     models.add(model);
                 } catch (IOException ex) {

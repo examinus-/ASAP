@@ -8,6 +8,7 @@ package asap.featurecalculation;
 import asap.Chunk;
 import asap.Config;
 import asap.Instance;
+import java.io.Serializable;
 import asap.PerformanceCounters;
 import asap.textprocessing.TextProcessChunkLemmas;
 import asap.textprocessing.TextProcessChunkLemmasRemoveSRule;
@@ -29,7 +30,7 @@ import java.util.Objects;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
+public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalculator, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Long, SemanticSimilarityAndRelatednessCalculator> perThreadInstances = new HashMap<>();
 
@@ -107,7 +108,7 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
 
         PerformanceCounters.startTimer("calculate SemanticSimilarityAndRelatedness");
 
-//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//        java.lang.System.out.println("calculating " + Arrays.toString(getFeatureNames())
 //                + " for instance " + i.getAttributeAt(0));
         Object o;
         Chunk[] s1Chunks, s2Chunks;
@@ -139,16 +140,16 @@ public class SemanticSimilarityAndRelatednessCalculator implements FeatureCalcul
 
         for (RelatednessCalculator relatednessCalculator : relatednessCalculators) {
             lemmaPairSimilarityValues = calculateLemmaPairSimilarityValues(s1Chunks, s2Chunks, getEqualChunkPairs(s1Chunks, s2Chunks), relatednessCalculator);
-            //System.out.println("lemma pair similarities calculated");
+            //java.lang.System.out.println("lemma pair similarities calculated");
 
             resolveConflicts(lemmaPairSimilarityValues);
-            //System.out.println("best lemma pairs determined");
+            //java.lang.System.out.println("best lemma pairs determined");
 
             i.addAtribute(getTotalSimilarityValueOf(lemmaPairSimilarityValues));
 
         }
 
-//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+//        java.lang.System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate SemanticSimilarityAndRelatedness");
     }
 

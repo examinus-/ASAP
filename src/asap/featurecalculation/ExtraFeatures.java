@@ -10,6 +10,7 @@ import asap.PerformanceCounters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class ExtraFeatures implements FeatureCalculator {
+public class ExtraFeatures implements FeatureCalculator, Serializable {
 
     private String[] columnNames;
     private FileInputStream fis;
@@ -34,7 +35,7 @@ public class ExtraFeatures implements FeatureCalculator {
      */
     public ExtraFeatures(String featuresFilename, List<Instance> instances) {
         PerformanceCounters.startTimer("ExtraFeaturesConstructor");
-        System.out.println(String.format("Adding features from %s", featuresFilename));
+        java.lang.System.out.println(String.format("Adding features from %s", featuresFilename));
         File f = new File(featuresFilename);
         int lineNo = 0;
         try {
@@ -72,7 +73,7 @@ public class ExtraFeatures implements FeatureCalculator {
                     //TODO: fix this:
                     i = new Instance(featuresFilename, "", "", 0);
                     addedInstances.add(i);
-                    System.out.println("Not enough instances!!");
+                    java.lang.System.out.println("Not enough instances!!");
                 }
                 String[] features = featuresLine.split("\t");
 
@@ -90,7 +91,7 @@ public class ExtraFeatures implements FeatureCalculator {
             }
             if (it.hasNext()) {
                 //TODO: fix somehow?
-                System.out.println("Not all instances had features added!!");
+                java.lang.System.out.println("Not all instances had features added!!");
             }
 
             sc.close();
@@ -104,7 +105,7 @@ public class ExtraFeatures implements FeatureCalculator {
             Logger.getLogger(ExtraFeatures.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("\tAdded " + columnNames.length + " features.");
+        java.lang.System.out.println("\tAdded " + columnNames.length + " features.");
         PerformanceCounters.stopTimer("ExtraFeaturesConstructor");
     }
 

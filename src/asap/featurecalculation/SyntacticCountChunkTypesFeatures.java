@@ -6,6 +6,7 @@
 package asap.featurecalculation;
 
 import asap.Chunk;
+import java.io.Serializable;
 import asap.Instance;
 import asap.PerformanceCounters;
 import asap.textprocessing.TextProcessChunks;
@@ -17,7 +18,7 @@ import java.util.HashMap;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, TextProcessedPartKeyConsts {
+public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Long, SyntacticCountChunkTypesFeatures> perThreadInstances = new HashMap<>();
     private final TextProcesser textProcessorDependency;
@@ -73,7 +74,7 @@ public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, Text
         }
         PerformanceCounters.startTimer("calculate SyntacticCountChunkTypes");
 
-//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//        java.lang.System.out.println("calculating " + Arrays.toString(getFeatureNames())
 //                + " for instance " + i.getAttributeAt(0));
         int sentence1Counters[];
         int sentence2Counters[];
@@ -97,7 +98,7 @@ public class SyntacticCountChunkTypesFeatures implements FeatureCalculator, Text
 
         i.addAtribute(features);
 
-//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+//        java.lang.System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate SyntacticCountChunkTypes");
     }
 

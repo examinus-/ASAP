@@ -8,6 +8,7 @@ package asap.textprocessing;
 import asap.Config;
 import asap.Instance;
 import asap.PerformanceCounters;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +18,7 @@ import java.util.HashMap;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessHashWords implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessHashWords implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Long, TextProcessHashWords> tphws
             = new HashMap<>();

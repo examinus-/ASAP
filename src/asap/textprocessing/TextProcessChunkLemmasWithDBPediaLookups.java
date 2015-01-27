@@ -121,7 +121,7 @@ public class TextProcessChunkLemmasWithDBPediaLookups extends TextProcessChunkLe
                 Logger.getLogger(TextProcessChunkLemmasWithDBPediaLookups.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println("Loaded TextProcessChunkLemmasWithDBPediaLookups with " + lemmas.size() + " cached lookups.");
+        java.lang.System.out.println("Loaded TextProcessChunkLemmasWithDBPediaLookups with " + lemmas.size() + " cached lookups.");
     }
 
     /**

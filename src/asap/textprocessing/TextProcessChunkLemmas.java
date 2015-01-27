@@ -9,6 +9,7 @@ import asap.Chunk;
 import asap.Config;
 import asap.Instance;
 import asap.LemmasNotFound;
+import java.io.Serializable;
 import asap.PerformanceCounters;
 import edu.cmu.lti.jawjaw.pobj.Lang;
 import edu.cmu.lti.jawjaw.pobj.POS;
@@ -31,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     /**
      *
@@ -106,7 +107,7 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
             Logger.getLogger(TextProcessChunkLemmas.class.getName()).log(Level.SEVERE, null, ex);
         }
         stemmer = new WordnetStemmer(dict);
-        System.out.println("Loaded JWI Dictionary.");
+        java.lang.System.out.println("Loaded JWI Dictionary.");
     }
 
     /**
@@ -258,7 +259,7 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
         //DEBUG only::
         /*
          if (!chunk.getChunkText().equalsIgnoreCase(r)) {
-         System.out.println("changed from \"" + chunk.getChunkText()
+         java.lang.System.out.println("changed from \"" + chunk.getChunkText()
          + "\" to \"" + r + "\"");
          }
          */
@@ -335,7 +336,7 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
      }
      }
 
-     //        System.out.println("\tChunk's (" + chunk.getChunkText()
+     //        java.lang.System.out.println("\tChunk's (" + chunk.getChunkText()
      //                + ") lemma is:" + validLemma);
      return validLemma;
      }

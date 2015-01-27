@@ -9,10 +9,12 @@ import asap.Config;
 import asap.Instance;
 import asap.PerformanceCounters;
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import opennlp.tools.cmdline.postag.POSModelLoader;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSSample;
+import java.io.Serializable;
 import opennlp.tools.postag.POSTaggerME;
 
 /**
@@ -23,7 +25,7 @@ import opennlp.tools.postag.POSTaggerME;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessPOSTags implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessPOSTags implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     private static POSModel posModel;
     private POSTaggerME tagger;
@@ -77,7 +79,7 @@ public class TextProcessPOSTags implements TextProcesser, TextProcessedPartKeyCo
         if (posModel == null) {
             File modelFile = new File(Config.getOpenNlpModelsDirectory() + File.separator + Config.getPosTaggerModelFilename());
             //File modelFile = new File(modelsPath + "/en-pos-perceptron.bin");
-            //System.out.println("loading POSModel from:" + modelFile.getAbsolutePath());
+            //java.lang.System.out.println("loading POSModel from:" + modelFile.getAbsolutePath());
             posModel = new POSModelLoader().load(modelFile);
         }
         tagger = new POSTaggerME(posModel);

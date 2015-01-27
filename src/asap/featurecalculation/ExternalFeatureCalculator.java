@@ -6,13 +6,14 @@
 package asap.featurecalculation;
 
 import asap.Instance;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class ExternalFeatureCalculator implements FeatureCalculator {
+public class ExternalFeatureCalculator implements FeatureCalculator, Serializable {
 
     private String []featureNames;
     

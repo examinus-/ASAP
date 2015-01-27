@@ -11,6 +11,7 @@ import asap.textprocessing.TextProcessedPartKeyConsts;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class LexicalCountWords implements FeatureCalculator, TextProcessedPartKeyConsts {
+public class LexicalCountWords implements FeatureCalculator, TextProcessedPartKeyConsts, Serializable {
 
     private static HashSet<String> fullStopWordSet;
     private static final HashMap<Long, HashMap<String, LexicalCountWords>> perThreadInstances = new HashMap<>();
@@ -167,7 +168,7 @@ public class LexicalCountWords implements FeatureCalculator, TextProcessedPartKe
     @Override
     public void calculate(Instance i) {
         PerformanceCounters.startTimer("calculate LexicalCountWords");
-//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//        java.lang.System.out.println("calculating " + Arrays.toString(getFeatureNames())
 //                + " for instance " + i.getAttributeAt(0));
         double features[] = new double[3];
         StringBuilder sb1 = new StringBuilder(), sb2 = new StringBuilder();
@@ -202,7 +203,7 @@ public class LexicalCountWords implements FeatureCalculator, TextProcessedPartKe
         i.addProcessedTextPart(sentence2StopWordsFound, sb2swr.toString().trim().split(" "));
 
         i.addAtribute(features);
-//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+//        java.lang.System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate LexicalCountWords");
     }
 

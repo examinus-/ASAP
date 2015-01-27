@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ import opennlp.tools.util.PlainTextByLineStream;
  * processing output: sentences split by words (String[])
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessTokenizer implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessTokenizer implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     private Tokenizer tokenizer;
 

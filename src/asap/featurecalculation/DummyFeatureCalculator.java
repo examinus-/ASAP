@@ -7,13 +7,14 @@ package asap.featurecalculation;
 
 import asap.Instance;
 import asap.textprocessing.TextProcesser;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class DummyFeatureCalculator implements FeatureCalculator {
+public class DummyFeatureCalculator implements FeatureCalculator, Serializable {
 
     private final TextProcesser textProcesserDependency;
     private static final HashMap<Long, HashMap<String, DummyFeatureCalculator>> dummyFeatureCalculators = new HashMap();

@@ -8,6 +8,7 @@ package asap.textprocessing;
 import asap.Chunk;
 import asap.Config;
 import asap.GrammarCounters;
+import java.io.Serializable;
 import asap.Instance;
 import asap.PerformanceCounters;
 import java.io.File;
@@ -23,7 +24,7 @@ import opennlp.tools.cmdline.chunker.ChunkerModelLoader;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class TextProcessChunks implements TextProcesser, TextProcessedPartKeyConsts {
+public class TextProcessChunks implements TextProcesser, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Long, TextProcessChunks> tpcs
             = new HashMap<>();
@@ -68,7 +69,7 @@ public class TextProcessChunks implements TextProcesser, TextProcessedPartKeyCon
     private TextProcessChunks(String modelsPath, Thread t) {
         if (chunkerModel == null) {
             File modelFile = new File(Config.getOpenNlpModelsDirectory() + File.separator + Config.getChunkerModelFilename());
-            //System.out.println("loading ChunkerModel from:" + modelFile.getAbsolutePath());
+            //java.lang.System.out.println("loading ChunkerModel from:" + modelFile.getAbsolutePath());
             chunkerModel = new ChunkerModelLoader().load(modelFile);
         }
         chunker = new ChunkerME(chunkerModel);
@@ -198,7 +199,7 @@ public class TextProcessChunks implements TextProcesser, TextProcessedPartKeyCon
         //TODO: faster way?
         for (int i = 0; i < chunkTypes.length; i++) {
             int j = i;
-            //System.out.println("creating chunk " + i);
+            //java.lang.System.out.println("creating chunk " + i);
             if (chunkTypes[i].length() < 2) {
                 chunk = new Chunk(chunkTypes[i], tokens[i]);
                 chunks.add(chunk);
@@ -253,7 +254,7 @@ public class TextProcessChunks implements TextProcesser, TextProcessedPartKeyCon
 
         }
 
-        //System.out.println("chunking complete");
+        //java.lang.System.out.println("chunking complete");
         Chunk[] tmp = new Chunk[chunks.size()];
         return chunks.toArray(tmp);
     }

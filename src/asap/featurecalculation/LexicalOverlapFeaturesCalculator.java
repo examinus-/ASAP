@@ -8,6 +8,7 @@ package asap.featurecalculation;
 import asap.Instance;
 import asap.PerformanceCounters;
 import asap.PreProcess;
+import java.io.Serializable;
 import asap.textprocessing.TextProcessHashWords;
 import asap.textprocessing.TextProcessedPartKeyConsts;
 import asap.textprocessing.TextProcesser;
@@ -21,7 +22,7 @@ import java.util.TreeSet;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, TextProcessedPartKeyConsts {
+public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Long, LexicalOverlapFeaturesCalculator> perThreadInstances
             = new HashMap<>();
@@ -78,7 +79,7 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, Text
         }
         PerformanceCounters.startTimer("calculate LexicalOverlapFeatures");
 
-//        System.out.println("calculating " + Arrays.toString(getFeatureNames())
+//        java.lang.System.out.println("calculating " + Arrays.toString(getFeatureNames())
 //                + " for instance " + i.getAttributeAt(0));
         HashSet<String> intersection, s1, s2;
         Object o;
@@ -133,7 +134,7 @@ public class LexicalOverlapFeaturesCalculator implements FeatureCalculator, Text
                 //no more stop words to remove, speed it up:
             }
         }
-//        System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
+//        java.lang.System.out.println("Completed adding " + Arrays.toString(getFeatureNames()));
         PerformanceCounters.stopTimer("calculate LexicalOverlapFeatures");
     }
 

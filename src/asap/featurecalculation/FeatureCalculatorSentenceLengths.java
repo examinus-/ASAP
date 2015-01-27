@@ -7,13 +7,14 @@ package asap.featurecalculation;
 
 import asap.Instance;
 import asap.PerformanceCounters;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class FeatureCalculatorSentenceLengths implements FeatureCalculator {
+public class FeatureCalculatorSentenceLengths implements FeatureCalculator, Serializable {
 
     private static final HashMap<Thread, FeatureCalculatorSentenceLengths> fcsls
             = new HashMap<>();

@@ -8,6 +8,7 @@ package asap.featurecalculation;
 import asap.Chunk;
 import asap.Config;
 import asap.Instance;
+import java.io.Serializable;
 import asap.PerformanceCounters;
 import asap.textprocessing.TextProcessChunkLemmas;
 import asap.textprocessing.TextProcessChunkLemmasWithDBPediaLookups;
@@ -19,7 +20,7 @@ import java.util.HashMap;
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
-public class FeatureCalculatorOverlappingLemmas implements FeatureCalculator, TextProcessedPartKeyConsts {
+public class FeatureCalculatorOverlappingLemmas implements FeatureCalculator, TextProcessedPartKeyConsts, Serializable {
 
     private static final HashMap<Thread, FeatureCalculatorOverlappingLemmas> fcols
             = new HashMap<>();
