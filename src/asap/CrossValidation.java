@@ -45,6 +45,7 @@ import weka.filters.unsupervised.attribute.Remove;
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
+@Deprecated
 public class CrossValidation {
 
     /**
@@ -55,7 +56,7 @@ public class CrossValidation {
      * @throws Exception if something goes wrong
      */
     public static void main(String[] args) throws Exception {
-        System.out.println(
+        java.lang.System.out.println(
                 performCrossValidation(
                         Utils.getOption("t", args),
                         Utils.getOption("c", args),
@@ -278,7 +279,6 @@ public class CrossValidation {
                     AbstractClassifier.makeCopy(cls)
             ));
 
-            //TODO: use Config.getNumThreads() for limiting these::
             if (n < Config.getNumThreads() - 1) {
                 Thread foldThread = new Thread(
                         new CrossValidationFoldThread(n, foldSets, eval)
@@ -295,6 +295,7 @@ public class CrossValidation {
                 foldThread.start();
             }
         } else {
+            //use the current thread to run the cross-validation instead of using the Thread instance created here:
             new CrossValidationFoldThread(0, foldSets, eval).run();
         }
 
