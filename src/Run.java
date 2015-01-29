@@ -191,42 +191,121 @@ public class Run {
                 .append("java -jar ASAP_Project.jar")
                 .append(" [options]\n")
                 .append(PROGRAM_DESCRIPTION)
-                .append("\n\n\tINPUT:\n")
-                .append(String.format("  %-28s%s\n",
+                //
+                .append("\nPlease note that this is a work in progress, parameters marked with * may not work as expected.\n")
+                //
+                .append("\n\n    INPUT:\n")
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-i FILE",
                                 "Builds models training them on data from FILE. Can be repeated."))
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-t FILE",
-                                "Evaluate data from FILE. Can be repeated."))
-                .append(String.format("  %-28s%s\n",
+                                "Evaluate models on data from FILE. Can be repeated."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-fi FILE",
+                                "Adds data from FILE to training data as extra features. Can be repeated."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-ft FILE",
+                                "Adds data from FILE to evaluation data as extra features. Can be repeated."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-fb FILE",
+                                "Adds data from FILE to training and evaluation data as extra features. Can be repeated."))
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-mi PATH",
                                 "Deserializes models for evaluation from this directory."))
-                .append(String.format("  %-28s%s\n",
-                                "-fi PATH",
-                                "Read features from FILE or concatenate them to training set."))
-                .append("\n\tOUTPUT:\n")
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-pt PERCENTAGE",
+                                "Take PERCENTAGE% of the training data and use it exclusively as evaluation data."))
+                //
+                .append("\n    OUTPUT:\n")
+                .append(String.format("%c %-22s%s\n", '*',
                                 "-o FILE",
-                                "Write predictions to FILE."))
-                .append(String.format("  %-28s%s\n",
+                                "Write predictions into FILE in the specified output format or 2014_TEST_FORMAT (default)."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-of FORMAT",
+                                "Set format output to FORMAT.")) //TODO: add available options
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-fo FILE",
-                                "Write features to FILE."))
-                .append(String.format("  %-28s%s\n",
+                                "Write features into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-mo PATH",
                                 "Builds models and serializes them into this directory."))
-                .append("\n\tOthers:\n")
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-to",
+                                "Save preprocessed text parts."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-tof FILE",
+                                "Save preprocessed text parts into FILE."))
+                //
+                .append("\n    Additional Logs:\n")
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-ll",
                                 "Logs lemmas not found."))
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-llf FILE",
+                                "Logs lemmas not found into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lfl",
+                                "Logs found lemmas with DBPedia."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lflf FILE",
+                                "Logs found lemmas with DBPedia into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-lg",
                                 "Logs grammar counters."))
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lgf FILE",
+                                "Logs grammar counters into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
                                 "-lt",
                                 "Logs timings."))
-                .append(String.format("  %-28s%s\n",
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-ltf FILE",
+                                "Logs timings into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lner",
+                                "Logs found Named Entities."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lnerf FILE",
+                                "Logs found Named Entities into FILE."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-lpef FILE",
+                                "Logs Prediction Errors into FILE."))
+                //
+                .append("\n    Others:\n")
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-mt NUMBER",
+                                "Use NUMBER of Threads instead of 1.")) //should this default to number of available processor threads?
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-p",
+                                "Show progress indicators."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-pre-only",
+                                "Ignore all post-processing."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-useSPOS",
+                                "Use Stanford Part-of-Speech Tagger instead of OpenNLP's."))
+                .append(String.format("%c %-22s%s\n", ' ',
+                                "-useSNER",
+                                "Use Stanford Named Entity Recognizer instead of OpenNLP's."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-ssaropiem",
+                                "Ignores exact matches before adding to sum, during Semantic similarity and relatedness calculations."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-ssaroplprev NUMBER",
+                                "Limits values to NUMBER before adding to sum, during Semantic similarity and relatedness calculations."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-ssaroplpostv NUMBER",
+                                "Limits value of sum to NUMBER after it's calculated, during Semantic similarity and relatedness calculations."))
+                .append(String.format("%c %-22s%s\n", '*',
                                 "-r N",
                                 "Runs all N times. Useful for increased timing accuracy."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-s FILE",
+                                "Save configuration into FILE."))
+                .append(String.format("%c %-22s%s\n", '*',
+                                "-l FILE",
+                                "Loads configuration from FILE. All other parameters will be overridden"))
                 .toString();
 
         System.out.println(usageString);
