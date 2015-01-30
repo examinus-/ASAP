@@ -5,6 +5,10 @@
  */
 package asap;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -50,7 +54,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     //--------------------------------------------------------------------------
     //-         public members                                                 -
     //--------------------------------------------------------------------------
-    public NLPSystem(Classifier classifier, Instances trainingSet, Instances evaluationSet, double[] trainingPredictions, double[] evaluationPredictions, double crossValidationPearsonsCorrelation, double evaluationPearsonsCorrelation) {
+    public NLPSystem(Classifier classifier, Instances trainingSet, Instances evaluationSet) {
         this.classifier = classifier;
         this.trainingSet = trainingSet;
         this.evaluationSet = evaluationSet;
@@ -112,13 +116,13 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     }
 
     public String buildClassifier() {
-        if (classifierBuilt) {
-            return null;
-        }
         return buildClassifier(false);
     }
 
     public synchronized String buildClassifier(boolean runCrossValidation) {
+        if (classifierBuilt && classifierBuiltWithCrossValidation == runCrossValidation) {
+            return null;
+        }
         String r = "";
 
         //build model with or without cross-validation
@@ -157,7 +161,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         }
         return r;
     }
-
+    
     public synchronized void setEvaluationSet(Instances evaluationSet) {
         this.evaluationSet = evaluationSet;
         this.evaluationPredictions = null;
@@ -311,6 +315,17 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         System.out.println("\tevaluation done.");
         PerformanceCounters.stopTimer("evaluateModel");
         return predictions;
+    }
+
+    public void saveSystem(File dir, String systemFilename) {
+        File systemFile = new File(dir, systemFilename);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(systemFile))){
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     //--------------------------------------------------------------------------
