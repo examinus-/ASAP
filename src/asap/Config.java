@@ -15,6 +15,7 @@ import asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator;
 import asap.featurecalculation.SyntacticCountChunkTypesFeatures;
 import asap.textprocessing.TextProcessNamedEntities;
 import asap.textprocessing.TextProcessNamedEntitiesStanford;
+import com.sun.accessibility.internal.resources.accessibility;
 import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -76,8 +77,8 @@ public class Config {
     private static boolean saveTextFeatures = false;
     private static String saveTextFeaturesOutputFilename = "outputs/Features.txt";
 
-    private static String predictionsOutputOldFormatFilename = "outputs/predictions.txt";
-    private static String predictionsOutputNewFormatFilename = "outputs/predictions_new-format.txt";
+    private static String predictionsOutputFilename = "outputs/predictions.txt";
+    private static OutputFormat predictionsOutputFormat = OutputFormat.SEMEVAL2015_TASK2a;
 
     private static boolean generateSerializedModelFiles = false;
     private static boolean readSerializedModelFiles = false;
@@ -244,12 +245,12 @@ public class Config {
                     extraTrainingFeaturesFilenames.add(args[++i]);
                     extraEvaluationFeaturesFilenames.add(args[i]);
                     break;
-                case "-o":
-                    predictionsOutputOldFormatFilename = args[++i];
-                    break;
-                case "-no":
-                    predictionsOutputNewFormatFilename = args[++i];
-                    break;
+//                case "-o":
+//                    predictionsOutputOldFormatFilename = args[++i];
+//                    break;
+//                case "-no":
+//                    predictionsOutputNewFormatFilename = args[++i];
+//                    break;
                 case "-tp":
                     tmp = 2;
                     try {
@@ -465,8 +466,10 @@ public class Config {
      */
     public static boolean needsPostProcessing() {
         return !preProcessOnly && (readSerializedModelFiles || generateSerializedModelFiles
-                || predictionsOutputNewFormatFilename != null
-                || predictionsOutputOldFormatFilename != null
+//                || predictionsOutputNewFormatFilename != null
+//                || predictionsOutputOldFormatFilename != null
+                || (predictionsOutputFilename != null
+                    && predictionsOutputFormat != OutputFormat.UNKNOWN)
                 || needsDatasetSeparation);
     }
 
@@ -695,17 +698,35 @@ public class Config {
      *
      * @return
      */
-    public static String getPredictionsOutputNewFormatFilename() {
-        return predictionsOutputNewFormatFilename;
+    public static String getPredictionsOutputFilename() {
+        return predictionsOutputFilename;
     }
 
     /**
      *
      * @return
      */
-    public static String getPredictionsOutputOldFormatFilename() {
-        return predictionsOutputOldFormatFilename;
+    public static OutputFormat getPredictionsOutputFormat() {
+        return predictionsOutputFormat;
     }
+    
+    
+
+//    /**
+//     *
+//     * @return
+//     */
+//    public static String getPredictionsOutputNewFormatFilename() {
+//        return predictionsOutputNewFormatFilename;
+//    }
+//
+//    /**
+//     *
+//     * @return
+//     */
+//    public static String getPredictionsOutputOldFormatFilename() {
+//        return predictionsOutputOldFormatFilename;
+//    }
 
     /**
      *
