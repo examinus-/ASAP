@@ -116,26 +116,39 @@ public class Run {
         postProcess = new PostProcess();
 
         //TODO: take care of output and generate summary
+//        if (Config.needsModelBuildingAndTraining()) {
+//            postProcess.loadFeaturesStream(pposTrainingData);
+//            postProcess.buildModels(Config.getSerializedModelFilesDirectory());
+//            postProcess.calculatePredictions(true, true);
+//            postProcess.savePredictionsSemeval2014Task1Format(Config.getPredictionsOutputOldFormatFilename() + ".training");
+//            postProcess.calculatePearsonsCorrelations();
+//
+//            postProcess.clearInput();
+//        }
+//
+//        if (Config.needsModelLoading()) {
+//            postProcess.loadModels(Config.getSerializedModelFilesDirectory());
+//        }
+//
+//        if (Config.needsModelEvaluation()) {
+//            postProcess.loadFeaturesStream(pposEvaluationData);
+//            postProcess.calculatePredictions(true, true);
+//            postProcess.savePredictionsSemeval2014Task1Format(Config.getPredictionsOutputOldFormatFilename() + ".evaluation");
+//            //postProcess.calculatePearsonsCorrelations();
+//        }
         if (Config.needsModelBuildingAndTraining()) {
-            postProcess.loadFeaturesStream(pposTrainingData);
+            postProcess.loadTrainingDataStream(pposTrainingData);
+            
             postProcess.buildModels(Config.getSerializedModelFilesDirectory());
-            postProcess.calculatePredictions(true, true);
-            postProcess.savePredictionsSemeval2014Task1Format(Config.getPredictionsOutputOldFormatFilename() + ".training");
-            postProcess.calculatePearsonsCorrelations();
-
-            postProcess.clearInput();
         }
-
         if (Config.needsModelLoading()) {
             postProcess.loadModels(Config.getSerializedModelFilesDirectory());
         }
-
         if (Config.needsModelEvaluation()) {
-            postProcess.loadFeaturesStream(pposEvaluationData);
-            postProcess.calculatePredictions(true, true);
-            postProcess.savePredictionsSemeval2014Task1Format(Config.getPredictionsOutputOldFormatFilename() + ".evaluation");
-            //postProcess.calculatePearsonsCorrelations();
+            postProcess.loadEvaluationDataStream(pposEvaluationData);
+            postProcess.evaluateAll(Config.getPredictionsOutputFilename(), Config.getPredictionsOutputFormat());
         }
+        
     }
 
     /**
