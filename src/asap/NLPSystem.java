@@ -27,7 +27,7 @@ import weka.core.Utils;
  * Full representation of a system, grouping together the classifier, its
  * learning and/or evaluation sets, FeatureCalculators used for generating the
  * sets and correlation data for comparison with other systems.
- * 
+ *
  *
  * @author David Jorge Vieira Simões (a21210644@alunos.isec.pt) AKA examinus
  */
@@ -37,7 +37,9 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     private static final int NO_FOLDS = 10;
 
     private final Classifier classifier;
-    //private FeatureCalculators[] featureCalculators;
+
+    //private final FeatureCalculators[] featureCalculators;
+    //private final Map<FeatureCalculator, List<Integer>> featuresMap;
     private final Instances trainingSet;
     private Instances evaluationSet;
 
@@ -54,10 +56,18 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     //--------------------------------------------------------------------------
     //-         public members                                                 -
     //--------------------------------------------------------------------------
+//    public NLPSystem(Classifier classifier, Instances trainingSet,
+//        Instances evaluationSet, List<FeatureCalculators> featureCalculators,
+//        Map<FeatureCalculator, List<Integer>> featuresMap) {
     public NLPSystem(Classifier classifier, Instances trainingSet, Instances evaluationSet) {
+
         this.classifier = classifier;
         this.trainingSet = trainingSet;
         this.evaluationSet = evaluationSet;
+//        this.featureCalculators = featureCalculators.toArray(
+//              new FeatureCalculators[featureCalculators.size()]);
+//        this.featuresMap = featuresMap;
+
         classifierBuilt = false;
         classifierBuiltWithCrossValidation = false;
         evaluated = false;
@@ -123,11 +133,12 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         if (classifierBuilt && classifierBuiltWithCrossValidation == runCrossValidation) {
             return null;
         }
+//        checkInstancesFeatures(trainingSet);
         String r = "";
 
         //build model with or without cross-validation
         if (Config.getNumThreads() > 1) {
-            new Thread() {
+            Thread buildThread = new Thread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -139,10 +150,18 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
                     }
                 }
 
-            };
+            });
+            buildThread.start();
             if (runCrossValidation) {
                 r = crossValidate(SEED, NO_FOLDS, null);
                 classifierBuiltWithCrossValidation = true;
+            }
+            while (buildThread.isAlive()) {
+                try {
+                    buildThread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
@@ -161,7 +180,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         }
         return r;
     }
-    
+
     public synchronized void setEvaluationSet(Instances evaluationSet) {
         this.evaluationSet = evaluationSet;
         this.evaluationPredictions = null;
@@ -250,10 +269,12 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         }
 
         for (Thread foldThread : foldThreads) {
-            try {
-                foldThread.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+            while (foldThread.isAlive()) {
+                try {
+                    foldThread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
@@ -291,6 +312,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     }
 
     private double[] evaluateModel(boolean printEvaluation) {
+//        checkInstancesFeatures(evaluationSet);
         PerformanceCounters.startTimer("evaluateModel");
         System.out.println("Evaluating model...");
         AbstractClassifier abstractClassifier = (AbstractClassifier) classifier;
@@ -319,7 +341,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
 
     public void saveSystem(File dir, String systemFilename) {
         File systemFile = new File(dir, systemFilename);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(systemFile))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(systemFile))) {
             oos.writeObject(this);
             oos.flush();
             oos.close();
