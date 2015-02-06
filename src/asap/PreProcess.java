@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -692,13 +693,16 @@ public final class PreProcess extends TextProcessHashWords {
             featureCalculatorWorker.start();
         }
 
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(2);
+        
         for (Thread featureCalculatorWorker : featureCalculatorWorkers) {
             while (featureCalculatorWorker.isAlive()) {
                 try {
                     featureCalculatorWorker.join(10000);
                     if (Config.showProgress() && featureCalculatorWorker.isAlive()) {
                         percentProcessed = (size - aux.size()) * percentPerInstance;
-                        System.out.println("percentProcessed = " + percentProcessed);
+                        System.out.print("\rpercentProcessed = " + nf.format(percentProcessed));
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(PreProcess.class.getName()).log(Level.SEVERE, null, ex);
@@ -709,7 +713,7 @@ public final class PreProcess extends TextProcessHashWords {
         //put instances back in order:
         Collections.sort(instances);
 
-        System.out.println("\n\tdone.");
+        System.out.println("\r\tdone.");
         PerformanceCounters.stopTimer("calculateFeatures");
     }
 
