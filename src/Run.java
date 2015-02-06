@@ -146,7 +146,11 @@ public class Run {
         }
         if (Config.needsModelEvaluation()) {
             postProcess.loadEvaluationDataStream(pposEvaluationData);
-            postProcess.evaluateAll(Config.getPredictionsOutputFilename(), Config.getPredictionsOutputFormat());
+            postProcess.evaluateModels(Config.getPredictionsOutputFilename(), Config.getPredictionsOutputFormat());
+        }
+        
+        if (Config.outputPredictions()) {
+            postProcess.savePredictions(Config.getPredictionsOutputFilename(), Config.getPredictionsOutputFormat());
         }
         
     }
