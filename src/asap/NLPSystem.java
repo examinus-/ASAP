@@ -22,6 +22,8 @@ import weka.classifiers.Evaluation;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.Utils;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.RemoveType;
 
 /**
  * Full representation of a system, grouping together the classifier, its
@@ -36,22 +38,27 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     private static final int SEED = 0;
     private static final int NO_FOLDS = 10;
 
-    private final Classifier classifier;
+    private Classifier classifier;
 
     //private final FeatureCalculators[] featureCalculators;
     //private final Map<FeatureCalculator, List<Integer>> featuresMap;
-    private final Instances trainingSet;
+    private Instances trainingSet;
     private Instances evaluationSet;
+
+    private Instances trainingOriginalSet;
+    private Instances evaluationOriginalSet;
 
     private double[] trainingPredictions;
     private double[] evaluationPredictions;
 
+    private double trainingPearsonsCorrelation;
     private double crossValidationPearsonsCorrelation;
     private double evaluationPearsonsCorrelation;
 
     private boolean classifierBuilt;
     private boolean classifierBuiltWithCrossValidation;
     private boolean evaluated;
+    private String filename;
 
     //--------------------------------------------------------------------------
     //-         public members                                                 -
@@ -62,12 +69,15 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     public NLPSystem(Classifier classifier, Instances trainingSet, Instances evaluationSet) {
 
         this.classifier = classifier;
-        this.trainingSet = trainingSet;
-        this.evaluationSet = evaluationSet;
+        this.trainingOriginalSet = trainingSet;
+        this.evaluationOriginalSet = evaluationSet;
+
+        this.trainingSet = getFilteredSet(trainingSet);
+        this.evaluationSet = getFilteredSet(evaluationSet);
+
 //        this.featureCalculators = featureCalculators.toArray(
 //              new FeatureCalculators[featureCalculators.size()]);
 //        this.featuresMap = featuresMap;
-
         classifierBuilt = false;
         classifierBuiltWithCrossValidation = false;
         evaluated = false;
@@ -78,21 +88,21 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     }
 
     public synchronized double getCrossValidationPearsonsCorrelation() {
-        if (classifierBuiltWithCrossValidation) {
+        if (!classifierBuiltWithCrossValidation) {
             return Double.NaN;
         }
         return crossValidationPearsonsCorrelation;
     }
 
     public synchronized double getEvaluationPearsonsCorrelation() {
-        if (evaluated) {
+        if (!evaluated) {
             return Double.NaN;
         }
         return evaluationPearsonsCorrelation;
     }
 
     public synchronized double[] getEvaluationPredictions() {
-        if (evaluated) {
+        if (!evaluated) {
             return null;
         }
         return evaluationPredictions;
@@ -103,7 +113,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     }
 
     public synchronized double[] getTrainingPredictions() {
-        if (classifierBuilt) {
+        if (!classifierBuilt) {
             return null;
         }
         return trainingPredictions;
@@ -111,6 +121,14 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
 
     public synchronized Instances getTrainingSet() {
         return trainingSet;
+    }
+
+    public Instances getTrainingOriginalSet() {
+        return trainingOriginalSet;
+    }
+
+    public Instances getEvaluationOriginalSet() {
+        return evaluationOriginalSet;
     }
 
     public synchronized boolean isClassifierBuilt() {
@@ -126,7 +144,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
     }
 
     public String buildClassifier() {
-        return buildClassifier(false);
+        return buildClassifier(true);
     }
 
     public synchronized String buildClassifier(boolean runCrossValidation) {
@@ -134,7 +152,8 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
             return null;
         }
 //        checkInstancesFeatures(trainingSet);
-        String r = "";
+        final StringBuilder sb = new StringBuilder();
+        sb.delete(0, sb.length());
 
         //build model with or without cross-validation
         if (Config.getNumThreads() > 1) {
@@ -142,19 +161,13 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
 
                 @Override
                 public void run() {
-                    try {
-                        classifier.buildClassifier(trainingSet);
-                        classifierBuilt = true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    sb.append(_buildClassifier());
                 }
 
             });
             buildThread.start();
             if (runCrossValidation) {
-                r = crossValidate(SEED, NO_FOLDS, null);
-                classifierBuiltWithCrossValidation = true;
+                sb.append(crossValidate(SEED, NO_FOLDS, null));
             }
             while (buildThread.isAlive()) {
                 try {
@@ -167,56 +180,122 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
 
         if (Config.getNumThreads() == 1) {
             if (runCrossValidation) {
-                r = crossValidate(SEED, NO_FOLDS, null);
-                classifierBuiltWithCrossValidation = true;
+                sb.append(crossValidate(SEED, NO_FOLDS, null));
             }
 
-            try {
-                classifier.buildClassifier(trainingSet);
-                classifierBuilt = true;
-            } catch (Exception ex) {
-                Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            sb.append(_buildClassifier());
         }
-        return r;
+
+        return sb.toString();
     }
 
     public synchronized void setEvaluationSet(Instances evaluationSet) {
-        this.evaluationSet = evaluationSet;
+        this.evaluationOriginalSet = evaluationSet;
+        this.evaluationSet = getFilteredSet(evaluationSet);
         this.evaluationPredictions = null;
         evaluated = false;
     }
 
+    private Instances getFilteredSet(Instances set) {
+        //TODO: filter all unwanted features
+        if (set == null) {
+            return null;
+        }
+        
+        RemoveType removeTypeFilter = new RemoveType();
+        String[] removeTypeFilterOptions = {"-T", "string"};
+        Instances filteredSet = null;
+        try {
+            removeTypeFilter.setInputFormat(set);
+            removeTypeFilter.setOptions(removeTypeFilterOptions);
+            filteredSet = Filter.useFilter(set, removeTypeFilter);
+        } catch (Exception ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return filteredSet;
+    }
+
+    private double getComparableCorrelation() {
+        if (evaluated) {
+            return evaluationPearsonsCorrelation;
+        }
+
+        if (classifierBuiltWithCrossValidation) {
+            return crossValidationPearsonsCorrelation;
+        }
+
+        if (classifierBuilt) {
+            return trainingPearsonsCorrelation;
+        }
+
+        return -1;
+    }
+
     @Override
     public int compareTo(NLPSystem o) {
-        if (evaluated && o.evaluated) {
-            return (int) (o.evaluationPearsonsCorrelation - evaluationPearsonsCorrelation);
-        }
+        double diff = o.getComparableCorrelation() - getComparableCorrelation();
 
-        if (evaluated) {
-            if (o.classifierBuiltWithCrossValidation) {
-                return (int) (o.crossValidationPearsonsCorrelation - evaluationPearsonsCorrelation);
-            }
-            //let's assume models with correlation data have higher order than those without correlation data
+        if (diff > 0) {
+            return 1;
+        }
+        if (diff < 0) {
             return -1;
         }
+        return 0;
+    }
 
-        if (o.evaluated && classifierBuiltWithCrossValidation) {
-            return (int) (o.evaluationPearsonsCorrelation - crossValidationPearsonsCorrelation);
+    public void saveSystem(File dir, String systemFilename) {
+        filename = systemFilename;
+        File systemFile = new File(dir, systemFilename);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(systemFile))) {
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String shortName() {
+        return getClassifier().getClass().getSimpleName() + hashCode();
+    }
+
+    @Override
+    public String toString() {
+        AbstractClassifier ac = (AbstractClassifier) classifier;
+        return String.format("Classifier: %s %s\n", ac.getClass().getName(), Utils.joinOptions(ac.getOptions()));
+    }
+
+    private String _buildClassifier() {
+        Evaluation eval;
+        try {
+            eval = new Evaluation(trainingSet);
+        } catch (Exception ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+            return "Error creating evaluation instance for given data!";
         }
 
-        if (o.classifierBuiltWithCrossValidation && classifierBuiltWithCrossValidation) {
-            return (int) (o.crossValidationPearsonsCorrelation - crossValidationPearsonsCorrelation);
+        try {
+            classifier.buildClassifier(trainingSet);
+        } catch (Exception ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //let's assume models without correlation data have lower order than those with correlation data
-        return 1;
+        try {
+            trainingPredictions = eval.evaluateModel(classifier, trainingSet);
+            trainingPearsonsCorrelation = eval.correlationCoefficient();
+        } catch (Exception ex) {
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        classifierBuilt = true;
+        return "Classifier built (" + trainingPearsonsCorrelation + ").";
     }
 
     private String crossValidate(int seed, int folds, String modelOutputFile) {
 
-        PerformanceCounters.startTimer("cross-validation MT");
-        PerformanceCounters.startTimer("cross-validation init MT");
+        PerformanceCounters.startTimer("cross-validation");
+        PerformanceCounters.startTimer("cross-validation init");
 
         AbstractClassifier abstractClassifier = (AbstractClassifier) classifier;
         // randomize data
@@ -232,7 +311,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
         try {
             eval = new Evaluation(randData);
         } catch (Exception ex) {
-            Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
             return "Error creating evaluation instance for given data!";
         }
         List<Thread> foldThreads = (List<Thread>) Collections.synchronizedList(new LinkedList<Thread>());
@@ -246,7 +325,7 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
                         AbstractClassifier.makeCopy(abstractClassifier)
                 ));
             } catch (Exception ex) {
-                Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             if (n < Config.getNumThreads() - 1) {
@@ -257,8 +336,8 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
             }
         }
 
-        PerformanceCounters.stopTimer("cross-validation init MT");
-        PerformanceCounters.startTimer("cross-validation folds+train MT");
+        PerformanceCounters.stopTimer("cross-validation init");
+        PerformanceCounters.startTimer("cross-validation folds+train");
 
         if (Config.getNumThreads() > 1) {
             for (Thread foldThread : foldThreads) {
@@ -273,23 +352,23 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
                 try {
                     foldThread.join();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
 
-        PerformanceCounters.stopTimer("cross-validation folds+train MT");
-        PerformanceCounters.startTimer("cross-validation post MT");
+        PerformanceCounters.stopTimer("cross-validation folds+train");
+        PerformanceCounters.startTimer("cross-validation post");
         // evaluation for output:
-        String out = "\n" + "=== Setup ===\n"
-                + "Classifier: " + abstractClassifier.getClass().getName() + " "
-                + Utils.joinOptions(abstractClassifier.getOptions()) + "\n"
-                + "Dataset: " + trainingSet.relationName() + "\n"
-                + "Folds: " + folds + "\n"
-                + "Seed: " + seed + "\n"
-                + "\n"
-                + eval.toSummaryString("=== " + folds + "-fold Cross-validation ===", false)
-                + "\n";
+        String out = String.format("\n=== Setup ===\nClassifier: %s %s\n"
+                + "Dataset: %s\nFolds: %s\nSeed: %s\n\n%s\n",
+                abstractClassifier.getClass().getName(),
+                Utils.joinOptions(abstractClassifier.getOptions()),
+                trainingSet.relationName(),
+                folds, seed,
+                eval.toSummaryString(
+                        String.format("=== %s-fold Cross-validation ===", folds),
+                        false));
 
         try {
             crossValidationPearsonsCorrelation = eval.correlationCoefficient();
@@ -301,27 +380,27 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
                 try {
                     SerializationHelper.write(modelOutputFile, abstractClassifier);
                 } catch (Exception ex) {
-                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
 
-        PerformanceCounters.stopTimer("cross-validation post MT");
-        PerformanceCounters.stopTimer("cross-validation MT");
+        classifierBuiltWithCrossValidation = true;
+        PerformanceCounters.stopTimer("cross-validation post");
+        PerformanceCounters.stopTimer("cross-validation");
         return out;
     }
 
-    private double[] evaluateModel(boolean printEvaluation) {
+    private void evaluateModel(boolean printEvaluation) {
 //        checkInstancesFeatures(evaluationSet);
         PerformanceCounters.startTimer("evaluateModel");
         System.out.println("Evaluating model...");
         AbstractClassifier abstractClassifier = (AbstractClassifier) classifier;
-        double[] predictions = null;
         try {
             // evaluate classifier and print some statistics
             Evaluation eval = new Evaluation(evaluationSet);
 
-            predictions = eval.evaluateModel(abstractClassifier, evaluationSet);
+            evaluationPredictions = eval.evaluateModel(abstractClassifier, evaluationSet);
 
             if (printEvaluation) {
                 System.out.println("\tstats for model:" + abstractClassifier.getClass().getName() + " "
@@ -330,24 +409,13 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
             }
 
             evaluationPearsonsCorrelation = eval.correlationCoefficient();
+            evaluated = true;
         } catch (Exception ex) {
             Logger.getLogger(PostProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         System.out.println("\tevaluation done.");
         PerformanceCounters.stopTimer("evaluateModel");
-        return predictions;
-    }
-
-    public void saveSystem(File dir, String systemFilename) {
-        File systemFile = new File(dir, systemFilename);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(systemFile))) {
-            oos.writeObject(this);
-            oos.flush();
-            oos.close();
-        } catch (IOException ex) {
-            Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     //--------------------------------------------------------------------------
@@ -382,14 +450,14 @@ public class NLPSystem implements Serializable, Comparable<NLPSystem> {
                 try {
                     cls.buildClassifier(trainSet);
                 } catch (Exception ex) {
-                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 try {
                     synchronized (eval) {
                         eval.evaluateModel(cls, testSet);
                     }
                 } catch (Exception ex) {
-                    Logger.getLogger(CrossValidation.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(NLPSystem.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
