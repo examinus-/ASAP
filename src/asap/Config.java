@@ -15,7 +15,6 @@ import asap.featurecalculation.SemanticSimilarityAndRelatednessCalculator;
 import asap.featurecalculation.SyntacticCountChunkTypesFeatures;
 import asap.textprocessing.TextProcessNamedEntities;
 import asap.textprocessing.TextProcessNamedEntitiesStanford;
-import com.sun.accessibility.internal.resources.accessibility;
 import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -147,69 +146,6 @@ public class Config {
     //holds the command string equivalent to the weka models configuration
     private static List<String> wekaModelsCmd;
 
-    /**
-     *
-     * @return
-     */
-    public static boolean limitSemanticSimilarityAndRelatednessCalculatorPostSum() {
-        return limitSemanticSimilarityAndRelatednessCalculatorPostSum;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static double getSemanticSimilarityAndRelatednessCalculatorPostSumValueLimit() {
-        return semanticSimilarityAndRelatednessCalculatorPostSumValueLimit;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static double getSemanticSimilarityAndRelatednessCalculatorPreSumValueLimit() {
-        return semanticSimilarityAndRelatednessCalculatorPreSumValueLimit;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static boolean limitSemanticSimilarityAndRelatednessCalculatorPreSum() {
-        return limitSemanticSimilarityAndRelatednessCalculatorPreSum;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static boolean ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum() {
-        return ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static boolean calculateWithCaseSensitivity() {
-        return calculateWithCaseSensitivity;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static boolean calculateWithoutCaseSensitivity() {
-        return calculateWithoutCaseSensitivity;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static boolean showProgress() {
-        return showProgress;
-    }
 
     private Config() {
         featureCalculators = new LinkedList<>();
@@ -245,6 +181,13 @@ public class Config {
                     extraTrainingFeaturesFilenames.add(args[++i]);
                     extraEvaluationFeaturesFilenames.add(args[i]);
                     break;
+                case "-o":
+                    predictionsOutputFilename = args[++i];
+                    break;
+                case "-of":
+                    //TODO: set format based on argument
+                    ++i;
+                    break;
 //                case "-o":
 //                    predictionsOutputOldFormatFilename = args[++i];
 //                    break;
@@ -252,7 +195,6 @@ public class Config {
 //                    predictionsOutputNewFormatFilename = args[++i];
 //                    break;
                 case "-tp":
-                    tmp = 2;
                     try {
                         tmp = Integer.parseInt(args[i + 1]);
                         i++;
@@ -308,7 +250,6 @@ public class Config {
                     break;
                 case "-mt":
                     useMultithread = true;
-                    tmp = 2;
                     try {
                         tmp = Integer.parseInt(args[i + 1]);
                         i++;
@@ -319,7 +260,6 @@ public class Config {
                     break;
                 case "-r":
                     repeatProcessing = true;
-                    tmp = 10;
                     try {
                         tmp = Integer.parseInt(args[i + 1]);
                         i++;
@@ -375,7 +315,6 @@ public class Config {
                     ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum = true;
                     break;
                 case "-ssaroplprev":
-                    tmpd = Double.MAX_VALUE;
                     try {
                         tmpd = Double.parseDouble(args[i + 1]);
                         i++;
@@ -386,8 +325,6 @@ public class Config {
                     }
                     break;
                 case "-ssaroplpostv":
-
-                    tmpd = Double.MAX_VALUE;
                     try {
                         tmpd = Double.parseDouble(args[i + 1]);
                         i++;
@@ -452,6 +389,79 @@ public class Config {
     //--------------------------------------------------------------------------
     //-         Getters                                                        -
     //--------------------------------------------------------------------------
+    
+    /**
+     *
+     * @return
+     */
+    public static boolean limitSemanticSimilarityAndRelatednessCalculatorPostSum() {
+        return limitSemanticSimilarityAndRelatednessCalculatorPostSum;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static double getSemanticSimilarityAndRelatednessCalculatorPostSumValueLimit() {
+        return semanticSimilarityAndRelatednessCalculatorPostSumValueLimit;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static double getSemanticSimilarityAndRelatednessCalculatorPreSumValueLimit() {
+        return semanticSimilarityAndRelatednessCalculatorPreSumValueLimit;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean limitSemanticSimilarityAndRelatednessCalculatorPreSum() {
+        return limitSemanticSimilarityAndRelatednessCalculatorPreSum;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum() {
+        return ignoreExactMatchesSemanticSimilarityAndRelatednessCalculatorPreSum;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean calculateWithCaseSensitivity() {
+        return calculateWithCaseSensitivity;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean calculateWithoutCaseSensitivity() {
+        return calculateWithoutCaseSensitivity;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean showProgress() {
+        return showProgress;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean outputPredictions() {
+        return predictionsOutputFilename != null && predictionsOutputFormat != OutputFormat.UNKNOWN;
+    }
+    
     /**
      *
      * @return
@@ -466,10 +476,10 @@ public class Config {
      */
     public static boolean needsPostProcessing() {
         return !preProcessOnly && (readSerializedModelFiles || generateSerializedModelFiles
-//                || predictionsOutputNewFormatFilename != null
-//                || predictionsOutputOldFormatFilename != null
+                //                || predictionsOutputNewFormatFilename != null
+                //                || predictionsOutputOldFormatFilename != null
                 || (predictionsOutputFilename != null
-                    && predictionsOutputFormat != OutputFormat.UNKNOWN)
+                && predictionsOutputFormat != OutputFormat.UNKNOWN)
                 || needsDatasetSeparation);
     }
 
@@ -709,8 +719,6 @@ public class Config {
     public static OutputFormat getPredictionsOutputFormat() {
         return predictionsOutputFormat;
     }
-    
-    
 
 //    /**
 //     *
@@ -727,7 +735,6 @@ public class Config {
 //    public static String getPredictionsOutputOldFormatFilename() {
 //        return predictionsOutputOldFormatFilename;
 //    }
-
     /**
      *
      * @return
@@ -931,7 +938,6 @@ public class Config {
         Config.featureCalculators.add(new FeatureCalculatorSentenceLengths());
 
         Config.featureCalculators.add(new FeatureCalculatorOverlappingLemmas());
-
         if (useStanfordNER) {
             Config.featureCalculators.add(new DummyFeatureCalculator(TextProcessNamedEntitiesStanford.getTextProcessNamedEntitiesStanford()));
         } else {
