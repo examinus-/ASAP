@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -241,9 +242,26 @@ public class PostProcess {
      *
      * @param outputFilename
      */
-    public void savePredictionsSemeval2015Task2Format(Instances instances, double[][] predictions, String outputFilename) {
+    public void savePredictionsSemeval2015Task2Format(String outputFilename) {
+        for (NLPSystem system : systems) {
+            savePredictionsSemeval2015Task2Format(system,
+                    outputFilename + system.getClassifier().getClass().getName());
+        }
+    }
+
+    public NLPSystem getCurrentBestSystem() {
+        Collections.sort(systems);
+        return systems.get(0);
+    }
+
+    public NLPSystem getSystem(int index) {
+        return systems.get(index);
+    }
+
+    public void savePredictionsSemeval2015Task2Format(NLPSystem system, String outputFilename) {
         PerformanceCounters.startTimer("savePredictions");
         System.out.println("Saving predictions to file(s)...");
+
         String[] columnNames = {};
         String outputPath = "./";
         String outputBaseFilename = outputFilename;
@@ -256,21 +274,31 @@ public class PostProcess {
             outputPath = outputFilename.substring(0, outputFilename.lastIndexOf("/") + 1);
             outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("/") + 1);
         }
+        
+        outputBaseFilename = outputBaseFilename + system.shortName();
 
-        if (predictions == null ? true : predictions.length == 0) {
-            System.out.println("\tno predictions to save.");
-            PerformanceCounters.stopTimer("savePredictions");
-            return;
-        }
-        if (predictions.length == 1) {
-            formatPredictions(instances, predictions[0], columnNames, 0, "relatedness_score",
-                    "\t", outputPath + outputBaseFilename, false);
-        } else {
-            for (int i = 0; i < predictions.length; i++) {
-                formatPredictions(instances, predictions[i], columnNames, 0, "relatedness_score",
-                        "\t", outputPath + i + "-" + outputBaseFilename, false);
+        if (system.isEvaluated()) {
+            formatPredictions(system.getEvaluationSet(),
+                    system.getEvaluationPredictions(), columnNames, 0,
+                    "relatedness_score", "\t",
+                    outputPath + outputBaseFilename + ".eval", false);
+
+            if (Config.logPredictionsErrors()) {
+                File f = new File(Config.getLogPredictionsErrorsOutputDir());
+                f.mkdirs();
+                String errorsFilename = f.getPath() + File.separatorChar + outputBaseFilename;
+
+                writePredictionErrors(system.getEvaluationOriginalSet(), system.getEvaluationPredictions(), errorsFilename);
             }
         }
+
+        if (system.isClassifierBuilt()) {
+            formatPredictions(system.getTrainingSet(),
+                    system.getTrainingPredictions(), columnNames, 0,
+                    "relatedness_score", "\t",
+                    outputPath + outputBaseFilename + ".train", false);
+        }
+
 //
 //        if (predictionsAvg != null) {
 //            formatPredictions(predictionsAvg, columnNames, 0, "relatedness_score",
@@ -289,17 +317,6 @@ public class PostProcess {
 //                predictionsFiles[i] = outputPath + i + "-" + outputBaseFilename;
 //            }
 //        }
-
-        if (Config.logPredictionsErrors()) {
-            for (int i = 0; i < predictions.length; i++) {
-                File f = new File(Config.getLogPredictionsErrorsOutputDir());
-                f.mkdirs();
-                String errorsFilename = f.getPath() + File.separatorChar + i + outputBaseFilename;
-
-                writePredictionErrors(instances, predictions[i], errorsFilename);
-            }
-        }
-
         System.out.println("\tpredictions saved.");
         PerformanceCounters.stopTimer("savePredictions");
     }
@@ -308,7 +325,7 @@ public class PostProcess {
      *
      * @param outputFilename
      */
-    public void savePredictionsSemeval2014Task1Format(Instances instances, double[][] predictions, String outputFilename) {
+    public void savePredictionsSemeval2014Task1Format(NLPSystem system, Instances instances, double[] predictions, String outputFilename) {
         PerformanceCounters.startTimer("savePredictions");
         System.out.println("Saving predictions to file(s)...");
         String[] columnNames = {"pair_ID"};
@@ -324,20 +341,15 @@ public class PostProcess {
             outputBaseFilename = outputFilename.substring(outputFilename.lastIndexOf("/") + 1);
         }
 
+        outputBaseFilename = system.getClassifier().getClass().getName() + outputBaseFilename;
+
         if (predictions == null ? true : predictions.length == 0) {
             System.out.println("\tno predictions to save.");
             PerformanceCounters.stopTimer("savePredictions");
             return;
         }
-        if (predictions.length == 1) {
-            formatPredictions(instances, predictions[0], columnNames, 1, "relatedness_score",
-                    "\t", outputPath + outputBaseFilename, true);
-        } else {
-            for (int i = 0; i < predictions.length; i++) {
-                formatPredictions(instances, predictions[i], columnNames, 1, "relatedness_score",
-                        "\t", outputPath + i + "-" + outputBaseFilename, true);
-            }
-        }
+        formatPredictions(instances, predictions, columnNames, 1, "relatedness_score",
+                "\t", outputPath + outputBaseFilename, true);
 
 //        if (predictionsAvg != null) {
 //            formatPredictions(predictionsAvg, columnNames, 1, "relatedness_score",
@@ -362,7 +374,7 @@ public class PostProcess {
                 f.mkdirs();
                 String errorsFilename = f.getPath() + File.separatorChar + i + outputBaseFilename;
 
-                writePredictionErrors(instances, predictions[i], errorsFilename);
+                writePredictionErrors(instances, predictions, errorsFilename);
             }
         }
 
@@ -933,20 +945,30 @@ public class PostProcess {
 //        PerformanceCounters.stopTimer("loadFeaturesStream");
 //    }
     public void buildModels(String modelDirectory) {
+        PerformanceCounters.startTimer("buildModels");
+        System.out.println("Building models...");
         File dir = new File(modelDirectory);
         if (!dir.isDirectory() && dir.exists()) {
             throw new IllegalArgumentException("Given path is not a directory (" + modelDirectory + ")!");
         }
-        
+
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        
+
         for (NLPSystem system : systems) {
-            String systemFilename = system.toString().replaceAll("@", "_");
-            system.buildClassifier();
+            String systemFilename = system.getClassifier().getClass().getSimpleName() + system.hashCode();
+
+            System.out.println(String.format("Building system %s", system.toString()));
+            System.out.println(system.buildClassifier());
             system.saveSystem(dir, systemFilename);
         }
+
+        System.out.println("Models built.");
+        Collections.sort(systems);
+        System.out.println("Best current model (" + systems.get(0).getCrossValidationPearsonsCorrelation() + ") is " + systems.get(0).shortName());
+
+        PerformanceCounters.stopTimer("buildModels");
     }
 
 //    /**
@@ -994,11 +1016,10 @@ public class PostProcess {
 //        predictionsAvg = null;
 //        predictionsFiles = null;
 //    }
-
     private void writePredictionErrors(Instances instances, double[] predictions, String errorsFilename) {
 
         TreeSet<PredictionError> errors = new TreeSet<>();
-
+        
         for (int i = 0; i < predictions.length; i++) {
             double prediction = predictions[i];
             double expected = instances.get(i).classValue();
@@ -1026,20 +1047,16 @@ public class PostProcess {
         }
     }
 
-    private void roundPredictions(double[][] predictions) {
-
-        for (int i = 0; i < predictions.length; i++) {
-            double[] prediction = predictions[i];
-            for (int j = 0; j < prediction.length; j++) {
-                double q = prediction[j];
-                predictions[i][j] = Double.parseDouble(String.format("%.3f", q));
-            }
-        }
-    }
-
+//    private void roundPredictions(double[][] predictions) {
+//
+//        for (double[] prediction : predictions) {
+//            for (int j = 0; j < prediction.length; j++) {
+//                prediction[j] = Double.parseDouble(String.format("%.3f", prediction[j]));
+//            }
+//        }
+//    }
     public void loadTrainingDataStream(PreProcessOutputStream pposTrainingData) {
-        Instances instancesTrainingSet = null;
-        Instances filteredInstancesTrainingSet = null;
+        Instances instancesTrainingSet;
 
         DataSource source = new DataSource(pposTrainingData);
         try {
@@ -1047,19 +1064,11 @@ public class PostProcess {
 
         } catch (Exception ex) {
             Logger.getLogger(PostProcess.class.getName()).log(Level.SEVERE, null, ex);
+            return;
         }
         // setting class attribute if the data format does not provide this information
         if (instancesTrainingSet.classIndex() == -1) {
             instancesTrainingSet.setClass(instancesTrainingSet.attribute("gold_standard"));
-        }
-
-        Remove remove = new Remove();
-        remove.setAttributeIndices("1");
-        try {
-            remove.setInputFormat(instancesTrainingSet);
-            filteredInstancesTrainingSet = Filter.useFilter(instancesTrainingSet, remove);
-        } catch (Exception ex) {
-            Logger.getLogger(PostProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         for (String wekaModelsCmd : Config.getWekaModelsCmd()) {
@@ -1077,7 +1086,8 @@ public class PostProcess {
 //                String modelName = String.format("%s%s%s%s.model", modelDirectory, File.separatorChar, i, classname);
 //                System.out.println(String.format("\tBuilding model %s (%s) and doing cross-validation...", i++, modelName));
 //                System.out.println(CrossValidation.performCrossValidationMT(trainSet, cl, Config.getCrossValidationSeed(), Config.getCrossValidationFolds(), modelName));
-                systems.add(new NLPSystem(cl, filteredInstancesTrainingSet, null));
+                systems.add(new NLPSystem(cl, instancesTrainingSet, null));
+                System.out.println("\tAdded system " + systems.get(systems.size()-1).shortName());
             } catch (Exception ex) {
                 Logger.getLogger(PostProcess.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1087,8 +1097,7 @@ public class PostProcess {
 
     public void loadEvaluationDataStream(PreProcessOutputStream pposEvaluationData) {
 
-        Instances instancesEvaluationSet = null;
-        Instances filteredInstancesEvaluationSet = null;
+        Instances instancesEvaluationSet;
 
         DataSource source = new DataSource(pposEvaluationData);
 
@@ -1103,24 +1112,41 @@ public class PostProcess {
             instancesEvaluationSet.setClass(instancesEvaluationSet.attribute("gold_standard"));
         }
 
-        Remove remove = new Remove();
-        remove.setAttributeIndices("1");
-        try {
-            remove.setInputFormat(instancesEvaluationSet);
-            filteredInstancesEvaluationSet = Filter.useFilter(instancesEvaluationSet, remove);
-        } catch (Exception ex) {
-            Logger.getLogger(PostProcess.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-        
         for (NLPSystem system : systems) {
-            system.setEvaluationSet(filteredInstancesEvaluationSet);
+            system.setEvaluationSet(instancesEvaluationSet);
         }
     }
 
-    public void evaluateAll(String predictionsOutputFilename, OutputFormat predictionsOutputFormat) {
+    public void evaluateModels(String predictionsOutputFilename, OutputFormat predictionsOutputFormat) {
+        PerformanceCounters.startTimer("evaluateModels");
         for (NLPSystem system : systems) {
             system.evaluate();
+        }
+
+        System.out.println("Models evaluated.");
+        Collections.sort(systems);
+        System.out.println("Best current model (" + systems.get(0).getEvaluationPearsonsCorrelation() + ") is " + systems.get(0).shortName());
+
+        PerformanceCounters.stopTimer("evaluateModels");
+    }
+
+    public void saveSystemPredictions(NLPSystem system, String baseFilename, OutputFormat predictionsOutputFormat) {
+        switch (predictionsOutputFormat) {
+            case SEMEVAL2014_TASK1:
+                    //savePredictionsSemeval2014Task1Format(system, baseFilename);
+
+                break;
+            case SEMEVAL2015_TASK2a:
+
+                savePredictionsSemeval2015Task2Format(system, baseFilename);
+
+                break;
+        }
+    }
+
+    public void savePredictions(String baseFilename, OutputFormat predictionsOutputFormat) {
+        for (NLPSystem system : systems) {
+            saveSystemPredictions(system, baseFilename, predictionsOutputFormat);
         }
     }
 
