@@ -15,7 +15,8 @@ import edu.cmu.lti.jawjaw.pobj.Lang;
 import edu.cmu.lti.jawjaw.pobj.POS;
 import edu.cmu.lti.jawjaw.pobj.Synset;
 import edu.cmu.lti.jawjaw.pobj.Word;
-import edu.mit.jwi.Dictionary;
+import edu.mit.jwi.RAMDictionary;
+import edu.mit.jwi.data.ILoadPolicy;
 import edu.mit.jwi.item.IIndexWord;
 import edu.mit.jwi.morph.WordnetStemmer;
 import java.io.IOException;
@@ -100,7 +101,7 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
             Logger.getLogger(TextProcessChunkLemmas.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        dict = new Dictionary(url);
+        dict = new RAMDictionary(url, ILoadPolicy.NO_LOAD);
         try {
             dict.open();
         } catch (IOException ex) {
@@ -115,7 +116,7 @@ public class TextProcessChunkLemmas implements TextProcesser, TextProcessedPartK
      * @param t
      */
     protected TextProcessChunkLemmas(Thread t) {
-        this("/usr/share/wordnet", t);
+        this(System.getenv("WNSEARCHDIR"), t);
     }
 
     private TextProcessChunkLemmas() {
